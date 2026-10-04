@@ -25,7 +25,7 @@ import torch
 import yaml
 
 from vla_stress import perturbations as P
-from vla_stress.env_utils import CHECKPOINT_REVISION, load_vla, make_env, run_episode, task_instructions
+from vla_stress.env_utils import CHECKPOINT_REVISION, load_vla, make_env, run_episode, suite_goals, task_instructions
 
 KEY = ["suite", "task_id", "condition", "intensity", "variant", "episode"]
 FIELDS = KEY + [
@@ -35,6 +35,8 @@ FIELDS = KEY + [
     "sign",
     "instruction",
     "success",
+    "goals_achieved",
+    "goals_at_reset",
     "steps",
     "n_policy_calls",
     "duration_s",
@@ -178,6 +180,8 @@ def main():
         from vla_stress.residual_rl.policy import Residual
 
         residual = Residual(meta["residual"])
+    # Optional: check every task's goal at every step (only meaningful when the tasks share a scene).
+    goals = suite_goals(cfg["suite"]) if cfg.get("check_all_goals") else None
     envs = {}
     new_file = not out.exists()
     # When appending to an older CSV keep its column order, even if FIELDS has grown since.
@@ -208,6 +212,7 @@ def main():
                 record=args.videos and job["episode"] == 0,
                 max_episode_steps=60 if args.smoke else None,
                 residual=residual,
+                goals=goals,
             )
             sign = pert.sign(job["episode"]) if hasattr(pert, "sign") else ""
             row = {

@@ -124,6 +124,29 @@ def max_steps(suite_name: str) -> int:
     return TASK_SUITE_MAX_STEPS[suite_name]
 
 
+def suite_goals(suite_name: str) -> list[list]:
+    """Goal predicates of every task in a suite, parsed from the BDDL files."""
+    from libero.libero import get_libero_path
+    from libero.libero.envs import bddl_utils
+
+    goals = []
+    for t in _get_suite(suite_name).tasks:
+        path = os.path.join(get_libero_path("bddl_files"), t.problem_folder, t.bddl_file)
+        goals.append(bddl_utils.robosuite_parse_problem(path)["goal_state"])
+    return goals
+
+
+def goals_satisfied(env: LiberoEnv, goals: list[list]) -> list[bool]:
+    """Evaluate other tasks' goals in the current scene.
+
+    In LIBERO-Goal all ten tasks use the same objects, so the goal of task i can be
+    checked inside the env of task j. This tells us what the robot actually did
+    when it was told something else, not just whether it did goal j.
+    """
+    inner = env._env.env
+    return [all(inner._eval_predicate(g) for g in goal) for goal in goals]
+
+
 def render_obs(env: LiberoEnv) -> dict:
     """Re-render the current sim state. Needed after we touch the model (camera, lights, qpos).
 
@@ -156,6 +179,7 @@ def run_episode(
     record: bool = False,
     max_episode_steps: int | None = None,
     residual=None,
+    goals: list[list] | None = None,
 ) -> dict:
     """One rollout. The perturbation (if any) is applied after the hard reset and on every frame.
 
@@ -170,6 +194,8 @@ def run_episode(
     if perturbation is not None:
         obs = perturbation.on_reset(env, episode) or obs
     t_reset = time.time() - t0
+    init_goals = goals_satisfied(env, goals) if goals else []
+    ever = list(init_goals)
     horizon = max_episode_steps or env._max_episode_steps
     frames, success, step, n_calls = [], False, 0, 0
     queue: list[np.ndarray] = []
@@ -188,6 +214,8 @@ def run_episode(
             action = residual(obs, action, len(queue), step, horizon)
         obs, _, terminated, _, info = env.step(np.clip(action, -1.0, 1.0))
         step += 1
+        if goals:
+            ever = [e or g for e, g in zip(ever, goals_satisfied(env, goals))]
         if info["is_success"]:
             success = True
             break
@@ -201,4 +229,7 @@ def run_episode(
         "reset_s": round(t_reset, 2),
         "policy_s": round(t_policy, 2),
         "frames": frames,
+        # indices of goals true at reset / true at any step of the episode
+        "goals_at_reset": ";".join(str(i) for i, g in enumerate(init_goals) if g),
+        "goals_achieved": ";".join(str(i) for i, g in enumerate(ever) if g),
     }

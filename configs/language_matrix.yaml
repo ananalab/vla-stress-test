@@ -8,3 +8,4 @@ episodes: 3
 conditions:
   - label: swap
     instruction_from_task: all
+check_all_goals: true   # log which of the 10 goals the robot achieved
