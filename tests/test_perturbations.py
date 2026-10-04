@@ -49,7 +49,8 @@ def test_intensity_zero_is_identity(env):
 def test_camera_orbit_leaves_wrist_camera(env):
     ref, moved = observe(env, "none", 0.0), observe(env, "camera_orbit", 1.0)
     assert img_diff(ref, moved, "image") > 1.0
-    assert img_diff(ref, moved, "image2") == 0.0
+    # Re-rendering after mj_forward changes the wrist image by ~0.1 grey level; the orbit itself does not touch it.
+    assert img_diff(ref, moved, "image2") < 0.5
 
 
 def test_soft_reset_does_not_accumulate():
