@@ -1,0 +1,14 @@
+# Which camera does the policy rely on? Black out one stream at a time.
+name: camera_mask
+suite: libero_spatial
+tasks: all
+episodes: 5
+conditions:
+  - label: mask_agentview
+    perturbation: camera_mask
+    intensities: [1.0]
+    params: {camera: image}
+  - label: mask_wrist
+    perturbation: camera_mask
+    intensities: [1.0]
+    params: {camera: image2}

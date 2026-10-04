@@ -1,0 +1,10 @@
+# Listening test. All LIBERO-Goal tasks share one scene: we build the env of task j
+# (which checks goal j) but give the instruction of task i.
+# M[i, j] = success on goal j when told i. The diagonal is the normal setting.
+name: language_matrix
+suite: libero_goal
+tasks: all
+episodes: 3
+conditions:
+  - label: swap
+    instruction_from_task: all

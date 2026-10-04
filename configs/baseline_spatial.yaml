@@ -1,0 +1,6 @@
+name: baseline_spatial
+suite: libero_spatial
+tasks: all
+episodes: 10
+conditions:
+  - label: clean

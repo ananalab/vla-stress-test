@@ -1,0 +1,9 @@
+# Dose-response on LIBERO-Spatial. Intensity 0 comes from baseline_spatial
+# (same init states and seeds), so only the perturbed levels are run here.
+name: dose_camera_orbit
+suite: libero_spatial
+tasks: all
+episodes: 5
+conditions:
+  - perturbation: camera_orbit
+    intensities: [0.25, 0.5, 0.75, 1.0]

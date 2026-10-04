@@ -1,0 +1,7 @@
+# Reference success rate, no perturbation. 10 tasks x 10 episodes.
+name: baseline_goal
+suite: libero_goal
+tasks: all
+episodes: 10
+conditions:
+  - label: clean
