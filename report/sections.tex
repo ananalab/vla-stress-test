@@ -44,7 +44,7 @@ Decorator~\citep{yuan2024policydecorator} apply it to imitation-learned diffusio
 We apply the same idea to a VLA, targeting one specific robustness failure.
 
 \section{Setup}
-\textbf{Model and simulator.} Checkpoint \texttt{lerobot/smolvla\_libero} (Hub revision
+\textbf{Model and simulator.} We use the Hub checkpoint \texttt{lerobot/smolvla\_libero} (revision
 \texttt{31d453f}), evaluated through LeRobot~\citep{cadene2024lerobot} 0.6.1 processors so that
 normalisation, tokenisation and camera naming match \texttt{lerobot-eval}. The policy predicts chunks of
 50 relative end-effector actions with flow matching~\citep{lipmanflow2022} and executes the whole chunk
