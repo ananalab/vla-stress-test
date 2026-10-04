@@ -1,0 +1,66 @@
+\section{Results}
+
+\textbf{Baseline.} Without perturbation SmolVLA succeeds in \BaseSpatial{} LIBERO-Spatial episodes
+(10 tasks $\times$ 10) and in \BaseGoal{} LIBERO-Goal episodes. The Spatial rate is well below the 90\%
+reported in~\citep{shukor2025smolvla}. To rule out our own evaluation loop, we re-ran two tasks with the
+official \texttt{lerobot-eval}: \LerobotEvalCheck{}, against \OurEvalCheck{} with our loop on the same
+tasks, a difference well within sampling noise. Two tasks (5 and 8) are solved in at most 2 of 10
+episodes. All conclusions below are relative to this measured baseline.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/language_matrix.pdf}
+  \caption{\textbf{Listening test on LIBERO-Goal} (3 episodes per cell). The environment of task $j$ is
+  built and the instruction of task $i$ is given. (a)~Success as scored by the environment (goal $j$).
+  (b)~Whether the goal of the \emph{given} instruction $i$ was reached at any point of the episode,
+  obtained by evaluating all ten goal predicates of the shared scene at every step. Off the diagonal
+  the robot never completes the environment's own task, but reaches the instructed goal in
+  \LangOffInstructedFrac{} of episodes.}
+  \label{fig:language}
+\end{figure*}
+
+\subsection{SmolVLA follows the instruction}
+Fig.~\ref{fig:language}a is the matrix one would get from the environment alone: success only on the
+diagonal. Read in isolation it is ambiguous, since a robot that ignores language would also fail
+off-diagonal if it performed some fixed behaviour unrelated to goal $j$. Panel~(b) removes the
+ambiguity. When told to do task $i$ inside the environment of task $j$, the robot reaches goal $i$
+in \LangOffInstructed{} of the 270 swapped episodes, close to the \LangDiag{} obtained with matched
+instructions, and reaches the environment's goal in \LangOffEnvFrac{} of them; only \LangOther{}
+episodes complete a third, unrelated goal. The initial states of the ten tasks differ slightly (each task
+has its own set), so the robot is not keyed on the start configuration either. The weakest instructions
+are those whose objects are close to other objects (task 3, bowl into the top drawer; task 6, cream
+cheese into the bowl).
+
+This contrasts with the conclusion of LIBERO-Plus that VLAs largely ignore language. The two tests
+measure different things: paraphrases or corrupted instructions that do not change the intended goal
+leave the action unchanged whether or not the model reads them, whereas swapping goals in a fixed
+scene requires the instruction to be used. \LangVariantsSentence{}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/dose_response.pdf}
+  \caption{\textbf{Success versus perturbation intensity} on LIBERO-Spatial (10 tasks, 5 episodes per
+  task and level; the unperturbed point uses the same episodes). Dots: pooled success with Wilson 95\%
+  intervals. Grey: individual tasks. Line: logistic fit with $s_0$ fixed to the unperturbed rate; dotted:
+  half of it. Dashed line and band: breaking point $x_{50}$ and its 95\% task-bootstrap interval.}
+  \label{fig:dose}
+\end{figure*}
+
+\subsection{Three ways of breaking}
+The perturbations do not just differ in strength; the curves have different shapes (Fig.~\ref{fig:dose}).
+\begin{itemize}
+  \item \textbf{Camera orbit: gradual.} Success declines roughly linearly with the angle and is halved at
+  $x_{50}=\CamXfifty^\circ$ \CamXfiftyCI{}. The decline is strongly task dependent: some tasks are unaffected
+  at the largest angle, others fail from the first level.
+  \item \textbf{Arm initial pose: immediate.} An offset of \RobotXfifty{}\,rad per joint \RobotXfiftyCI{}
+  halves success, although the wrist camera still sees the scene and the objects have not moved. This is
+  the most sensitive axis by far relative to what a human would consider a meaningful change.
+  \item \textbf{Lighting: threshold.} Removing up to two thirds of the light has no measurable effect; the
+  policy then collapses between \LightCliffLow{} and \LightCliffHigh{} of light removed ($x_{50}=\LightXfifty$).
+  Below the cliff the model is effectively invariant, which a single fixed-level test would miss
+  entirely.
+\end{itemize}
+\NoiseSentence{}
+\CameraMaskSentence{}
+
+\input{results_rl.tex}

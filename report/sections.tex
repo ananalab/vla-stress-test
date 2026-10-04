@@ -57,6 +57,14 @@ also fixes the flow-matching noise), whatever the condition, so conditions are c
 episodes. Hard resets are used throughout. Success rates are reported with Wilson 95\% intervals~\citep{wilson1927};
 paired comparisons use an exact McNemar test.
 
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/perturbation_grid.pdf}
+  \caption{What the policy sees from the main camera at intensities 0, 0.25, 0.5, 0.75 and 1
+  (LIBERO-Spatial task 0, initial state 0). The arm offset also moves the wrist view (not shown).}
+  \label{fig:grid}
+\end{figure}
+
 \textbf{Perturbations} (Fig.~\ref{fig:grid}). \emph{Camera orbit}: the agentview camera rotates about the
 vertical axis through the point it looks at on the table, $0$--$60^\circ$, sign alternating with the
 episode; the wrist camera is untouched. \emph{Arm initial pose}: after reset, each of the seven joints
