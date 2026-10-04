@@ -1,0 +1,38 @@
+\documentclass[10pt,twocolumn,letterpaper]{article}
+\usepackage[margin=0.75in,columnsep=0.25in]{geometry}
+\usepackage{newtxtext,newtxmath}
+\usepackage[T1]{fontenc}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[font=small,labelfont=bf,skip=4pt]{caption}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=black,citecolor={blue!50!black},urlcolor={blue!50!black}]{hyperref}
+\usepackage{enumitem}
+\setlist{nosep,leftmargin=*}
+\usepackage{titlesec}
+\titlespacing*{\section}{0pt}{6pt}{3pt}
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
+\input{numbers.tex}
+
+\title{\vspace{-1.2em}\textbf{Does a small VLA listen, and where does it break?}\\[2pt]
+\large Graded robustness of SmolVLA on LIBERO and a residual RL correction}
+\author{Ana\"is Azouaoui\vspace{-0.6em}}
+\date{}
+
+\begin{document}
+\maketitle
+
+\input{sections.tex}
+
+{\small
+\bibliographystyle{abbrvnat}
+\setlength{\bibsep}{1pt}
+\bibliography{refs}
+}
+\end{document}
