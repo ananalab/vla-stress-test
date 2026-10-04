@@ -21,13 +21,15 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-import imageio.v2 as imageio
+import pickle
 import numpy as np
 import yaml
 from matplotlib import font_manager
 from PIL import Image, ImageDraw, ImageFont
 
 from vla_stress import perturbations as P
+from lerobot.utils.io_utils import write_video
+
 from vla_stress.env_utils import load_vla, make_env, run_episode, suite_goals, task_instructions
 
 PANEL = 288
@@ -77,10 +79,22 @@ def main():
     ap.add_argument("--spec", required=True)
     ap.add_argument("--stride", type=int, default=2, help="keep one frame out of `stride`")
     ap.add_argument("--fps", type=int, default=15)
+    ap.add_argument("--from-cache", action="store_true", help="re-compose from the saved frames, no simulation")
     args = ap.parse_args()
     spec = yaml.safe_load(open(args.spec))
-    vla = load_vla()
+    out = Path(spec["out"])
+    cache = Path("outputs/video_cache") / (out.name + ".pkl")
+    if args.from_cache:
+        runs = pickle.load(open(cache, "rb"))
+    else:
+        runs = simulate(spec)
+        cache.parent.mkdir(parents=True, exist_ok=True)
+        pickle.dump(runs, open(cache, "wb"))
+    compose(runs, spec, out, args.stride, args.fps)
 
+
+def simulate(spec):
+    vla = load_vla()
     runs = []
     for p in spec["panels"]:
         suite = p["suite"]
@@ -100,14 +114,17 @@ def main():
             ok = str(p["success_goal"]) in res["goals_achieved"].split(";")
         frames = [f[:, : f.shape[1] // 2] for f in res["frames"]]  # main camera only
         runs.append((frames, p.get("title", ""), p.get("subtitle", instruction), ok))
-        print(f"{p.get('title')}: {'success' if ok else 'failure'} in {res['steps']} steps")
+        print(f"{p.get('title')}: {'success' if ok else 'failure'} in {res['steps']} steps", flush=True)
+    return runs
 
+
+def compose(runs, spec, out, stride, fps):
     T = max(len(f) for f, *_ in runs)
-    hold = args.fps * 2  # show the final state for two seconds
+    hold = fps * 2  # show the final state for two seconds
     cols = spec.get("columns", len(runs))
     rows = int(np.ceil(len(runs) / cols))
     video = []
-    for t in list(range(0, T, args.stride)) + [T - 1] * hold:
+    for t in list(range(0, T, stride)) + [T - 1] * hold:
         tiles = []
         for frames, title, sub, ok in runs:
             k = min(t, len(frames) - 1)
@@ -124,11 +141,12 @@ def main():
         hgap = np.full((6, grid_rows[0].shape[1], 3), 255, np.uint8)
         video.append(np.concatenate(sum([[g, hgap] for g in grid_rows], [])[:-1], 0))
 
-    out = Path(spec["out"])
     out.parent.mkdir(parents=True, exist_ok=True)
-    imageio.mimsave(out.with_suffix(".mp4"), video, fps=args.fps, quality=8, macro_block_size=2)
-    small = [np.asarray(Image.fromarray(f).resize((f.shape[1] * 2 // 3, f.shape[0] * 2 // 3), Image.LANCZOS)) for f in video[::2]]
-    imageio.mimsave(out.with_suffix(".gif"), small, duration=1000 * 2 / args.fps, loop=0)
+    write_video(out.with_suffix(".mp4"), video, fps=fps)
+    # GIF for the README: smaller, every other frame, shared palette per frame.
+    small = [Image.fromarray(f).resize((f.shape[1] * 2 // 3, f.shape[0] * 2 // 3), Image.LANCZOS) for f in video[::2]]
+    small = [im.quantize(colors=192, method=Image.Quantize.MEDIANCUT) for im in small]
+    small[0].save(out.with_suffix(".gif"), save_all=True, append_images=small[1:], duration=int(2000 / fps), loop=0, optimize=True)
     Image.fromarray(video[-1]).save(out.with_name(out.name + "_final.png"))
     print("wrote", out.with_suffix(".gif"), out.with_suffix(".mp4"))
 
