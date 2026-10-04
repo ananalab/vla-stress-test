@@ -1,0 +1,9 @@
+# Sanity check: VLA + untrained (zero) residual must match dose_robot_init episode by episode.
+name: rl_zero_check
+suite: libero_spatial
+tasks: [2]
+episodes: 5
+residual: runs/zero/final.pt
+conditions:
+  - perturbation: robot_init
+    intensities: [0.25]

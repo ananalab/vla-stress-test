@@ -1,0 +1,21 @@
+suite,task_id,condition,intensity,variant,episode,perturbation,magnitude,unit,sign,instruction,success,steps,n_policy_calls,duration_s,reset_s,policy_s,seed,n_action_steps,resolution,residual,config,git_commit,lerobot_version,checkpoint_revision,device,date
+libero_goal,0,clean,0.0000,,0,none,0.0,,,open the middle drawer of the cabinet,1,127,3,32.12,11.28,10.61,0,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:23:11
+libero_goal,0,clean,0.0000,,1,none,0.0,,,open the middle drawer of the cabinet,1,123,3,18.75,3.09,7.28,1,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:23:32
+libero_goal,0,clean,0.0000,,2,none,0.0,,,open the middle drawer of the cabinet,1,124,3,22.18,4.36,8.67,2,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:23:54
+libero_goal,0,clean,0.0000,,3,none,0.0,,,open the middle drawer of the cabinet,1,124,3,20.38,3.06,8.11,3,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:24:14
+libero_goal,0,clean,0.0000,,4,none,0.0,,,open the middle drawer of the cabinet,1,128,3,26.35,3.5,12.02,4,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:24:41
+libero_goal,0,clean,0.0000,,5,none,0.0,,,open the middle drawer of the cabinet,1,129,3,22.76,4.19,9.01,5,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:25:03
+libero_goal,0,clean,0.0000,,6,none,0.0,,,open the middle drawer of the cabinet,1,126,3,25.7,5.33,10.71,6,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:25:29
+libero_goal,0,clean,0.0000,,7,none,0.0,,,open the middle drawer of the cabinet,1,125,3,28.84,4.54,12.39,7,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:25:58
+libero_goal,0,clean,0.0000,,8,none,0.0,,,open the middle drawer of the cabinet,1,124,3,35.26,8.51,16.65,8,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:26:33
+libero_goal,0,clean,0.0000,,9,none,0.0,,,open the middle drawer of the cabinet,1,121,3,30.8,10.85,10.06,9,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:27:04
+libero_goal,1,clean,0.0000,,0,none,0.0,,,put the bowl on the stove,1,86,2,19.95,6.67,6.1,0,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:27:25
+libero_goal,1,clean,0.0000,,1,none,0.0,,,put the bowl on the stove,1,89,2,18.48,2.77,8.33,1,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:27:45
+libero_goal,1,clean,0.0000,,2,none,0.0,,,put the bowl on the stove,1,90,2,17.15,5.85,4.32,2,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:28:02
+libero_goal,1,clean,0.0000,,3,none,0.0,,,put the bowl on the stove,1,90,2,14.12,2.6,4.85,3,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:28:16
+libero_goal,1,clean,0.0000,,4,none,0.0,,,put the bowl on the stove,1,84,2,15.29,3.84,4.72,4,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:28:31
+libero_goal,1,clean,0.0000,,5,none,0.0,,,put the bowl on the stove,1,88,2,17.46,4.13,6.24,5,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:28:49
+libero_goal,1,clean,0.0000,,6,none,0.0,,,put the bowl on the stove,1,163,4,43.04,8.13,22.08,6,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:29:32
+libero_goal,1,clean,0.0000,,7,none,0.0,,,put the bowl on the stove,1,86,2,27.32,10.93,10.12,7,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:29:59
+libero_goal,1,clean,0.0000,,8,none,0.0,,,put the bowl on the stove,1,84,2,50.45,11.32,27.62,8,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:30:50
+libero_goal,1,clean,0.0000,,9,none,0.0,,,put the bowl on the stove,1,87,2,47.82,22.73,16.34,9,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:31:38
