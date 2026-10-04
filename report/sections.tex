@@ -1,0 +1,86 @@
+\begin{abstract}
+Vision-language-action (VLA) models are evaluated almost exclusively on the conditions they were
+trained on. We probe SmolVLA~\citep{shukor2025smolvla}, a 450M-parameter open VLA, on the LIBERO
+benchmark~\citep{liu2023libero} along three questions. \emph{Does it listen?} In LIBERO-Goal, where
+ten tasks share one scene, we swap instructions and check all ten goal predicates: the robot reaches
+the goal of the instruction it is given in \LangOffInstructed{} of swapped episodes and the goal of the
+environment in only \LangOffEnv{}. \emph{How does it break?} Under four graded perturbations, success
+decays smoothly with camera viewpoint, collapses after a sharp threshold with lighting, and is already
+halved by a \RobotXfifty{}\,rad offset of each arm joint at the start of the episode. \emph{Can a
+small corrector help?} \RLAbstract{} All results come from \TotalEpisodes{} simulated episodes run on a
+laptop; code and per-episode logs are public.
+\end{abstract}
+
+\section{Introduction}
+VLA models map a camera image and a sentence to robot actions with a single network. Benchmark scores
+on LIBERO are now close to saturation, which says little about what happens when the scene moves
+slightly away from the demonstrations. Recent robustness suites~\citep{fei2025liberoplus,zhou2025liberopro}
+answer this with many perturbation types at a few fixed levels and report that models are fragile to
+viewpoint and initial state, and largely ignore language.
+
+This report looks at a narrower set of questions in more depth, on one small model:
+\begin{itemize}
+  \item \textbf{Listening.} If the scene is held fixed and only the instruction changes, does the robot
+  change what it does? Checking every task's goal, not only the one the environment scores, separates
+  ``ignores the instruction'' from ``follows it but fails''.
+  \item \textbf{Shape of the degradation.} Each perturbation has a continuous intensity; we fit a dose-response
+  curve and estimate the intensity $x_{50}$ at which success falls to half its unperturbed value.
+  \item \textbf{Repair without retraining.} A small policy trained with PPO adds a bounded correction to
+  the frozen VLA's actions (residual RL~\citep{silver2018residual,johannink2019residual}).
+\end{itemize}
+
+\section{Related work}
+\textbf{Robustness of VLAs.} LIBERO-Plus~\citep{fei2025liberoplus} perturbs LIBERO along seven axes
+(camera, lighting, language, sensor noise, robot initial state, layout, textures) and finds camera and
+initial-state changes the most harmful, and language variations almost harmless, which the authors read
+as models ignoring language. LIBERO-PRO~\citep{zhou2025liberopro} reports that success can collapse
+under object and position changes and argues that high scores reflect memorisation. We reuse their
+perturbation axes but sweep intensity continuously, and our listening test scores every goal of the shared
+scene rather than only the environment's own goal.
+
+\textbf{Residual policies.} Residual RL learns a correction on top of a fixed controller or
+policy~\citep{silver2018residual,johannink2019residual}; ResiP~\citep{ankile2024resip} and Policy
+Decorator~\citep{yuan2024policydecorator} apply it to imitation-learned diffusion or transformer policies.
+We apply the same idea to a VLA, targeting one specific robustness failure.
+
+\section{Setup}
+\textbf{Model and simulator.} Checkpoint \texttt{lerobot/smolvla\_libero} (Hub revision
+\texttt{31d453f}), evaluated through LeRobot~\citep{cadene2024lerobot} 0.6.1 processors so that
+normalisation, tokenisation and camera naming match \texttt{lerobot-eval}. The policy predicts chunks of
+50 relative end-effector actions with flow matching~\citep{lipmanflow2022} and executes the whole chunk
+before re-planning. Images are $360\times360$ from the third-person (\emph{agentview}) and wrist cameras.
+Everything ran on an Apple M1 laptop (8\,GB, PyTorch MPS, bf16 weights); LIBERO runs natively on macOS once
+an unused Linux-only dependency is skipped.
+
+\textbf{Protocol.} Episode $e$ of a task always starts from LIBERO initial state $e$ with seed $e$ (which
+also fixes the flow-matching noise), whatever the condition, so conditions are compared on identical
+episodes. Hard resets are used throughout. Success rates are reported with Wilson 95\% intervals~\citep{wilson1927};
+paired comparisons use an exact McNemar test.
+
+\textbf{Perturbations} (Fig.~\ref{fig:grid}). \emph{Camera orbit}: the agentview camera rotates about the
+vertical axis through the point it looks at on the table, $0$--$60^\circ$, sign alternating with the
+episode; the wrist camera is untouched. \emph{Arm initial pose}: after reset, each of the seven joints
+is shifted by $\pm\delta$, $\delta\in[0,0.2]$\,rad, with signs drawn per episode; objects are not moved.
+\emph{Lighting}: every light in the scene is scaled down by up to 90\%. \emph{Pixel noise}: Gaussian noise
+of standard deviation up to 60 grey levels on both cameras. At the strongest level all task-relevant
+objects remain visible (Fig.~\ref{fig:grid}), except at 90\% light removal where the scene is very dark
+but still readable.
+
+\textbf{Dose-response fit.} For each perturbation we fit
+$p(x) = s_0 / (1 + e^{(x - x_{50})/w})$ by binomial maximum likelihood, with $s_0$ fixed to the
+unperturbed success rate on the same episodes, so that $x_{50}$ is exactly the intensity at which
+success is halved. Its 95\% interval comes from a bootstrap over tasks (whole tasks resampled), since
+task difficulty varies far more than episode outcomes within a task.
+
+\input{results.tex}
+
+\section{Limitations}
+Everything is in simulation, on one model and one checkpoint, with 3--10 episodes per cell; intervals are
+correspondingly wide and per-task curves noisy. Our baseline is well below the numbers reported in the
+SmolVLA paper (which may not use this Hub checkpoint), so all conclusions are relative to the measured
+baseline. Inference ran on Apple MPS in bf16; a GPU run with the same configs is provided but was not used
+for the reported numbers. The residual corrector sees proprioception only, which is why we target a
+perturbation that is visible in proprioception.
+
+\section{Conclusion}
+\Conclusion{}

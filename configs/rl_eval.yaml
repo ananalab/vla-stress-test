@@ -1,0 +1,11 @@
+# Residual RL evaluation on held-out init states (training used states 0-39).
+# Run once without residual and once per trained seed (--residual ... --out ...).
+name: rl_eval
+suite: libero_spatial
+tasks: [2]
+first_episode: 40
+episodes: 10
+conditions:
+  - label: clean
+  - perturbation: robot_init
+    intensities: [0.25, 0.5]
