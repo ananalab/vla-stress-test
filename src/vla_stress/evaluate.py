@@ -41,6 +41,7 @@ FIELDS = KEY + [
     "seed",
     "n_action_steps",
     "resolution",
+    "residual",
     "config",
     "git_commit",
     "lerobot_version",
@@ -90,10 +91,10 @@ def expand_jobs(cfg: dict) -> list[dict]:
             yield "", instructions[task_id]
 
     jobs = []
-    # Episode-major order: if a run is cut short, every task/condition has the same
-    # number of episodes so far, instead of some conditions being complete and others empty.
-    for ep in episodes:
-        for task_id in tasks:
+    # Task-major order so that only one LIBERO env (one MuJoCo model + renderer) is alive
+    # at a time; keeping one per task made an 8 GB machine swap.
+    for task_id in tasks:
+        for ep in episodes:
             for cond in cfg["conditions"]:
                 for intensity in cond.get("intensities", [0.0]):
                     for variant, instruction in variants(cond, task_id):
@@ -131,6 +132,7 @@ def main():
     ap.add_argument("--device", default=None)
     ap.add_argument("--shard", default="0/1", help="i/n: run every n-th job starting at i")
     ap.add_argument("--smoke", action="store_true", help="1 task, 1 episode, 60 steps, print the tokenised instruction")
+    ap.add_argument("--residual", default=None, help="checkpoint of a trained residual corrector (overrides the config)")
     ap.add_argument("--videos", action="store_true", help="save an mp4 of episode 0 for every task/condition")
     ap.add_argument("--video-dir", default="outputs/videos")
     args = ap.parse_args()
@@ -167,16 +169,26 @@ def main():
         "device": device_name(vla.device),
         "n_action_steps": cfg.get("n_action_steps", 50),
         "resolution": cfg.get("resolution", 360),
+        "residual": args.residual or cfg.get("residual", ""),
     }
+    residual = None
+    if meta["residual"]:
+        from vla_stress.residual_rl.policy import Residual
+
+        residual = Residual(meta["residual"])
     envs = {}
     new_file = not out.exists()
+    # When appending to an older CSV keep its column order, even if FIELDS has grown since.
+    fields = FIELDS if new_file else next(csv.reader(open(out)))
     with open(out, "a", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=FIELDS, extrasaction="ignore")
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         if new_file:
             writer.writeheader()
         for n, job in enumerate(todo):
             if job["task_id"] not in envs:
-                envs[job["task_id"]] = make_env(job["suite"], job["task_id"], resolution=meta["resolution"])
+                for e in envs.values():
+                    e.close()
+                envs = {job["task_id"]: make_env(job["suite"], job["task_id"], resolution=meta["resolution"])}
             env = envs[job["task_id"]]
             pert = P.build(job["perturbation"], job["intensity"], **job["params"])
             if args.smoke:
@@ -193,6 +205,7 @@ def main():
                 n_action_steps=meta["n_action_steps"],
                 record=args.videos and job["episode"] == 0,
                 max_episode_steps=60 if args.smoke else None,
+                residual=residual,
             )
             sign = pert.sign(job["episode"]) if hasattr(pert, "sign") else ""
             row = {

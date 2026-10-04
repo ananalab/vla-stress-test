@@ -56,21 +56,23 @@ class VLA:
     device: str
     env_proc: LiberoProcessorStep = field(default_factory=LiberoProcessorStep)
 
-    def batch(self, obs: dict, instruction: str) -> dict:
-        """Raw LIBERO observation (unbatched numpy) -> model-ready batch."""
-        obs = pytree.tree_map(lambda v: v[None], obs)  # add batch dim
-        b = preprocess_observation(obs)
-        b["task"] = [instruction]
+    def batch(self, obs: dict | list[dict], instruction: str | list[str]) -> dict:
+        """Raw LIBERO observation(s) (unbatched numpy) -> model-ready batch."""
+        obs_list = obs if isinstance(obs, list) else [obs]
+        instructions = instruction if isinstance(instruction, list) else [instruction] * len(obs_list)
+        stacked = pytree.tree_map(lambda *v: np.stack(v), *obs_list)
+        b = preprocess_observation(stacked)
+        b["task"] = list(instructions)
         b = self.env_proc._process_observation(b)  # 180 deg image flip + 8-d state
         return self.pre(b)
 
     @torch.no_grad()
-    def chunk(self, obs: dict, instruction: str) -> np.ndarray:
-        """Return the full action chunk (chunk_size, 7) in env units."""
+    def chunk(self, obs: dict | list[dict], instruction: str | list[str]) -> np.ndarray:
+        """Full action chunk in env units: (chunk_size, 7), or (B, chunk_size, 7) for a list of obs."""
         b = self.batch(obs, instruction)
-        actions = self.policy.predict_action_chunk(b)  # (1, T, 7), normalised
-        actions = self.post(actions)
-        return actions[0].float().cpu().numpy()
+        actions = self.policy.predict_action_chunk(b)  # (B, T, 7), normalised
+        actions = self.post(actions).float().cpu().numpy()
+        return actions if isinstance(obs, list) else actions[0]
 
     def decode_tokens(self, obs: dict, instruction: str) -> str:
         """What the language model actually receives. Used to check language perturbations."""
@@ -152,6 +154,7 @@ def run_episode(
     n_action_steps: int = 50,
     record: bool = False,
     max_episode_steps: int | None = None,
+    residual=None,
 ) -> dict:
     """One rollout. The perturbation (if any) is applied after the hard reset and on every frame.
 
@@ -174,7 +177,11 @@ def run_episode(
         if not queue:
             queue = list(vla.chunk(policy_obs, instruction)[:n_action_steps])
             n_calls += 1
-        obs, _, terminated, _, info = env.step(np.clip(queue.pop(0), -1.0, 1.0))
+        action = queue.pop(0)
+        if residual is not None:
+            # Residual RL: final action = VLA action + alpha * correction(state, VLA action, time)
+            action = residual(obs, action, len(queue), step, horizon)
+        obs, _, terminated, _, info = env.step(np.clip(action, -1.0, 1.0))
         step += 1
         if info["is_success"]:
             success = True
