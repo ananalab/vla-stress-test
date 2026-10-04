@@ -1,0 +1,10 @@
+# The curve has not fallen to half the baseline at 30 deg; extend to 60 deg.
+# All objects stay in view at 60 deg (checked with scripts/perturbation_grid.py).
+name: dose_camera_orbit_wide
+suite: libero_spatial
+tasks: all
+episodes: 5
+conditions:
+  - perturbation: camera_orbit
+    intensities: [0.625, 0.75, 0.875, 1.0]   # 37.5, 45, 52.5, 60 deg
+    params: {max_magnitude: 60}

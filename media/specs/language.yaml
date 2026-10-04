@@ -1,0 +1,11 @@
+# Same LIBERO-Goal scene (env of task 2, init state 1), six different instructions.
+# Outcome = whether the goal of the *given* instruction is reached.
+out: media/language
+columns: 3
+panels:
+  - {suite: libero_goal, task: 2, episode: 1, success_goal: 2, title: "Instruction of this env", instruction: "put the wine bottle on top of the cabinet"}
+  - {suite: libero_goal, task: 2, episode: 1, success_goal: 0, title: "Other instruction", instruction: "open the middle drawer of the cabinet"}
+  - {suite: libero_goal, task: 2, episode: 1, success_goal: 1, title: "Other instruction", instruction: "put the bowl on the stove"}
+  - {suite: libero_goal, task: 2, episode: 1, success_goal: 7, title: "Other instruction", instruction: "turn on the stove"}
+  - {suite: libero_goal, task: 2, episode: 1, success_goal: 8, title: "Other instruction", instruction: "put the bowl on the plate"}
+  - {suite: libero_goal, task: 2, episode: 1, success_goal: 9, title: "Other instruction", instruction: "put the wine bottle on the rack"}

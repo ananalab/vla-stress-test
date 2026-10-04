@@ -1,0 +1,7 @@
+out: media/perturbations
+columns: 4
+panels:
+  - {suite: libero_spatial, task: 3, episode: 2, title: "No perturbation", subtitle: "LIBERO-Spatial task 3"}
+  - {suite: libero_spatial, task: 3, episode: 2, perturbation: camera_orbit, intensity: 0.75, title: "Camera orbit 22.5 deg", subtitle: "main camera moved, wrist camera unchanged"}
+  - {suite: libero_spatial, task: 3, episode: 2, perturbation: robot_init, intensity: 0.5, title: "Arm offset 0.1 rad/joint", subtitle: "start pose shifted, objects unchanged"}
+  - {suite: libero_spatial, task: 3, episode: 2, perturbation: light_dimming, intensity: 1.0, title: "90% of light removed", subtitle: "all scene lights dimmed"}

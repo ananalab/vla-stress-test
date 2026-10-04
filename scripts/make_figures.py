@@ -25,18 +25,20 @@ SUM = R / "summary"
 FIG.mkdir(parents=True, exist_ok=True)
 SUM.mkdir(parents=True, exist_ok=True)
 
-GOAL_TASKS = [
-    "open the middle drawer of the cabinet",
-    "put the bowl on the stove",
-    "put the wine bottle on top of the cabinet",
-    "open the top drawer and put the bowl inside",
-    "put the bowl on top of the cabinet",
-    "push the plate to the front of the stove",
-    "put the cream cheese in the bowl",
-    "turn on the stove",
-    "put the bowl on the plate",
-    "put the wine bottle on the rack",
+GOAL_SHORT = [
+    "open middle drawer",
+    "bowl \u2192 stove",
+    "bottle \u2192 cabinet top",
+    "bowl \u2192 top drawer",
+    "bowl \u2192 cabinet top",
+    "push plate to stove",
+    "cheese \u2192 bowl",
+    "turn on stove",
+    "bowl \u2192 plate",
+    "bottle \u2192 rack",
 ]
+# Extra configs that refine or extend a family (same init states / seeds, more levels).
+EXTRA = {"robot_init": ["dose_robot_init_fine"], "light_dimming": ["dose_light_dimming_fine"], "camera_orbit": ["dose_camera_orbit_wide"]}
 
 
 def load(name: str) -> pd.DataFrame | None:
@@ -73,16 +75,18 @@ for suite in ["goal", "spatial"]:
 # ---------------------------------------------------------------- language
 lm = load("language_matrix")
 if lm is not None:
-    m, c = plots.language_matrix(lm, GOAL_TASKS, FIG / "language_matrix.pdf")
-    m.to_csv(SUM / "language_matrix_rates.csv")
+    mats = plots.language_matrix(lm, GOAL_SHORT, FIG / "language_matrix.pdf")
     lm["said"] = lm["variant"].str.replace("from_task_", "").astype(int)
+    lm["said_goal"] = [str(s) in str(a).split(";") for s, a in zip(lm["said"], lm["goals_achieved"])]
     diag = lm[lm.said == lm.task_id]
     off = lm[lm.said != lm.task_id]
     headline["language_diagonal"] = wilson_str(diag.success.sum(), len(diag))
-    headline["language_off_diagonal"] = wilson_str(off.success.sum(), len(off))
-    # For each environment j: does the robot do goal j even when told something else?
-    per_env = off.groupby("task_id").success.mean()
-    headline["language_off_diag_per_env"] = {int(k): round(v, 2) for k, v in per_env.items()}
+    headline["language_off_diag_env_goal"] = wilson_str(off.success.sum(), len(off))
+    headline["language_off_diag_instructed_goal"] = wilson_str(int(off.said_goal.sum()), len(off))
+    # other goals reached that are neither the instructed one nor the env one
+    other = [len(set(str(a).split(";")) - {"", str(s), str(t)}) > 0 for a, s, t in zip(off.goals_achieved, off.said, off.task_id)]
+    headline["language_off_diag_some_other_goal"] = wilson_str(int(np.sum(other)), len(off))
+    lm.groupby(["said"]).said_goal.mean().to_csv(SUM / "language_instructed_goal_by_instruction.csv")
 
 lv = load("language_variants")
 bg = load("baseline_goal")
@@ -97,7 +101,7 @@ if lv is not None and bg is not None:
     t.to_csv(SUM / "language_variants.csv", index=False)
     names = {"original": "original instruction", "paraphrase": "paraphrase (3 per task)", "empty": "empty string", "absurd": '"sing a song"'}
     t["name"] = t["condition"].map(names)
-    plots.bars(t, "name", FIG / "language_variants.pdf", figsize=(3.3, 1.3))
+    plots.bars(t, "name", FIG / "language_variants.pdf", figsize=(3.25, 1.2))
     # paired test vs original instruction, same task/episode
     tests = {}
     for cond in ["empty", "absurd"]:
@@ -111,9 +115,11 @@ if lv is not None and bg is not None:
 bs = load("baseline_spatial")
 curves = {}
 for fam in ["camera_orbit", "robot_init", "light_dimming", "image_noise"]:
-    d = load(f"dose_{fam}")
-    if d is None or bs is None:
+    parts = [load(n) for n in [f"dose_{fam}"] + EXTRA.get(fam, [])]
+    parts = [p for p in parts if p is not None]
+    if not parts or bs is None:
         continue
+    d = pd.concat(parts, ignore_index=True)
     # Intensity 0 = the baseline episodes with the same init states and seeds.
     zero = bs[bs.episode.isin(d.episode.unique())].copy()
     zero["magnitude"] = 0.0
@@ -137,7 +143,7 @@ if cm is not None and bs is not None:
     names = {"both cameras": "both cameras", "mask_agentview": "agentview masked", "mask_wrist": "wrist masked"}
     t["name"] = t["condition"].map(names)
     t.to_csv(SUM / "camera_mask.csv", index=False)
-    plots.bars(t, "name", FIG / "camera_mask.pdf", figsize=(3.3, 1.1))
+    plots.bars(t, "name", FIG / "camera_mask.pdf", figsize=(3.25, 1.0))
 
 # ---------------------------------------------------------------- residual RL
 runs = sorted(glob.glob("runs/*/log.csv"))

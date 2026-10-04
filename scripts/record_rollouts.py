@@ -93,7 +93,7 @@ def main():
             residual = Residual(p["residual"])
         env = make_env(suite, p["task"])
         goals = suite_goals(suite) if p.get("success_goal") is not None else None
-        res = run_episode(env, vla, instruction, p["episode"], p.get("seed", p["episode"]), pert, record=True, residual=residual, goals=goals)
+        res = run_episode(env, vla, instruction, p["episode"], p.get("seed", p["episode"]), pert, record=True, residual=residual, goals=goals, stop_goal=p.get("success_goal"))
         env.close()
         ok = bool(res["success"])
         if p.get("success_goal") is not None:  # judge by another task's goal (language demo)

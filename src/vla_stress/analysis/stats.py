@@ -41,32 +41,36 @@ def logistic(x, s0, x50, w):
     return s0 / (1.0 + np.exp((x - x50) / w))
 
 
-def fit_dose_response(x: np.ndarray, y: np.ndarray) -> dict:
-    """Binomial MLE of the 3-parameter decreasing logistic. x in physical units, y in {0, 1}."""
+def fit_dose_response(x: np.ndarray, y: np.ndarray, s0: float | None = None) -> dict:
+    """Binomial MLE of the decreasing logistic, with s0 fixed to the unperturbed success rate.
+
+    Leaving s0 free made the fit wander off (s0 -> 1 with a very wide slope) when the
+    curve declines slowly. Fixing it to the observed rate at x = 0 makes x50 mean
+    exactly what we want: the intensity at which success is half of the baseline.
+    """
     x = np.asarray(x, float)
     y = np.asarray(y, float)
     xmax = x.max() if x.max() > 0 else 1.0
+    if s0 is None:
+        s0 = float(np.clip(y[x == 0].mean() if np.any(x == 0) else y[x == x.min()].mean(), 1e-3, 1 - 1e-3))
 
     def nll(theta):
-        s0 = 1 / (1 + np.exp(-theta[0]))  # keep s0 in (0, 1)
-        x50, w = theta[1], np.exp(theta[2])
+        x50, w = theta[0], np.exp(theta[1])
         p = np.clip(logistic(x, s0, x50, w), 1e-6, 1 - 1e-6)
         return -np.sum(y * np.log(p) + (1 - y) * np.log(1 - p))
 
-    s0_init = np.clip(y[x == x.min()].mean(), 0.05, 0.95)
     best = None
-    # A few starting points: the likelihood is flat when the curve never drops.
-    for x50_init in np.linspace(0.2, 1.5, 6) * xmax:
-        theta0 = [np.log(s0_init / (1 - s0_init)), x50_init, np.log(0.15 * xmax)]
-        r = optimize.minimize(nll, theta0, method="Nelder-Mead", options={"maxiter": 4000, "xatol": 1e-6, "fatol": 1e-8})
+    for x50_init in (0.3 * xmax, 0.8 * xmax, 2.0 * xmax):
+        r = optimize.minimize(nll, [x50_init, np.log(0.2 * xmax)], method="Nelder-Mead", options={"maxiter": 2000, "xatol": 1e-5, "fatol": 1e-7})
         if best is None or r.fun < best.fun:
             best = r
-    s0 = 1 / (1 + np.exp(-best.x[0]))
-    return {"s0": s0, "x50": best.x[1], "w": np.exp(best.x[2]), "nll": best.fun}
+    # Beyond ~3x the tested range the estimate is pure extrapolation; cap it.
+    x50 = float(np.clip(best.x[0], 0.0, 3 * xmax))
+    return {"s0": s0, "x50": x50, "w": float(np.exp(best.x[1])), "nll": float(best.fun), "reached": bool(x50 <= xmax)}
 
 
-def bootstrap_x50(df: pd.DataFrame, x_col: str = "magnitude", n_boot: int = 1000, seed: int = 0) -> np.ndarray:
-    """Resample whole tasks with replacement, refit, return the x50 samples."""
+def bootstrap_x50(df: pd.DataFrame, x_col: str = "magnitude", n_boot: int = 500, seed: int = 0) -> np.ndarray:
+    """Resample whole tasks with replacement, refit (s0 re-estimated), return the x50 samples."""
     rng = np.random.default_rng(seed)
     tasks = df["task_id"].unique()
     by_task = {t: df[df["task_id"] == t] for t in tasks}
@@ -74,6 +78,8 @@ def bootstrap_x50(df: pd.DataFrame, x_col: str = "magnitude", n_boot: int = 1000
     for _ in range(n_boot):
         pick = rng.choice(tasks, size=len(tasks), replace=True)
         d = pd.concat([by_task[t] for t in pick])
+        if d.loc[d[x_col] == 0, "success"].mean() == 0:
+            continue  # all resampled tasks fail even without perturbation: no breaking point
         out.append(fit_dose_response(d[x_col].values, d["success"].values)["x50"])
     return np.array(out)
 

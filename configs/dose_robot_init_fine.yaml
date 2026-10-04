@@ -1,0 +1,8 @@
+# Finer levels below 0.05 rad, where most of the drop happens.
+name: dose_robot_init_fine
+suite: libero_spatial
+tasks: all
+episodes: 5
+conditions:
+  - perturbation: robot_init
+    intensities: [0.05, 0.1, 0.15]   # 0.01, 0.02, 0.03 rad per joint

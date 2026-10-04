@@ -180,6 +180,7 @@ def run_episode(
     max_episode_steps: int | None = None,
     residual=None,
     goals: list[list] | None = None,
+    stop_goal: int | None = None,
 ) -> dict:
     """One rollout. The perturbation (if any) is applied after the hard reset and on every frame.
 
@@ -216,6 +217,8 @@ def run_episode(
         step += 1
         if goals:
             ever = [e or g for e, g in zip(ever, goals_satisfied(env, goals))]
+            if stop_goal is not None and ever[stop_goal]:
+                break  # only used for videos: stop once the instructed goal is reached
         if info["is_success"]:
             success = True
             break
