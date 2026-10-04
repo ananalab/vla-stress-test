@@ -1,5 +1,0 @@
-suite,task_id,condition,intensity,variant,episode,perturbation,magnitude,unit,sign,instruction,success,steps,n_policy_calls,duration_s,seed,n_action_steps,resolution,config,git_commit,lerobot_version,checkpoint_revision,device,date
-libero_goal,0,clean,0.0000,,0,none,0.0,,,open the middle drawer of the cabinet,1,130,3,54.78,0,50,360,baseline_goal,07fb7a0,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:17:17
-libero_goal,1,clean,0.0000,,0,none,0.0,,,put the bowl on the stove,1,86,2,36.6,0,50,360,baseline_goal,07fb7a0,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:17:59
-libero_goal,2,clean,0.0000,,0,none,0.0,,,put the wine bottle on top of the cabinet,1,90,2,58.45,0,50,360,baseline_goal,07fb7a0,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:18:59
-libero_goal,0,clean,0.0000,,1,none,0.0,,,open the middle drawer of the cabinet,1,123,3,45.69,1,50,360,baseline_goal,07fb7a0-dirty,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:21:06

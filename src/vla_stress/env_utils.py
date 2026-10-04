@@ -82,16 +82,17 @@ class VLA:
         return tok.input_tokenizer.decode(ids, skip_special_tokens=True)
 
 
-def load_vla(device: str | None = None, fp32: bool = True) -> VLA:
+def load_vla(device: str | None = None, fp32: bool = False) -> VLA:
     device = pick_device(device)
     cfg = PreTrainedConfig.from_pretrained(CHECKPOINT, revision=CHECKPOINT_REVISION)
     cfg.pretrained_path = CHECKPOINT
     cfg.device = device
     policy = make_policy(cfg, env_cfg=LiberoEnvConfig(task="libero_goal"), rename_map=RENAME_MAP)
     policy.eval()
-    # Weights are stored in bf16. On Apple MPS fp32 is ~20% faster than bf16 and upcasting
-    # bf16 -> fp32 is exact, so this only changes the arithmetic precision of the forward pass.
-    if fp32 and device != "cuda":
+    # Weights are stored in bf16 and we keep them that way by default (same as on CUDA).
+    # fp32 is ~20% faster per call on Apple MPS but doubles memory, which made an 8 GB
+    # laptop swap so much that episodes got 2-3x slower overall.
+    if fp32:
         policy.float()
     pre, post = make_pre_post_processors(
         cfg,
@@ -162,11 +163,13 @@ def run_episode(
     for every condition, so conditions can be compared episode by episode.
     """
     t0 = time.time()
+    t_policy = 0.0
     torch.manual_seed(seed)
     np.random.seed(seed)
     obs = reset(env, episode, seed)
     if perturbation is not None:
         obs = perturbation.on_reset(env, episode) or obs
+    t_reset = time.time() - t0
     horizon = max_episode_steps or env._max_episode_steps
     frames, success, step, n_calls = [], False, 0, 0
     queue: list[np.ndarray] = []
@@ -175,7 +178,9 @@ def run_episode(
         if record:
             frames.append(np.concatenate([im[::-1, ::-1] for im in policy_obs["pixels"].values()], axis=1))
         if not queue:
+            tp = time.time()
             queue = list(vla.chunk(policy_obs, instruction)[:n_action_steps])
+            t_policy += time.time() - tp
             n_calls += 1
         action = queue.pop(0)
         if residual is not None:
@@ -193,5 +198,7 @@ def run_episode(
         "steps": step,
         "n_policy_calls": n_calls,
         "duration_s": round(time.time() - t0, 2),
+        "reset_s": round(t_reset, 2),
+        "policy_s": round(t_policy, 2),
         "frames": frames,
     }

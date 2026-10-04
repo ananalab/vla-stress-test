@@ -38,6 +38,8 @@ FIELDS = KEY + [
     "steps",
     "n_policy_calls",
     "duration_s",
+    "reset_s",
+    "policy_s",
     "seed",
     "n_action_steps",
     "resolution",
