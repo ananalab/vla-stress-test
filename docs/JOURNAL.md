@@ -86,3 +86,12 @@
 - Disque plein (d'autres projets tournaient en parallèle) : la fin de la file a échoué d'un coup (lumière fine arrêtée à 101/200, seeds 1 et 2 pas lancés). Cache uv vidé (4 Go).
 - Effet de bord : le projet est sur le Bureau, synchronisé avec iCloud. Quand le disque s'est rempli, macOS a évincé les fichiers vers le cloud (« dataless ») : résultats, code, `.git` et tout le `.venv`. Fichiers du projet rapatriés en les relisant un par un (`brctl download` était beaucoup trop lent). CSV et dépôt git intacts (`git fsck` propre).
 - L'environnement Python vit maintenant hors iCloud (`~/venvs/vla-stress`), avec un lien `.venv` dans le projet. Mêmes versions épinglées. Vérifié en rejouant 4 épisodes déjà enregistrés : mêmes issues et même nombre de pas exact (108, 280, 90, 81).
+
+### Fin de campagne (5 octobre, 22h)
+- Seed 2 du résiduel : même tableau que les deux autres. États vus 13/20 (VLA 10/20), états 40-49 4/10 (VLA 5/10), épisodes réussis plus courts (110 → 88 pas). Pas de creux vers 70k pas, contrairement aux seeds 0 et 1.
+- Masquage de caméra : 5/50 sans la caméra principale, 6/50 sans le poignet, 33/50 avec les deux.
+- Caméra jusqu'à 60° : déclin régulier, x50 ≈ 40°, encore 26 % à 60°.
+- Bruit pixel : plateau jusqu'à σ = 30, x50 ≈ 42, 1/50 à σ = 60.
+- Baseline Goal complète : 84/100.
+- Bilan : 2 439 épisodes, ~29 h de calcul sur le portable (19 h d'évaluation, 10 h de PPO).
+- Rapport complet (9 pages) et version courte (4 pages + références). Tous les chiffres viennent de `numbers.tex` et `tables/`, générés depuis `results/`.

@@ -283,11 +283,11 @@ if rl_rows:
     ho = [rl_steps[(sd, "heldout")] for sd in seeds if (sd, "heldout") in rl_steps]
     if tr:
         macros["RLStepsSeenVla"] = f"{tr[0][0]:.0f}"
-        macros["RLStepsSeenRes"] = "--".join(sorted({f"{t[1]:.0f}" for t in tr}))
+        macros["RLStepsSeenRes"] = f"{min(t[1] for t in tr):.0f}--{max(t[1] for t in tr):.0f}"
         macros["RLPSeen"] = ", ".join(f"{t[2]:.2f}" for t in tr)
     if ho:
         macros["RLStepsUnseenVla"] = f"{ho[0][0]:.0f}"
-        macros["RLStepsUnseenRes"] = "--".join(sorted({f"{t[1]:.0f}" for t in ho}))
+        macros["RLStepsUnseenRes"] = f"{min(t[1] for t in ho):.0f}--{max(t[1] for t in ho):.0f}"
     if logs:
         first = [lg.success_rate.head(10).mean() for lg in logs.values()]
         last = [lg.success_rate.tail(10).mean() for lg in logs.values()]

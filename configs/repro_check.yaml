@@ -1,0 +1,8 @@
+# Re-run of four episodes already in baseline_spatial.csv after the Python environment was
+# rebuilt (5 October): outcomes and episode lengths must be identical.
+name: repro_check
+suite: libero_spatial
+tasks: [1, 3]
+episodes: 2
+conditions:
+  - label: clean

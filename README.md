@@ -13,7 +13,7 @@ usually asks for.*
 
 ## Main results
 
-About 2,400 simulated episodes, all run on a laptop (Apple M1, 8 GB). Every number below is read from
+2,439 simulated episodes and about 29 hours of compute, all on a laptop (Apple M1, 8 GB). Every number below is read from
 `results/summary/`; intervals are Wilson 95%.
 
 1. **It listens, but to the exact words.** Given the instruction of another LIBERO-Goal task, the robot
@@ -24,8 +24,9 @@ About 2,400 simulated episodes, all run on a laptop (Apple M1, 8 GB). Every numb
    40°), falls past sharp thresholds for lighting (no effect until 67% of the light is removed) and pixel
    noise, and is halved by an offset of about 0.05 rad (3°) per arm joint at the start of an episode.
 3. **A residual corrector learns, but does not generalise.** PPO on top of the frozen VLA raises success
-   on the initial states it was trained on (14/20 and 13/20 vs 10/20) but not on held-out ones, and mostly
-   learns to finish successful episodes faster.
+   on the initial states it was trained on (14/20, 13/20 and 13/20 over three seeds, vs 10/20) but not on
+   held-out ones (4/10, 5/10, 4/10 vs 5/10), and mostly learns to finish successful episodes faster
+   (about 110 to 90 steps).
 
 | | |
 |---|---|
@@ -38,6 +39,11 @@ About 2,400 simulated episodes, all run on a laptop (Apple M1, 8 GB). Every numb
 *Same episode under each perturbation (main camera view).*
 
 ![residual RL](report/figures/rl_residual.png)
+
+![residual rollouts](media/residual.gif)
+
+*Arm offset of 0.05 rad per joint. Top: an initial state seen during RL training, rescued by the corrector.
+Bottom: a held-out initial state, where the corrector only makes the robot faster.*
 
 ## How it works
 

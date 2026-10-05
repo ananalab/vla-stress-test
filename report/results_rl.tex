@@ -22,8 +22,7 @@ one process sharing batched VLA calls, and 100k environment steps per run (about
 the laptop at 10 steps/s). Training uses initial states 0--39; states 40--49 are kept for evaluation.
 
 \textbf{Results} (Fig.~\ref{fig:rl}). Training success rises modestly (from \RLTrainFirst{} to
-\RLTrainLast{} over the first and last ten updates of each of the \RLSeeds{} seeds), with a common dip around 70k steps
-that we did not investigate. On initial states seen in training, the deterministic corrector succeeds in
+\RLTrainLast{} over the first and last ten updates of each of the \RLSeeds{} seeds); seeds 0 and 1 dip around 70k steps before recovering, seed 2 does not. On initial states seen in training, the deterministic corrector succeeds in
 \RLSeenRes{} episodes against \RLSeenVla{} for the VLA alone, and every discordant episode favours the
 corrector (McNemar $p=$ \RLPSeen{}, not significant at this sample size). On held-out initial states the
 gain disappears: \RLUnseenRes{} against \RLUnseenVla{} at the training level, \RLUnseenStrongRes{} against

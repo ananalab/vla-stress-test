@@ -439,7 +439,8 @@ executes 10 instead of 50 actions per chunk, without any learning.}
 
 \subsection{Results}
 Training success rises modestly (from \RLTrainFirst{} to \RLTrainLast{} over the first and last ten updates
-of each of the \SeedsWord{} seeds; \cref{fig:rl}a). On initial states seen in training, the deterministic
+of each of the \SeedsWord{} seeds; \cref{fig:rl}a), and two of the three runs dip around 70k steps before
+recovering. On initial states seen in training, the deterministic
 corrector succeeds in \RLSeenRes{} episodes against \RLSeenVla{} for the VLA alone, and every discordant
 episode favours the corrector (\cref{tab:rl}; McNemar $p=$ \RLPSeen{}, not significant at this sample
 size). On held-out initial states the gain disappears: \RLUnseenRes{} against \RLUnseenVla{} at the training
