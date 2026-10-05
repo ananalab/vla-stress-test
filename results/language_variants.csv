@@ -1,0 +1,251 @@
+suite,task_id,condition,intensity,variant,episode,perturbation,magnitude,unit,sign,instruction,success,goals_achieved,goals_at_reset,steps,n_policy_calls,duration_s,reset_s,policy_s,seed,n_action_steps,resolution,residual,config,git_commit,lerobot_version,checkpoint_revision,device,date
+libero_goal,0,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,37.61,4.74,13.53,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:35:34
+libero_goal,0,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,28.93,1.99,10.63,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:36:03
+libero_goal,0,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,open the drawer in the middle of the cabinet,0,,,300,6,34.26,2.16,12.26,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:36:37
+libero_goal,0,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,pull the cabinet's middle drawer open,0,,,300,6,39.44,1.91,15.79,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:37:16
+libero_goal,0,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,slide out the middle drawer,0,,,300,6,27.89,2.06,10.17,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:37:44
+libero_goal,0,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,30.47,2.02,11.06,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:38:15
+libero_goal,0,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,36.2,2.86,13.55,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:38:51
+libero_goal,0,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,open the drawer in the middle of the cabinet,0,,,300,6,26.18,2.25,9.4,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:39:17
+libero_goal,0,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,pull the cabinet's middle drawer open,0,,,300,6,34.13,1.61,12.26,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:39:51
+libero_goal,0,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,slide out the middle drawer,1,0,,203,5,22.1,1.99,8.8,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:40:13
+libero_goal,0,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,30.59,3.19,11.05,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:40:44
+libero_goal,0,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,30.02,2.36,10.1,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:41:14
+libero_goal,0,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,open the drawer in the middle of the cabinet,0,,,300,6,26.39,1.69,9.2,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:41:40
+libero_goal,0,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,pull the cabinet's middle drawer open,0,,,300,6,33.18,1.78,13.39,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:42:14
+libero_goal,0,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,slide out the middle drawer,0,,,300,6,25.15,1.55,8.78,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:42:39
+libero_goal,0,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,33.52,2.0,12.63,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:43:12
+libero_goal,0,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,24.1,2.02,8.74,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:43:36
+libero_goal,0,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,open the drawer in the middle of the cabinet,0,,,300,6,28.95,1.48,10.25,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:44:05
+libero_goal,0,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,pull the cabinet's middle drawer open,0,,,300,6,25.32,1.91,8.59,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:44:31
+libero_goal,0,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,slide out the middle drawer,0,,,300,6,27.04,1.46,9.51,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:44:58
+libero_goal,0,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,31.14,1.56,11.4,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:45:29
+libero_goal,0,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,28.16,1.89,10.03,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:45:57
+libero_goal,0,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,open the drawer in the middle of the cabinet,0,,,300,6,28.62,1.6,10.35,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:46:26
+libero_goal,0,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,pull the cabinet's middle drawer open,0,,,300,6,24.85,2.03,8.95,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:46:51
+libero_goal,0,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,slide out the middle drawer,0,,,300,6,27.3,1.71,8.87,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:47:18
+libero_goal,1,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,30.56,3.65,10.07,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:47:49
+libero_goal,1,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,25.82,2.02,9.2,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:48:15
+libero_goal,1,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,place the bowl on the stove,1,1,,87,2,10.54,1.61,3.42,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:48:25
+libero_goal,1,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,move the bowl onto the stove,1,1,,88,2,13.36,2.36,4.39,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:48:39
+libero_goal,1,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,set the bowl down on the cooktop,0,,,300,6,28.46,2.0,9.17,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:49:07
+libero_goal,1,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,23.67,1.52,8.93,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:49:31
+libero_goal,1,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,30.36,1.69,11.35,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:50:01
+libero_goal,1,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,place the bowl on the stove,1,1,,86,2,9.79,1.75,3.69,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:50:11
+libero_goal,1,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,move the bowl onto the stove,1,1,,86,2,9.16,1.44,3.47,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:50:20
+libero_goal,1,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,set the bowl down on the cooktop,0,,,300,6,25.07,1.41,9.37,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:50:45
+libero_goal,1,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,30.72,1.68,11.81,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:51:16
+libero_goal,1,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,27.47,1.8,9.24,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:51:43
+libero_goal,1,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,place the bowl on the stove,1,1,,90,2,12.82,1.96,3.93,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:51:56
+libero_goal,1,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,move the bowl onto the stove,1,1,,91,2,10.7,2.12,3.66,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:52:07
+libero_goal,1,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,set the bowl down on the cooktop,0,,,300,6,25.43,1.66,9.16,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:52:32
+libero_goal,1,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,31.01,1.8,11.34,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:53:03
+libero_goal,1,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,27.07,2.02,9.45,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:53:30
+libero_goal,1,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,place the bowl on the stove,1,1,,90,2,9.13,1.54,3.06,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:53:40
+libero_goal,1,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,move the bowl onto the stove,1,1,,91,2,9.05,1.59,3.16,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:53:49
+libero_goal,1,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,set the bowl down on the cooktop,0,,,300,6,30.51,1.57,10.99,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:54:19
+libero_goal,1,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,21.73,1.53,8.77,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:54:41
+libero_goal,1,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,21.65,1.4,8.93,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:55:03
+libero_goal,1,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,place the bowl on the stove,0,,,300,6,29.66,1.39,10.63,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:55:32
+libero_goal,1,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,move the bowl onto the stove,1,1,,85,2,8.21,1.57,2.9,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:55:40
+libero_goal,1,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,set the bowl down on the cooktop,0,,,300,6,23.78,1.71,8.75,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:56:04
+libero_goal,2,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,32.32,3.32,11.46,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:56:37
+libero_goal,2,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,27.54,2.0,9.83,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:57:04
+libero_goal,2,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,place the wine bottle on top of the cabinet,0,,,300,6,31.18,1.84,10.85,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:57:36
+libero_goal,2,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,move the bottle of wine onto the cabinet,0,,,300,6,24.85,1.77,9.08,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:58:01
+libero_goal,2,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,set the bottle on the cabinet top,0,,,300,6,28.4,1.77,10.16,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:58:29
+libero_goal,2,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,25.5,1.93,9.35,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:58:54
+libero_goal,2,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,22.1,1.48,8.99,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:59:17
+libero_goal,2,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,place the wine bottle on top of the cabinet,1,2,,98,2,9.51,1.66,3.19,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:59:26
+libero_goal,2,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,move the bottle of wine onto the cabinet,0,,,300,6,31.82,1.85,11.84,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T03:59:58
+libero_goal,2,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,set the bottle on the cabinet top,0,,,300,6,23.99,1.67,8.89,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:00:22
+libero_goal,2,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,31.62,1.43,12.47,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:00:53
+libero_goal,2,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,28.72,1.87,9.62,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:01:22
+libero_goal,2,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,place the wine bottle on top of the cabinet,1,2,,110,3,13.66,1.69,5.43,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:01:36
+libero_goal,2,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,move the bottle of wine onto the cabinet,0,,,300,6,27.88,2.31,9.54,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:02:04
+libero_goal,2,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,set the bottle on the cabinet top,0,,,300,6,23.5,1.62,8.89,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:02:27
+libero_goal,2,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,30.16,1.41,11.31,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:02:57
+libero_goal,2,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,21.54,1.41,8.62,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:03:19
+libero_goal,2,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,place the wine bottle on top of the cabinet,1,2,,94,2,7.67,1.32,2.95,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:03:27
+libero_goal,2,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,move the bottle of wine onto the cabinet,0,,,300,6,29.07,1.87,10.54,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:03:56
+libero_goal,2,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,set the bottle on the cabinet top,0,,,300,6,22.22,1.45,8.46,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:04:18
+libero_goal,2,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,26.41,1.71,9.74,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:04:44
+libero_goal,2,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,27.15,1.89,9.13,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:05:12
+libero_goal,2,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,place the wine bottle on top of the cabinet,1,2,,91,2,8.61,1.59,2.72,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:05:20
+libero_goal,2,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,move the bottle of wine onto the cabinet,0,,,300,6,22.57,1.63,8.63,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:05:43
+libero_goal,2,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,set the bottle on the cabinet top,0,,,300,6,29.0,1.55,10.51,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:06:12
+libero_goal,3,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,22.8,2.62,8.72,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:06:35
+libero_goal,3,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,24.09,1.55,9.83,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:06:59
+libero_goal,3,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,open the top drawer and place the bowl inside,0,,,300,6,32.18,2.15,12.27,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:07:31
+libero_goal,3,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,"pull out the upper drawer, then put the bowl in it",0,,,300,6,31.89,2.42,10.8,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:08:03
+libero_goal,3,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,put the bowl in the top drawer after opening it,0,,,300,6,27.49,1.54,9.7,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:08:31
+libero_goal,3,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,31.44,1.63,11.1,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:09:02
+libero_goal,3,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,29.92,2.03,10.3,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:09:32
+libero_goal,3,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,open the top drawer and place the bowl inside,1,3,,180,4,20.36,2.5,6.96,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:09:52
+libero_goal,3,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,"pull out the upper drawer, then put the bowl in it",0,,,300,6,28.74,4.65,9.44,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:10:21
+libero_goal,3,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,put the bowl in the top drawer after opening it,0,,,300,6,30.94,2.3,10.43,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:10:52
+libero_goal,3,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,26.37,1.99,9.51,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:11:18
+libero_goal,3,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,23.58,1.52,9.12,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:11:42
+libero_goal,3,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,open the top drawer and place the bowl inside,0,,,300,6,30.37,1.96,11.15,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:12:12
+libero_goal,3,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,"pull out the upper drawer, then put the bowl in it",0,,,300,6,32.0,1.73,11.48,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:12:44
+libero_goal,3,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,put the bowl in the top drawer after opening it,0,,,300,6,27.07,2.27,8.94,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:13:11
+libero_goal,3,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,26.04,1.66,9.19,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:13:37
+libero_goal,3,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,30.66,2.64,11.06,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:14:08
+libero_goal,3,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,open the top drawer and place the bowl inside,0,,,300,6,23.04,1.71,8.69,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:14:31
+libero_goal,3,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,"pull out the upper drawer, then put the bowl in it",0,,,300,6,25.28,1.79,9.62,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:14:56
+libero_goal,3,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,put the bowl in the top drawer after opening it,0,,,300,6,32.24,2.3,11.29,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:15:29
+libero_goal,3,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,24.39,1.91,8.85,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:15:53
+libero_goal,3,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,22.78,1.57,8.83,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:16:16
+libero_goal,3,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,open the top drawer and place the bowl inside,1,3,,175,4,18.93,1.78,7.01,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:16:35
+libero_goal,3,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,"pull out the upper drawer, then put the bowl in it",0,,,300,6,24.81,2.11,9.1,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:17:00
+libero_goal,3,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,put the bowl in the top drawer after opening it,0,,,300,6,25.82,1.77,9.17,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:17:25
+libero_goal,4,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,30.76,2.33,11.38,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:17:57
+libero_goal,4,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,28.73,1.98,10.01,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:18:25
+libero_goal,4,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,place the bowl on top of the cabinet,0,,,300,6,28.31,1.76,10.48,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:18:54
+libero_goal,4,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,move the bowl onto the cabinet,0,,,300,6,24.34,2.01,8.69,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:19:18
+libero_goal,4,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,set the bowl down on the cabinet top,0,,,300,6,24.07,1.56,9.23,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:19:42
+libero_goal,4,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,30.24,1.63,11.05,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:20:12
+libero_goal,4,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,23.0,1.39,8.7,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:20:35
+libero_goal,4,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,place the bowl on top of the cabinet,1,4,,84,2,8.97,1.62,3.13,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:20:44
+libero_goal,4,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,move the bowl onto the cabinet,0,,,300,6,35.16,1.9,13.22,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:21:19
+libero_goal,4,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,set the bowl down on the cabinet top,1,4,,86,2,9.15,1.65,3.02,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:21:29
+libero_goal,4,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,26.07,1.79,8.83,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:21:55
+libero_goal,4,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,31.96,1.58,11.31,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:22:27
+libero_goal,4,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,place the bowl on top of the cabinet,1,4,,87,2,12.45,1.99,4.11,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:22:39
+libero_goal,4,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,move the bowl onto the cabinet,0,,,300,6,27.26,1.57,9.91,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:23:06
+libero_goal,4,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,set the bowl down on the cabinet top,1,4,,81,2,8.96,1.74,3.31,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:23:15
+libero_goal,4,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,32.54,1.67,11.96,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:23:48
+libero_goal,4,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,32.7,2.16,11.65,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:24:21
+libero_goal,4,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,place the bowl on top of the cabinet,1,4,,90,2,9.31,1.6,2.87,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:24:30
+libero_goal,4,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,move the bowl onto the cabinet,0,,,300,6,27.33,1.62,9.87,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:24:57
+libero_goal,4,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,set the bowl down on the cabinet top,0,,,300,6,27.96,1.97,9.86,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:25:25
+libero_goal,4,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,21.8,1.55,8.7,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:25:47
+libero_goal,4,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,22.92,1.46,9.37,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:26:10
+libero_goal,4,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,place the bowl on top of the cabinet,0,,,300,6,33.16,2.5,12.6,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:26:43
+libero_goal,4,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,move the bowl onto the cabinet,0,,,300,6,29.37,2.35,9.64,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:27:12
+libero_goal,4,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,set the bowl down on the cabinet top,0,,,300,6,24.94,1.61,9.42,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:27:37
+libero_goal,5,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,33.19,3.26,12.21,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:28:11
+libero_goal,5,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,29.37,2.04,10.61,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:28:40
+libero_goal,5,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,push the plate to the front of the cooktop,0,,,300,6,23.45,1.51,8.81,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:29:04
+libero_goal,5,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,slide the plate in front of the stove,0,,,300,6,32.22,1.5,12.22,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:29:36
+libero_goal,5,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,move the plate forward until it is in front of the stove,0,,,300,6,31.42,1.91,11.22,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:30:07
+libero_goal,5,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,25.54,1.52,9.05,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:30:33
+libero_goal,5,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,31.6,1.78,11.51,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:31:05
+libero_goal,5,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,push the plate to the front of the cooktop,0,,,300,6,27.84,2.15,9.29,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:31:32
+libero_goal,5,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,slide the plate in front of the stove,0,,,300,6,23.37,1.48,8.9,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:31:56
+libero_goal,5,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,move the plate forward until it is in front of the stove,0,,,300,6,28.96,1.61,10.48,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:32:25
+libero_goal,5,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,27.0,2.07,9.53,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:32:52
+libero_goal,5,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,24.18,1.74,8.8,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:33:16
+libero_goal,5,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,push the plate to the front of the cooktop,0,,,300,6,27.5,1.6,10.55,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:33:43
+libero_goal,5,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,slide the plate in front of the stove,0,,,300,6,25.26,1.95,9.35,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:34:09
+libero_goal,5,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,move the plate forward until it is in front of the stove,0,,,300,6,22.38,1.76,8.88,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:34:31
+libero_goal,5,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,30.99,1.51,12.46,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:35:02
+libero_goal,5,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,21.98,1.85,8.86,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:35:24
+libero_goal,5,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,push the plate to the front of the cooktop,0,,,300,6,26.09,1.48,10.48,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:35:50
+libero_goal,5,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,slide the plate in front of the stove,0,,,300,6,29.85,2.04,10.84,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:36:20
+libero_goal,5,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,move the plate forward until it is in front of the stove,0,,,300,6,27.51,1.78,9.51,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:36:48
+libero_goal,5,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,27.17,1.88,9.7,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:37:15
+libero_goal,5,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,23.74,1.54,8.68,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:37:38
+libero_goal,5,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,push the plate to the front of the cooktop,0,,,300,6,37.83,1.61,15.19,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:38:16
+libero_goal,5,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,slide the plate in front of the stove,0,,,300,6,323.04,2.46,310.29,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:43:39
+libero_goal,5,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,move the plate forward until it is in front of the stove,0,,,300,6,17.19,1.97,7.15,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:43:57
+libero_goal,6,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,316.1,1.9,8.14,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:49:13
+libero_goal,6,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,38.74,1.2,18.78,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:49:52
+libero_goal,6,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,place the cream cheese in the bowl,0,,,300,6,317.84,302.08,7.39,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:55:09
+libero_goal,6,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,move the cream cheese into the bowl,0,,,300,6,16.53,1.23,7.13,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:55:26
+libero_goal,6,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,drop the cheese box into the bowl,0,,,300,6,16.62,1.19,7.35,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:55:43
+libero_goal,6,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,16.54,1.13,7.38,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:55:59
+libero_goal,6,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,45.97,1.11,23.06,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:56:45
+libero_goal,6,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,place the cream cheese in the bowl,0,,,300,6,64.73,3.78,31.78,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T04:57:50
+libero_goal,6,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,move the cream cheese into the bowl,0,,,300,6,989.72,3.8,977.67,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:14:20
+libero_goal,6,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,drop the cheese box into the bowl,0,,,300,6,16.2,1.19,7.16,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:14:36
+libero_goal,6,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,16.56,1.17,7.25,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:14:52
+libero_goal,6,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,17.37,1.22,8.0,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:15:10
+libero_goal,6,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,place the cream cheese in the bowl,0,,,300,6,16.34,1.07,7.19,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:15:26
+libero_goal,6,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,move the cream cheese into the bowl,0,,,300,6,15.9,1.03,7.0,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:15:42
+libero_goal,6,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,drop the cheese box into the bowl,0,,,300,6,15.88,1.06,7.03,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:15:58
+libero_goal,6,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,15.87,1.04,7.04,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:16:14
+libero_goal,6,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,15.97,1.09,7.08,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:16:30
+libero_goal,6,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,place the cream cheese in the bowl,1,6,,81,2,5.75,1.05,2.54,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:16:35
+libero_goal,6,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,move the cream cheese into the bowl,0,,,300,6,16.2,0.97,6.95,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:16:52
+libero_goal,6,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,drop the cheese box into the bowl,0,,,300,6,34.95,1.01,14.46,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:17:27
+libero_goal,6,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,56.95,3.58,27.53,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:18:24
+libero_goal,6,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,16.76,1.09,7.32,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:18:40
+libero_goal,6,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,place the cream cheese in the bowl,0,,,300,6,17.27,1.15,7.33,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:18:58
+libero_goal,6,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,move the cream cheese into the bowl,0,,,300,6,18.53,1.14,7.8,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:19:16
+libero_goal,6,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,drop the cheese box into the bowl,0,,,300,6,20.73,1.55,8.3,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:19:37
+libero_goal,7,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,36.4,2.41,15.4,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:20:13
+libero_goal,7,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,48.76,3.32,25.44,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:21:02
+libero_goal,7,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,switch on the stove,0,,,300,6,21.32,1.78,8.5,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:21:24
+libero_goal,7,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,turn the stove on,1,7,,76,2,6.95,1.65,3.03,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:21:31
+libero_goal,7,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,start the cooktop,0,,,300,6,21.96,1.5,9.22,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:21:52
+libero_goal,7,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,24.5,1.5,9.04,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:22:17
+libero_goal,7,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,25.45,1.66,9.31,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:22:42
+libero_goal,7,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,switch on the stove,0,,,300,6,26.2,1.52,9.97,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:23:09
+libero_goal,7,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,turn the stove on,1,7,,73,2,8.99,1.78,3.3,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:23:18
+libero_goal,7,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,start the cooktop,0,,,300,6,30.61,2.28,10.3,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:23:48
+libero_goal,7,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,30.27,1.65,10.26,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:24:19
+libero_goal,7,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,31.26,1.7,11.03,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:24:50
+libero_goal,7,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,switch on the stove,0,,,300,6,31.25,1.87,10.78,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:25:21
+libero_goal,7,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,turn the stove on,0,,,300,6,30.17,1.61,11.48,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:25:51
+libero_goal,7,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,start the cooktop,0,,,300,6,33.2,1.76,12.26,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:26:24
+libero_goal,7,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,30.71,1.79,11.15,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:26:55
+libero_goal,7,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,31.07,1.69,11.65,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:27:26
+libero_goal,7,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,switch on the stove,0,,,300,6,31.73,2.0,11.69,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:27:58
+libero_goal,7,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,turn the stove on,1,7,,77,2,10.43,1.74,4.14,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:28:08
+libero_goal,7,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,start the cooktop,0,,,300,6,30.74,2.05,11.88,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:28:39
+libero_goal,7,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,32.58,1.69,12.04,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:29:12
+libero_goal,7,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,30.1,1.66,11.17,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:29:42
+libero_goal,7,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,switch on the stove,0,,,300,6,31.58,1.72,11.91,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:30:13
+libero_goal,7,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,turn the stove on,1,7,,75,2,10.94,2.02,4.13,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:30:24
+libero_goal,7,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,start the cooktop,0,,,300,6,31.19,2.34,11.74,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:30:56
+libero_goal,8,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,32.69,2.74,11.47,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:31:29
+libero_goal,8,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,32.11,1.77,11.67,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:32:01
+libero_goal,8,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,place the bowl on the plate,0,,,300,6,31.0,1.8,10.98,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:32:32
+libero_goal,8,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,move the bowl onto the plate,0,,,300,6,32.31,1.66,11.63,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:33:04
+libero_goal,8,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,set the bowl down on the dish,0,,,300,6,32.15,2.32,11.5,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:33:36
+libero_goal,8,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,32.64,2.32,11.53,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:34:09
+libero_goal,8,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,34.36,2.64,12.18,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:34:43
+libero_goal,8,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,place the bowl on the plate,1,8,,80,2,10.83,2.01,4.1,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:34:54
+libero_goal,8,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,move the bowl onto the plate,0,,,300,6,33.21,2.05,12.26,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:35:27
+libero_goal,8,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,set the bowl down on the dish,0,,,300,6,33.6,1.9,12.72,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:36:01
+libero_goal,8,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,35.41,2.5,13.13,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:36:36
+libero_goal,8,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,34.93,2.44,12.7,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:37:11
+libero_goal,8,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,place the bowl on the plate,1,8,,81,2,11.9,2.34,4.21,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:37:23
+libero_goal,8,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,move the bowl onto the plate,1,8,,88,2,12.0,2.16,4.3,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:37:35
+libero_goal,8,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,set the bowl down on the dish,0,,,300,6,31.95,2.01,12.08,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:38:07
+libero_goal,8,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,32.78,1.88,12.03,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:38:40
+libero_goal,8,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,30.74,1.81,11.94,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:39:10
+libero_goal,8,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,place the bowl on the plate,1,8,,79,2,10.68,1.72,4.1,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:39:21
+libero_goal,8,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,move the bowl onto the plate,1,8,,223,5,26.28,2.08,9.99,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:39:47
+libero_goal,8,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,set the bowl down on the dish,0,,,300,6,32.2,2.72,11.69,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:40:20
+libero_goal,8,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,31.54,2.32,11.36,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:40:51
+libero_goal,8,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,33.18,2.44,11.92,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:41:24
+libero_goal,8,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,place the bowl on the plate,0,,,300,6,30.84,2.31,11.3,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:41:55
+libero_goal,8,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,move the bowl onto the plate,0,,,300,6,32.5,2.41,11.57,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:42:28
+libero_goal,8,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,set the bowl down on the dish,0,,,300,6,31.72,2.39,11.02,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:42:59
+libero_goal,9,empty,0.0000,empty,0,none,0.0,,,,0,,,300,6,32.74,3.32,11.0,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:43:33
+libero_goal,9,absurd,0.0000,absurd,0,none,0.0,,,sing a song,0,,,300,6,33.15,2.14,11.91,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:44:06
+libero_goal,9,paraphrase,0.0000,paraphrase_0,0,none,0.0,,,place the wine bottle on the rack,1,9,,123,3,15.64,2.46,5.62,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:44:21
+libero_goal,9,paraphrase,0.0000,paraphrase_1,0,none,0.0,,,move the bottle of wine onto the rack,0,,,300,6,33.12,2.49,11.6,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:44:54
+libero_goal,9,paraphrase,0.0000,paraphrase_2,0,none,0.0,,,set the bottle in the wine rack,0,,,300,6,35.06,2.14,12.73,0,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:45:30
+libero_goal,9,empty,0.0000,empty,1,none,0.0,,,,0,,,300,6,32.46,1.92,11.78,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:46:02
+libero_goal,9,absurd,0.0000,absurd,1,none,0.0,,,sing a song,0,,,300,6,33.81,1.72,12.36,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:46:36
+libero_goal,9,paraphrase,0.0000,paraphrase_0,1,none,0.0,,,place the wine bottle on the rack,1,9,,140,3,17.18,2.26,5.96,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:46:53
+libero_goal,9,paraphrase,0.0000,paraphrase_1,1,none,0.0,,,move the bottle of wine onto the rack,0,,,300,6,32.26,1.86,12.02,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:47:25
+libero_goal,9,paraphrase,0.0000,paraphrase_2,1,none,0.0,,,set the bottle in the wine rack,0,,,300,6,33.02,1.73,11.83,1,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:47:58
+libero_goal,9,empty,0.0000,empty,2,none,0.0,,,,0,,,300,6,31.8,2.14,11.22,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:48:30
+libero_goal,9,absurd,0.0000,absurd,2,none,0.0,,,sing a song,0,,,300,6,33.53,2.11,12.18,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T05:49:04
+libero_goal,9,paraphrase,0.0000,paraphrase_0,2,none,0.0,,,place the wine bottle on the rack,0,,,300,6,1018.92,2.69,12.75,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:06:03
+libero_goal,9,paraphrase,0.0000,paraphrase_1,2,none,0.0,,,move the bottle of wine onto the rack,0,,,300,6,17.55,2.0,7.21,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:06:20
+libero_goal,9,paraphrase,0.0000,paraphrase_2,2,none,0.0,,,set the bottle in the wine rack,0,,,300,6,16.44,1.1,7.42,2,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:06:36
+libero_goal,9,empty,0.0000,empty,3,none,0.0,,,,0,,,300,6,16.77,1.18,7.44,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:06:53
+libero_goal,9,absurd,0.0000,absurd,3,none,0.0,,,sing a song,0,,,300,6,16.92,1.6,7.52,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:07:10
+libero_goal,9,paraphrase,0.0000,paraphrase_0,3,none,0.0,,,place the wine bottle on the rack,1,9,,123,3,7.98,1.1,3.66,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:07:18
+libero_goal,9,paraphrase,0.0000,paraphrase_1,3,none,0.0,,,move the bottle of wine onto the rack,0,,,300,6,16.03,0.96,7.1,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:07:34
+libero_goal,9,paraphrase,0.0000,paraphrase_2,3,none,0.0,,,set the bottle in the wine rack,1,9,,128,3,8.13,1.09,3.66,3,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:07:42
+libero_goal,9,empty,0.0000,empty,4,none,0.0,,,,0,,,300,6,16.58,1.11,7.3,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:07:59
+libero_goal,9,absurd,0.0000,absurd,4,none,0.0,,,sing a song,0,,,300,6,16.41,1.15,7.33,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:08:15
+libero_goal,9,paraphrase,0.0000,paraphrase_0,4,none,0.0,,,place the wine bottle on the rack,0,,,300,6,15.85,1.08,6.97,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:08:31
+libero_goal,9,paraphrase,0.0000,paraphrase_1,4,none,0.0,,,move the bottle of wine onto the rack,0,,,300,6,15.72,1.07,6.99,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:08:47
+libero_goal,9,paraphrase,0.0000,paraphrase_2,4,none,0.0,,,set the bottle in the wine rack,0,,,300,6,15.96,0.98,7.11,4,50,360,,language_variants,80004f3,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T06:09:03

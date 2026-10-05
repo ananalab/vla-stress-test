@@ -7,6 +7,15 @@
   "language_off_diag_env_goal": "0/270 = 0% [0%, 1%]",
   "language_off_diag_instructed_goal": "197/270 = 73% [67%, 78%]",
   "language_off_diag_some_other_goal": "2/270 = 1% [0%, 3%]",
+  "language_paraphrase": "35/150 = 23% [17%, 31%]",
+  "language_paraphrase_by_index": {
+    "paraphrase_0": 20,
+    "paraphrase_1": 11,
+    "paraphrase_2": 4
+  },
+  "language_empty": "0/50 = 0% [0%, 7%]",
+  "language_absurd": "0/50 = 0% [0%, 7%]",
+  "language_variants_failed_with_any_goal": 0,
   "breaking_points": [
     {
       "family": "camera_orbit",
@@ -41,5 +50,34 @@
       "n_per_point": 50,
       "n_boot_valid": 300
     }
-  ]
+  ],
+  "rl_eval": [
+    {
+      "level_rad": 0.0,
+      "vla_k": 8,
+      "n": 10,
+      "s0_k": 8,
+      "s0_n": 10,
+      "s0_p": 1.0
+    },
+    {
+      "level_rad": 0.05,
+      "vla_k": 5,
+      "n": 10,
+      "s0_k": 4,
+      "s0_n": 10,
+      "s0_p": 1.0
+    },
+    {
+      "level_rad": 0.1,
+      "vla_k": 1,
+      "n": 10,
+      "s0_k": 1,
+      "s0_n": 10,
+      "s0_p": 1.0
+    }
+  ],
+  "rl_final_train_success": {
+    "robot025_task2_s0": 0.761
+  }
 }

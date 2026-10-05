@@ -89,27 +89,34 @@ if lm is not None:
     lm.groupby(["said"]).said_goal.mean().to_csv(SUM / "language_instructed_goal_by_instruction.csv")
 
 lv = load("language_variants")
-bg = load("baseline_goal")
-if lv is not None and bg is not None:
-    ref = bg[bg.episode < lv.episode.max() + 1].assign(condition="original", variant="original")
-    allv = pd.concat([ref, lv], ignore_index=True)
-    allv["label"] = allv["condition"].replace({"paraphrase": "paraphrase"})
-    t = rate_table(allv, ["condition"])
-    order = ["original", "paraphrase", "empty", "absurd"]
-    t["order"] = t["condition"].map({k: i for i, k in enumerate(order)})
-    t = t.sort_values("order")
+if lv is not None:
+    # Reference with the original wording, same tasks and init states: baseline_goal if it covers
+    # all tasks, otherwise the diagonal of the swap matrix (episodes 0-2).
+    bg = load("baseline_goal")
+    if bg is not None and bg.task_id.nunique() == 10:
+        ref = bg[bg.episode < lv.episode.max() + 1].copy()
+        ref_name = "original wording"
+    else:
+        ref = lm[lm.said == lm.task_id].copy()
+        ref_name = "original wording (eps 0-2)"
+    ref["label"] = ref_name
+    lv = lv.copy()
+    names = {"paraphrase_0": "paraphrase, close", "paraphrase_1": "paraphrase, reworded", "paraphrase_2": "paraphrase, distant", "empty": "empty string", "absurd": "\u201csing a song\u201d"}
+    lv["label"] = lv["variant"].map(names)
+    allv = pd.concat([ref[["label", "success", "task_id", "episode"]], lv[["label", "success", "task_id", "episode"]]])
+    t = rate_table(allv, ["label"])
+    order = [ref_name] + list(names.values())
+    t["o"] = t["label"].map({k: i for i, k in enumerate(order)})
+    t = t.sort_values("o")
     t.to_csv(SUM / "language_variants.csv", index=False)
-    names = {"original": "original instruction", "paraphrase": "paraphrase (3 per task)", "empty": "empty string", "absurd": '"sing a song"'}
-    t["name"] = t["condition"].map(names)
-    plots.bars(t, "name", FIG / "language_variants.pdf", figsize=(3.25, 1.2))
-    # paired test vs original instruction, same task/episode
-    tests = {}
-    for cond in ["empty", "absurd"]:
-        x = lv[lv.condition == cond].merge(ref, on=["task_id", "episode"], suffixes=("", "_ref"))
-        tests[cond] = mcnemar_exact(x["success_ref"], x["success"])
-    headline["language_variant_tests"] = tests
+    plots.bars(t, "label", FIG / "language_variants.pdf", figsize=(3.25, 1.45))
     pp = lv[lv.condition == "paraphrase"]
-    headline["paraphrase_by_index"] = pp.groupby("variant").success.mean().round(2).to_dict()
+    headline["language_paraphrase"] = wilson_str(int(pp.success.sum()), len(pp))
+    headline["language_paraphrase_by_index"] = pp.groupby("variant").success.sum().to_dict()
+    headline["language_empty"] = wilson_str(int(lv[lv.condition == "empty"].success.sum()), int((lv.condition == "empty").sum()))
+    headline["language_absurd"] = wilson_str(int(lv[lv.condition == "absurd"].success.sum()), int((lv.condition == "absurd").sum()))
+    failed = lv[lv.success == 0]
+    headline["language_variants_failed_with_any_goal"] = int((failed.goals_achieved.astype(str) != "").sum())
 
 # ---------------------------------------------------------------- dose-response
 bs = load("baseline_spatial")
@@ -240,6 +247,17 @@ if "light_dimming" in curves:
     lost = t[(t.rate <= 0.25 * s0) & (t.magnitude > keep)].magnitude.min()
     macros["LightCliffLow"] = f"{100 * keep:g}\\%"
     macros["LightCliffHigh"] = f"{100 * lost:g}\\%"
+if lv is not None:
+    pp = lv[lv.condition == "paraphrase"]
+    macros["LangPara"] = frac(int(pp.success.sum()), len(pp))
+    for k, nm in zip(["paraphrase_0", "paraphrase_1", "paraphrase_2"], ["Close", "Reworded", "Distant"]):
+        g = pp[pp.variant == k]
+        macros[f"LangPara{nm}"] = f"{int(g.success.sum())}/{len(g)}"
+    for c in ["empty", "absurd"]:
+        g = lv[lv.condition == c]
+        macros[f"Lang{c.capitalize()}"] = f"{int(g.success.sum())}/{len(g)}"
+    macros["LangVariantsFailedAnyGoal"] = str(int((lv[lv.success == 0].goals_achieved.astype(str) != "").sum()))
+    macros["LangVariantsFailed"] = str(int((lv.success == 0).sum()))
 if rl_rows:
     seeds = sorted(rl_res)
     for row in rl_rows:

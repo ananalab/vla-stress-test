@@ -31,10 +31,34 @@ has its own set), so the robot is not keyed on the start configuration either. T
 are those whose objects are close to other objects (task 3, bowl into the top drawer; task 6, cream
 cheese into the bowl).
 
-This contrasts with the conclusion of LIBERO-Plus that VLAs largely ignore language. The two tests
-measure different things: paraphrases or corrupted instructions that do not change the intended goal
-leave the action unchanged whether or not the model reads them, whereas swapping goals in a fixed
-scene requires the instruction to be used. \LangVariantsSentence{}
+This contrasts with the conclusion of LIBERO-Plus that VLAs largely ignore language. A swap test
+is a direct check: in a fixed scene, only the instruction can tell the robot which of ten goals to
+pursue.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{figures/language_variants.pdf}
+  \caption{\textbf{Instruction variants} on LIBERO-Goal (environment and instruction of the same
+  task, 5 episodes per task). Paraphrases were written by hand, from close to the original wording
+  to fully reworded. Wilson 95\% intervals.}
+  \label{fig:variants}
+\end{figure}
+
+\subsection{\dots{} but to the exact words}
+The same model is brittle to rewording (Fig.~\ref{fig:variants}). Hand-written paraphrases that keep
+the goal unchanged succeed in only \LangPara{} of episodes, and the rate drops with the distance from
+the training wording: \LangParaClose{} for a close paraphrase (\emph{``place the bowl on the
+stove''}), \LangParaReworded{} for a reworded one, \LangParaDistant{} for the most distant. Small
+changes matter: \emph{``turn the stove on''} works, \emph{``switch on the stove''} does not. An empty
+instruction and an unrelated one (\emph{``sing a song''}) both give \LangEmpty{}. In none of the
+\LangVariantsFailed{} failed episodes does the robot complete any of the ten goals: without an
+instruction it recognises, it does not fall back on a default task, it does nothing useful.
+
+Taken together, the instruction is what selects the behaviour, but it acts more like a key into a
+small set of learned behaviours than like language that is understood. For this model and suite we
+therefore find sensitivity to language on both counts: naming another goal changes the behaviour, and
+rewording the same goal breaks it. Model, suite and perturbation types all differ from LIBERO-Plus,
+and we did not reproduce their setting, so this is a statement about SmolVLA on LIBERO-Goal only.
 
 \begin{figure*}[t]
   \centering
