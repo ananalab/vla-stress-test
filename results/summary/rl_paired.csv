@@ -1,0 +1,5 @@
+seed,split,mean_steps_success_vla,mean_steps_success_res,mcnemar_p
+s0,train,109.6,91.28571428571429,0.125
+s0,heldout,95.4,89.0,1.0
+s1,train,109.6,89.53846153846153,0.375
+s1,heldout,95.4,92.4,1.0

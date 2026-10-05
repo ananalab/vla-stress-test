@@ -19,3 +19,17 @@ libero_goal,1,clean,0.0000,,6,none,0.0,,,put the bowl on the stove,1,163,4,43.04
 libero_goal,1,clean,0.0000,,7,none,0.0,,,put the bowl on the stove,1,86,2,27.32,10.93,10.12,7,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:29:59
 libero_goal,1,clean,0.0000,,8,none,0.0,,,put the bowl on the stove,1,84,2,50.45,11.32,27.62,8,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:30:50
 libero_goal,1,clean,0.0000,,9,none,0.0,,,put the bowl on the stove,1,87,2,47.82,22.73,16.34,9,50,360,,baseline_goal,367b3ae,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-04T15:31:38
+libero_goal,2,clean,0.0000,,0,none,0.0,,,put the wine bottle on top of the cabinet,1,90,2,9.5,3.88,3.1,0,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:38:41
+libero_goal,2,clean,0.0000,,1,none,0.0,,,put the wine bottle on top of the cabinet,1,97,2,6.26,1.11,2.52,1,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:38:47
+libero_goal,2,clean,0.0000,,2,none,0.0,,,put the wine bottle on top of the cabinet,1,104,3,8.91,1.03,4.33,2,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:38:56
+libero_goal,2,clean,0.0000,,3,none,0.0,,,put the wine bottle on top of the cabinet,0,300,6,26.58,1.28,10.67,3,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:39:23
+libero_goal,2,clean,0.0000,,4,none,0.0,,,put the wine bottle on top of the cabinet,1,95,2,10.33,2.68,2.94,4,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:39:33
+libero_goal,2,clean,0.0000,,5,none,0.0,,,put the wine bottle on top of the cabinet,1,95,2,8.6,1.56,3.2,5,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:39:42
+libero_goal,2,clean,0.0000,,6,none,0.0,,,put the wine bottle on top of the cabinet,1,91,2,10.87,1.9,3.49,6,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:39:52
+libero_goal,2,clean,0.0000,,7,none,0.0,,,put the wine bottle on top of the cabinet,1,95,2,13.65,2.8,4.27,7,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:40:06
+libero_goal,2,clean,0.0000,,8,none,0.0,,,put the wine bottle on top of the cabinet,1,97,2,10.96,2.92,3.39,8,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:40:17
+libero_goal,2,clean,0.0000,,9,none,0.0,,,put the wine bottle on top of the cabinet,1,88,2,8.93,1.83,3.26,9,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:40:26
+libero_goal,3,clean,0.0000,,0,none,0.0,,,open the top drawer and put the bowl inside,1,181,4,16.43,3.14,5.97,0,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:40:43
+libero_goal,3,clean,0.0000,,1,none,0.0,,,open the top drawer and put the bowl inside,1,175,4,19.83,1.56,7.25,1,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:41:03
+libero_goal,3,clean,0.0000,,2,none,0.0,,,open the top drawer and put the bowl inside,1,180,4,24.84,2.05,12.91,2,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:41:28
+libero_goal,3,clean,0.0000,,3,none,0.0,,,open the top drawer and put the bowl inside,1,174,4,17.03,3.41,6.66,3,50,360,,baseline_goal,0de13ef,0.6.1,31d453f7edd7,mps-arm64-Apple_M1,2026-10-05T15:41:45

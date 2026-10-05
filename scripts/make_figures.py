@@ -154,39 +154,49 @@ if cm is not None and bs is not None:
 
 # ---------------------------------------------------------------- residual RL
 rl_vla = load("rl_eval_vla")
-rl_res = {Path(f).stem.split("_")[-1]: pd.read_csv(f, keep_default_na=False) for f in sorted(glob.glob(str(R / "rl_eval_residual_s*.csv")))}
+rl_tr_vla = load("rl_eval_train_vla")
+rl_res = {Path(f).stem.split("_")[-1]: load(Path(f).stem) for f in sorted(glob.glob(str(R / "rl_eval_residual_s*.csv")))}
+rl_tr_res = {Path(f).stem.split("_")[-1]: load(Path(f).stem) for f in sorted(glob.glob(str(R / "rl_eval_train_residual_s*.csv")))}
 logs = {}
 for f in sorted(glob.glob("runs/robot025_task2_s*/log.csv")):
     try:
         lg = pd.read_csv(f)
     except pd.errors.EmptyDataError:
         continue  # run just started
-    if len(lg) >= 10:
+    if len(lg) >= 40:  # finished runs only
         logs[Path(f).parent.name] = lg
-rl_rows = []
-if rl_vla is not None:
-    rl_vla["level"] = rl_vla["magnitude"].astype(float)
-    for lvl, g in rl_vla.groupby("level"):
-        row = {"level_rad": lvl, "vla_k": int(g.success.sum()), "n": len(g)}
-        for seed, r in rl_res.items():
-            r = r.copy()
-            r["level"] = r["magnitude"].astype(float)
-            rg = r[r.level == lvl].merge(g[["episode", "success"]], on="episode", suffixes=("", "_vla"))
-            if len(rg):
-                row[f"{seed}_k"] = int(rg.success.sum())
-                row[f"{seed}_n"] = len(rg)
-                row[f"{seed}_p"] = mcnemar_exact(rg.success_vla, rg.success)["p"]
+rl_rows, groups, rl_steps = [], [], {}
+if rl_vla is not None and rl_res:
+    def kn(d, mag):
+        g = d[np.isclose(d.magnitude, mag)]
+        return (int(g.success.sum()), len(g))
+
+    def paired(v, r, mag):
+        m = v[np.isclose(v.magnitude, mag)].merge(r[np.isclose(r.magnitude, mag)], on="episode", suffixes=("_v", "_r"))
+        return m
+
+    if rl_tr_vla is not None:
+        groups.append({"label": "seen states\n0.05 rad", "vla": kn(rl_tr_vla, 0.05), "res": {sd: kn(d, 0.05) for sd, d in rl_tr_res.items()}})
+    for mag, lab in [(0.05, "unseen states\n0.05 rad"), (0.0, "unseen states\nno offset"), (0.1, "unseen states\n0.10 rad")]:
+        groups.append({"label": lab, "vla": kn(rl_vla, mag), "res": {sd: kn(d, mag) for sd, d in rl_res.items()}})
+    for g in groups:
+        row = {"group": g["label"].replace("\n", " "), "vla": f"{g['vla'][0]}/{g['vla'][1]}"}
+        for sd, (k, n) in g["res"].items():
+            row[sd] = f"{k}/{n}"
         rl_rows.append(row)
+    # paired tests and episode length of successes
+    for sd in rl_res:
+        for split, v, r in [("train", rl_tr_vla, rl_tr_res.get(sd)), ("heldout", rl_vla, rl_res[sd])]:
+            if v is None or r is None:
+                continue
+            m = paired(v, r, 0.05)
+            rl_steps[(sd, split)] = (m[m.success_v == 1].steps_v.mean(), m[m.success_r == 1].steps_r.mean(), mcnemar_exact(m.success_v, m.success_r)["p"])
     pd.DataFrame(rl_rows).to_csv(SUM / "rl_eval.csv", index=False)
+    pd.DataFrame([{"seed": k[0], "split": k[1], "mean_steps_success_vla": v[0], "mean_steps_success_res": v[1], "mcnemar_p": v[2]} for k, v in rl_steps.items()]).to_csv(SUM / "rl_paired.csv", index=False)
     headline["rl_eval"] = rl_rows
-if logs:
-    # training-time reference: VLA alone at the training level on the training init states
     d = load("dose_robot_init")
-    ref = None
-    if d is not None:
-        ref = d[(d.task_id == 2) & (d.intensity == 0.25)].success.mean()
-    plots.learning_curves(logs, FIG / "rl_learning_curve.pdf", baseline=ref)
-    headline["rl_final_train_success"] = {k: round(v.success_rate.tail(5).mean(), 3) for k, v in logs.items()}
+    ref = d[(d.task_id == 2) & np.isclose(d.magnitude, 0.05)].success.mean() if d is not None else None
+    plots.rl_summary(logs, groups, FIG / "rl_residual.pdf", train_ref=ref)
 
 json.dump(headline, open(SUM / "headline.json", "w"), indent=2, default=lambda o: o.item() if hasattr(o, "item") else str(o))
 print(json.dumps(headline, indent=2, default=str))
@@ -271,18 +281,32 @@ if lv is not None:
     macros["LangVariantsFailed"] = str(int((lv.success == 0).sum()))
 if rl_rows:
     seeds = sorted(rl_res)
-    for row in rl_rows:
-        tag = {0.0: "Clean", 0.05: "Train", 0.1: "Strong"}.get(round(row["level_rad"], 3))
-        if tag is None:
-            continue
-        macros[f"RL{tag}Vla"] = f"{row['vla_k']}/{row['n']}"
-        ks = [row.get(f"{sd}_k") for sd in seeds if f"{sd}_k" in row]
-        ns = [row.get(f"{sd}_n") for sd in seeds if f"{sd}_n" in row]
-        if ks:
-            macros[f"RL{tag}Res"] = f"{sum(ks)}/{sum(ns)}"
-            macros[f"RL{tag}ResPct"] = pct(sum(ks), sum(ns))
-            macros[f"RL{tag}VlaPct"] = pct(row["vla_k"], row["n"])
     macros["RLSeeds"] = str(len(seeds))
+    names = {"seen states 0.05 rad": "Seen", "unseen states 0.05 rad": "Unseen", "unseen states no offset": "UnseenClean", "unseen states 0.10 rad": "UnseenStrong"}
+    for row in rl_rows:
+        tag = names[row["group"]]
+        macros[f"RL{tag}Vla"] = row["vla"]
+        macros[f"RL{tag}Res"] = ", ".join(row[sd] for sd in seeds if sd in row)
+    tr = [rl_steps[(sd, "train")] for sd in seeds if (sd, "train") in rl_steps]
+    ho = [rl_steps[(sd, "heldout")] for sd in seeds if (sd, "heldout") in rl_steps]
+    if tr:
+        macros["RLStepsSeenVla"] = f"{tr[0][0]:.0f}"
+        macros["RLStepsSeenRes"] = "--".join(sorted({f"{t[1]:.0f}" for t in tr}))
+        macros["RLPSeen"] = ", ".join(f"{t[2]:.2f}" for t in tr)
+    if ho:
+        macros["RLStepsUnseenVla"] = f"{ho[0][0]:.0f}"
+        macros["RLStepsUnseenRes"] = "--".join(sorted({f"{t[1]:.0f}" for t in ho}))
+    if logs:
+        first = [lg.success_rate.head(10).mean() for lg in logs.values()]
+        last = [lg.success_rate.tail(10).mean() for lg in logs.values()]
+        macros["RLTrainFirst"] = ", ".join(f"{v:.2f}" for v in first)
+        macros["RLTrainLast"] = ", ".join(f"{v:.2f}" for v in last)
+rp = load("rl_eval_replan10")
+if rp is not None and rl_vla is not None:
+    for mag, tag in [(0.0, "Clean"), (0.05, "Train"), (0.1, "Strong")]:
+        g = rp[np.isclose(rp.magnitude, mag)]
+        macros[f"RLReplan{tag}"] = f"{int(g.success.sum())}/{len(g)}"
+    macros["RLReplanSlowdown"] = f"{rp.duration_s.astype(float).mean() / rl_vla.duration_s.astype(float).mean():.1f}"
 with open("report/numbers.tex", "w") as f:
     f.write("% generated by scripts/make_figures.py from results/ -- do not edit by hand\n")
     for k, v in sorted(macros.items()):

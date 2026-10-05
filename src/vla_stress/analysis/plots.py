@@ -199,24 +199,55 @@ def dose_response(curves: dict[str, pd.DataFrame], path, n_boot: int = 300):
 
 
 # --------------------------------------------------------------------------- residual RL
-def learning_curves(logs: dict[str, pd.DataFrame], path, baseline: float | None = None, window: int = 5):
-    """Rollout success during PPO (moving average over `window` updates): each seed thin, mean thick."""
-    fig, ax = plt.subplots(figsize=(3.25, 1.9))
-    ys, steps = [], None
-    for lg in logs.values():
+SEED_COLORS = ["#2a78d6", "#eb6834", "#1baf7a"]
+
+
+def rl_summary(logs: dict[str, pd.DataFrame], groups: list[dict], path, train_ref: float | None = None, window: int = 5):
+    """(a) PPO training success per seed (moving average); (b) evaluation success, VLA alone vs
+    VLA + residual for each seed, on init states seen in training and on held-out ones.
+
+    groups: [{"label": str, "vla": (k, n), "res": {seed: (k, n)}}]"""
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.75, 2.1), gridspec_kw={"width_ratios": [1, 1.25]}, constrained_layout=True)
+    for i, (name, lg) in enumerate(sorted(logs.items())):
         s = lg["success_rate"].rolling(window, min_periods=1).mean()
-        ax.plot(lg["step"] / 1000, s, color="#2a78d6", lw=0.6, alpha=0.35)
-        ys.append(s.values)
-        if steps is None or len(lg) < len(steps):
-            steps = lg["step"].values
-    if ys:
-        L = min(len(y) for y in ys)
-        Y = np.stack([y[:L] for y in ys])
-        ax.plot(steps[:L] / 1000, Y.mean(0), color="#2a78d6", lw=1.6, label=f"VLA + residual (mean of {len(ys)} seeds)")
-    if baseline is not None:
-        ax.axhline(baseline, color=GREY, ls=(0, (2, 2)), lw=0.9, label="VLA alone")
-    ax.set_xlabel("environment steps (thousands)")
-    ax.set_ylabel("training success rate")
-    ax.set_ylim(0, 1)
-    ax.legend(frameon=False, loc="lower right")
+        ax1.plot(lg["step"] / 1000, s, color=SEED_COLORS[i % 3], lw=1.3, label=f"seed {name.rsplit('_s', 1)[-1]}")
+    if train_ref is not None:
+        ax1.axhline(train_ref, color=GREY, ls=(0, (2, 2)), lw=0.9, label="VLA alone (states 0\u20134)")
+    ax1.set_xlabel("environment steps (thousands)")
+    ax1.set_ylabel(f"training success ({window}-update avg)")
+    ax1.set_ylim(0, 1)
+    ax1.legend(frameon=False, loc="lower right", ncol=2)
+    ax1.set_title("PPO training (init states 0\u201339)", loc="left")
+    panel_label(ax1, "a")
+
+    from vla_stress.analysis.stats import wilson
+
+    x = np.arange(len(groups))
+    seeds = sorted({sd for g in groups for sd in g["res"]})
+    width = 0.8 / (1 + len(seeds))
+    for j, who in enumerate(["vla"] + seeds):
+        xs, ys, los, his = [], [], [], []
+        for i, g in enumerate(groups):
+            kn = g["vla"] if who == "vla" else g["res"].get(who)
+            if kn is None:
+                continue
+            k, n = kn
+            lo, hi = wilson(k, n)
+            xs.append(i - 0.4 + width * (j + 0.5))
+            ys.append(k / n)
+            los.append(k / n - lo)
+            his.append(hi - k / n)
+        col = GREY if who == "vla" else SEED_COLORS[(j - 1) % 3]
+        lab = "VLA alone" if who == "vla" else f"+ residual, seed {who[1:]}"
+        ax2.bar(xs, ys, width=width * 0.92, color=col, alpha=0.9 if who != "vla" else 0.55, label=lab, zorder=2)
+        ax2.errorbar(xs, ys, yerr=[los, his], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, capthick=0.6, zorder=3)
+    ax2.set_xticks(x)
+    ax2.set_xticklabels([g["label"] for g in groups])
+    ax2.set_ylim(0, 1.32)
+    ax2.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    ax2.set_ylabel("success rate")
+    ax2.grid(axis="x", visible=False)
+    ax2.legend(frameon=False, fontsize=6.5, loc="upper center", ncol=len(seeds) + 1, handlelength=1.2, columnspacing=1.0)
+    ax2.set_title("Deterministic evaluation, hard resets", loc="left")
+    panel_label(ax2, "b")
     save(fig, path)
