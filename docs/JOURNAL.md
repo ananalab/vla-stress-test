@@ -69,3 +69,15 @@
 - Ce que le correcteur a appris : les épisodes déjà réussis finissent plus vite (121 → 92 pas, 103 → 90). Avec γ = 0,995 une réussite plus rapide rapporte plus, donc c'est exactement ce que PPO optimise ; rattraper un échec est beaucoup plus rare à observer avec ~400 épisodes.
 - Diagnostics ajoutés avant de lancer d'autres seeds : (1) même éval sur les états d'entraînement 0-19 pour distinguer « n'a rien appris » de « ne généralise pas » ; (2) alternative sans apprentissage : exécuter 10 actions par chunk au lieu de 50 (le VLA replanifie 5 fois plus souvent).
 - Seed 1 gardé avec la même config : changer les hyperparamètres maintenant ferait du réglage sur l'ensemble de test.
+
+### Variantes de consigne (5 octobre, 6h)
+- Consigne vide 0/50, « sing a song » 0/50 : aucun des 10 buts n'est atteint, le robot ne fait rien d'utile.
+- Paraphrases écrites à la main : 35/150 (23 %). Proche 20/50, reformulée 11/50, éloignée 4/50. « turn the stove on » marche (4/5), « switch on the stove » jamais.
+- Dans aucun des 135 échecs le robot n'atteint un autre but : pas de comportement par défaut.
+- Lecture : la consigne sélectionne le comportement, mais elle fonctionne comme une clé (formulations vues à l'entraînement) plutôt que comme du langage compris. Ça nuance la matrice d'écoute : le modèle écoute, mais les mots exacts.
+
+### Diagnostics du résiduel
+- Sur les états d'entraînement 0-19 à 0,05 rad : VLA 10/20, VLA + résiduel 14/20 ; les 4 paires discordantes sont toutes en faveur du résiduel (McNemar p = 0,125). Épisodes réussis plus courts : 110 → 91 pas.
+- Sur les états 40-49 jamais vus : pas de gain (4/10 contre 5/10).
+- Donc le correcteur a appris des corrections spécifiques aux 40 états initiaux d'entraînement et ne généralise pas. Normal avec une entrée uniquement proprioceptive et 40 états : rien ne lui permet de déduire la correction pour une configuration nouvelle autrement que par interpolation.
+- Replanifier toutes les 10 actions au lieu de 50 (sans apprentissage) : 10/10, 4/10, 3/10 contre 8/10, 5/10, 1/10. Rien de significatif avec 10 épisodes, et 2,4 fois plus lent.
