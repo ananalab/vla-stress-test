@@ -77,10 +77,12 @@ We report two estimates of the breaking point: the logistic $x_{50}$, and a mode
 success made non-increasing by isotonic regression, then linearly interpolated at half the baseline),
 both with task-bootstrap intervals.
 \begin{itemize}
-  \item \textbf{Camera orbit: gradual.} Success declines roughly linearly with the angle, with no
-  plateau. The logistic fit puts the breaking point at $\CamXfifty^\circ$ \CamXfiftyCI{}, at the edge of the
-  tested range; the pooled rate is still above half the baseline at $30^\circ$. The decline is strongly
-  task dependent: some tasks are unaffected at the largest angle, others fail from the first level.
+  \item \textbf{Camera orbit: gradual.} Success declines steadily with the angle, with no plateau and no
+  cliff: it is halved around $x_{50}=\CamXfifty^\circ$ \CamXfiftyCI{} and is still above zero at
+  $60^\circ$, a viewpoint far from anything in the demonstrations. The decline is strongly task
+  dependent: some tasks are unaffected at the largest angle, others fail from the first level. The two
+  orbit directions are not equally harmful at intermediate angles, but direction is confounded with the
+  initial state here (it alternates with the episode index), so we do not interpret it.
   \item \textbf{Arm initial pose: narrow tolerance, then a cliff.} Offsets up to 0.02\,rad per joint
   ($\approx1^\circ$) leave success unchanged; between 0.03 and 0.05\,rad it is halved (model-free
   $x_{50}=\RobotXfiftyInterp$\,rad \RobotXfiftyInterpCI{}; logistic \RobotXfifty{}\,rad), and a long tail

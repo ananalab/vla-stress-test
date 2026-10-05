@@ -20,13 +20,13 @@
     {
       "family": "camera_orbit",
       "s0": 0.66,
-      "x50": 147.993,
-      "x50_lo": 27.158,
-      "x50_hi": 180.0,
-      "reached": false,
-      "w": 108.206,
-      "x50_interp": Infinity,
-      "x50_interp_lo": 19.969,
+      "x50": 39.651,
+      "x50_lo": 24.74,
+      "x50_hi": 61.25,
+      "reached": true,
+      "w": 23.761,
+      "x50_interp": 39.375,
+      "x50_interp_lo": 15.0,
       "x50_interp_hi": NaN,
       "n_per_point": 50,
       "n_boot_valid": 300
@@ -57,6 +57,20 @@
       "x50_interp_lo": 0.716,
       "x50_interp_hi": 0.782,
       "n_per_point": 50,
+      "n_boot_valid": 300
+    },
+    {
+      "family": "image_noise",
+      "s0": 0.66,
+      "x50": 48.489,
+      "x50_lo": 0.382,
+      "x50_hi": 53.72,
+      "reached": true,
+      "w": 6.542,
+      "x50_interp": 42.578,
+      "x50_interp_lo": 39.764,
+      "x50_interp_hi": NaN,
+      "n_per_point": 7,
       "n_boot_valid": 300
     }
   ],
