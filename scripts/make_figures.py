@@ -94,16 +94,16 @@ if lv is not None:
     # all tasks, otherwise the diagonal of the swap matrix (episodes 0-2).
     bg = load("baseline_goal")
     if bg is not None and bg.task_id.nunique() == 10:
-        ref = bg[bg.episode < lv.episode.max() + 1].copy()
+        lang_ref = bg[bg.episode < lv.episode.max() + 1].copy()
         ref_name = "original wording"
     else:
-        ref = lm[lm.said == lm.task_id].copy()
+        lang_ref = lm[lm.said == lm.task_id].copy()
         ref_name = "original wording (eps 0-2)"
-    ref["label"] = ref_name
+    lang_ref["label"] = ref_name
     lv = lv.copy()
     names = {"paraphrase_0": "paraphrase, close", "paraphrase_1": "paraphrase, reworded", "paraphrase_2": "paraphrase, distant", "empty": "empty string", "absurd": "\u201csing a song\u201d"}
     lv["label"] = lv["variant"].map(names)
-    allv = pd.concat([ref[["label", "success", "task_id", "episode"]], lv[["label", "success", "task_id", "episode"]]])
+    allv = pd.concat([lang_ref[["label", "success", "task_id", "episode"]], lv[["label", "success", "task_id", "episode"]]])
     t = rate_table(allv, ["label"])
     order = [ref_name] + list(names.values())
     t["o"] = t["label"].map({k: i for i, k in enumerate(order)})
@@ -271,7 +271,7 @@ if "light_dimming" in curves:
 if lv is not None:
     pp = lv[lv.condition == "paraphrase"]
     macros["LangPara"] = frac(int(pp.success.sum()), len(pp))
-    macros["LangOrig"] = frac(int(ref.success.sum()), len(ref))
+    macros["LangOrig"] = frac(int(lang_ref.success.sum()), len(lang_ref))
     for k, nm in zip(["paraphrase_0", "paraphrase_1", "paraphrase_2"], ["Close", "Reworded", "Distant"]):
         g = pp[pp.variant == k]
         macros[f"LangPara{nm}"] = f"{int(g.success.sum())}/{len(g)}"
