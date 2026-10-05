@@ -62,15 +62,15 @@
     {
       "family": "image_noise",
       "s0": 0.66,
-      "x50": 48.489,
-      "x50_lo": 0.382,
-      "x50_hi": 53.72,
+      "x50": 42.319,
+      "x50_lo": 35.805,
+      "x50_hi": 45.837,
       "reached": true,
-      "w": 6.542,
-      "x50_interp": 42.578,
-      "x50_interp_lo": 39.764,
-      "x50_interp_hi": NaN,
-      "n_per_point": 7,
+      "w": 5.41,
+      "x50_interp": 41.719,
+      "x50_interp_lo": 34.881,
+      "x50_interp_hi": 47.199,
+      "n_per_point": 50,
       "n_boot_valid": 300
     }
   ],

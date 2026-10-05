@@ -1,14 +1,17 @@
 \begin{abstract}
-Vision-language-action (VLA) models are evaluated almost exclusively on the conditions they were
+Vision-language-action (VLA) models are evaluated almost exclusively in the conditions they were
 trained on. We probe SmolVLA~\citep{shukor2025smolvla}, a 450M-parameter open VLA, on the LIBERO
-benchmark~\citep{liu2023libero} along three questions. \emph{Does it listen?} In LIBERO-Goal, where
-ten tasks share one scene, we swap instructions and check all ten goal predicates: the robot reaches
-the goal of the instruction it is given in \LangOffInstructed{} of swapped episodes and the goal of the
-environment in only \LangOffEnv{}. \emph{How does it break?} Under four graded perturbations, success
-decays smoothly with camera viewpoint, collapses after a sharp threshold with lighting, and is already
-halved by a \RobotXfifty{}\,rad offset of each arm joint at the start of the episode. \emph{Can a
-small corrector help?} \RLAbstract{} All results come from \TotalEpisodes{} simulated episodes run on a
-laptop; code and per-episode logs are public.
+benchmark~\citep{liu2023libero} with three questions. \emph{Does it listen?} In LIBERO-Goal, where ten
+tasks share one scene, we swap instructions and check all ten goal predicates at every step: the robot
+reaches the goal of the instruction it is given in \LangOffInstructed{} of swapped episodes and the
+environment's own goal in \LangOffEnv{}, but hand-written paraphrases of the same instruction succeed
+far less often (\LangParaPct{} against \LangOrigPct{}). \emph{How does it break?} Under five graded
+perturbations, success declines gradually with camera viewpoint, collapses past sharp thresholds for
+lighting and pixel noise, and is halved by an offset of about 3$^\circ$ per arm joint at the start of the
+episode. \emph{Can a small corrector help?} A residual policy trained with PPO on top of the frozen VLA
+improves success on the initial states it was trained on but not on held-out ones, and mostly learns to
+finish successful episodes faster. All results come from \TotalEpisodes{} simulated episodes run on a
+laptop, with per-episode logs and code released.
 \end{abstract}
 
 \section{Introduction}
@@ -91,4 +94,11 @@ for the reported numbers. The residual corrector sees proprioception only, which
 perturbation that is visible in proprioception.
 
 \section{Conclusion}
-\Conclusion{}
+On LIBERO, SmolVLA is neither deaf to language nor robust to it: the instruction decides which task is
+attempted, but only in wordings close to the training ones. Its failures under distribution shift have
+distinct shapes, gradual for viewpoint and abrupt for photometric changes and arm configuration,
+which a single perturbation level per axis would hide. A residual corrector trained with a few hundred
+episodes does not repair the arm-pose weakness on unseen configurations; making it generalise likely
+requires many more initial states, or an input that encodes the scene rather than proprioception only.
+Natural next steps are a search over combinations of perturbations rather than one axis at a time, and
+the same protocol on larger VLAs.

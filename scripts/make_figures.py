@@ -272,6 +272,8 @@ if lv is not None:
     pp = lv[lv.condition == "paraphrase"]
     macros["LangPara"] = frac(int(pp.success.sum()), len(pp))
     macros["LangOrig"] = frac(int(lang_ref.success.sum()), len(lang_ref))
+    macros["LangOrigPct"] = pct(int(lang_ref.success.sum()), len(lang_ref))
+    macros["LangParaPct"] = pct(int(pp.success.sum()), len(pp))
     for k, nm in zip(["paraphrase_0", "paraphrase_1", "paraphrase_2"], ["Close", "Reworded", "Distant"]):
         g = pp[pp.variant == k]
         macros[f"LangPara{nm}"] = f"{int(g.success.sum())}/{len(g)}"

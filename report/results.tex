@@ -71,7 +71,7 @@ and we did not reproduce their setting, so this is a statement about SmolVLA on 
   \label{fig:dose}
 \end{figure*}
 
-\subsection{Three ways of breaking}
+\subsection{Different ways of breaking}
 The perturbations do not just differ in strength; the curves have different shapes (Fig.~\ref{fig:dose}).
 We report two estimates of the breaking point: the logistic $x_{50}$, and a model-free one (pooled
 success made non-increasing by isotonic regression, then linearly interpolated at half the baseline),
@@ -92,8 +92,14 @@ both with task-bootstrap intervals.
   effect; success is then halved at $x_{50}=\LightXfiftyInterp$ \LightXfiftyInterpCI{} of light removed
   and falls below a quarter of the baseline at \LightCliffHigh{}. A single fixed-level test would either
   miss the effect entirely or report a collapse.
+  \item \textbf{Pixel noise: threshold.} No effect at a standard deviation of 15 grey levels, a small
+  one at 30, then a collapse: success is halved at $x_{50}=\NoiseXfiftyInterp$ \NoiseXfiftyInterpCI{} and is
+  close to zero at 60, although the objects remain easy to see for a human at that level
+  (Fig.~\ref{fig:grid}).
 \end{itemize}
-\NoiseSentence{}
+Gradual decline for viewpoint, sharp thresholds for photometric changes (lighting, noise) and a narrow
+tolerance for the arm configuration: one fixed perturbation level per axis would have placed these on a
+single ``robust/fragile'' scale and missed the differences.
 \textbf{Both cameras are needed.} Blacking out one stream entirely drops success from \CamMaskBoth{} to
 \CamMaskAgent{} without the main camera and \CamMaskWrist{} without the wrist camera (same episodes). The
 policy cannot do without the third-person view, yet tolerates rotating it by $20$--$30^\circ$ with a
