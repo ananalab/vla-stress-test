@@ -3,7 +3,8 @@ __pycache__/
 *.egg-info/
 .pytest_cache/
 outputs/
-runs/
+runs/*/last.pt
+runs/*/step*.pt
 checkpoints/
 *.mp4
 .DS_Store
