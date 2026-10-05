@@ -149,6 +149,10 @@ class RobotInitOffset(Perturbation):
     Signs are drawn once per episode index (so every condition sees the same
     direction for a given episode). Objects are not moved, so the task itself is
     unchanged; only the arm starts somewhere it never started in the demos.
+
+    With random_signs=True the signs are drawn anew at every reset instead. This is
+    only used to train the residual corrector on more diverse starting poses; all
+    evaluations keep the per-episode signs.
     """
 
     name = "robot_init"
@@ -156,7 +160,14 @@ class RobotInitOffset(Perturbation):
     max_magnitude = 0.2
     settle_steps = 5
 
+    def __init__(self, intensity=0.0, max_magnitude=None, random_signs: bool = False, seed: int = 0):
+        super().__init__(intensity, max_magnitude)
+        self.random_signs = random_signs
+        self.rng = np.random.default_rng(seed)
+
     def signs(self, episode: int) -> np.ndarray:
+        if self.random_signs:
+            return self.rng.choice([-1.0, 1.0], size=7)
         return np.random.default_rng(10_000 + episode).choice([-1.0, 1.0], size=7)
 
     def on_reset(self, env, episode):
@@ -216,6 +227,33 @@ class CameraMask(Perturbation):
         pixels = dict(obs["pixels"])
         pixels[self.camera] = np.zeros_like(pixels[self.camera])
         return {**obs, "pixels": pixels}
+
+
+class Combined(Perturbation):
+    """Several perturbations at once (used by the failure search in vla_stress.qd_search).
+
+    Model-level changes (camera, lights) are applied first, then the arm offset, which steps
+    the simulator and re-renders with everything in place; image-level noise comes last.
+    """
+
+    name = "combined"
+    unit = ""
+
+    def __init__(self, parts: list[Perturbation]):
+        super().__init__(0.0)
+        order = {"camera_orbit": 0, "light_dimming": 1, "robot_init": 2, "image_noise": 3, "camera_mask": 4}
+        self.parts = sorted(parts, key=lambda p: order.get(p.name, 5))
+
+    def on_reset(self, env, episode):
+        obs = None
+        for p in self.parts:
+            obs = p.on_reset(env, episode) or obs
+        return obs
+
+    def on_obs(self, obs):
+        for p in self.parts:
+            obs = p.on_obs(obs)
+        return obs
 
 
 REGISTRY = {

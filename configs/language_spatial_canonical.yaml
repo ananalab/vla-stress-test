@@ -1,0 +1,9 @@
+# Harder case for canonicalisation: LIBERO-Spatial instructions differ only by the bowl's position.
+name: language_spatial_canonical
+suite: libero_spatial
+tasks: all
+episodes: 5
+canonicalize: {threshold: 0.5}
+conditions:
+  - label: paraphrase
+    paraphrases_from: configs/language_spatial_paraphrases.yaml

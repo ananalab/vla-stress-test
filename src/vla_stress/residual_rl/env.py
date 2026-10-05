@@ -35,6 +35,7 @@ class ResidualLibero:
         hard_reset: bool = False,
         resolution: int = 360,
         max_episode_steps: int | None = None,
+        perturbation_params: dict | None = None,
     ):
         self.vla = vla
         self.alpha = alpha
@@ -43,7 +44,11 @@ class ResidualLibero:
         self.init_states = list(init_states)
         self.rng = np.random.default_rng(seed)
         self.envs = [make_env(suite, task_id, resolution, hard_reset=hard_reset) for _ in range(n_envs)]
-        self.perts = [P.build(perturbation, intensity) for _ in range(n_envs)]
+        params = perturbation_params or {}
+        self.perts = [P.build(perturbation, intensity, **params) for _ in range(n_envs)]
+        for i, p in enumerate(self.perts):
+            if hasattr(p, "rng"):  # independent streams per env when signs are random
+                p.rng = np.random.default_rng(seed * 100 + i)
         self.instruction = self.envs[0].task_description
         self.horizon = max_episode_steps or self.envs[0]._max_episode_steps
         self.obs = [None] * n_envs

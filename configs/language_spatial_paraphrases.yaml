@@ -1,0 +1,20 @@
+# Paraphrases on LIBERO-Spatial, where the ten instructions differ only by the position of the bowl:
+# a harder test for instruction canonicalisation (src/vla_stress/language.py). Written by hand before
+# running anything: the first keeps the structure, the second rewords it.
+name: language_spatial_paraphrases
+suite: libero_spatial
+tasks: all
+episodes: 5
+conditions:
+  - label: paraphrase
+    paraphrases:
+      0: ["take the black bowl that sits between the plate and the ramekin and put it on the plate", "move the bowl located between the ramekin and the plate onto the plate"]
+      1: ["take the black bowl beside the ramekin and put it on the plate", "put the bowl that is next to the ramekin onto the plate"]
+      2: ["take the black bowl in the middle of the table and put it on the plate", "move the bowl at the center of the table onto the plate"]
+      3: ["take the black bowl sitting on the cookie box and put it on the plate", "move the bowl from the top of the cookie box onto the plate"]
+      4: ["take the black bowl from the top drawer of the wooden cabinet and put it on the plate", "get the bowl out of the cabinet's top drawer and set it on the plate"]
+      5: ["take the black bowl sitting on the ramekin and put it on the plate", "move the bowl stacked on the ramekin onto the plate"]
+      6: ["take the black bowl beside the cookie box and put it on the plate", "put the bowl that is next to the cookie box onto the plate"]
+      7: ["take the black bowl sitting on the stove and put it on the plate", "move the bowl from the stove onto the plate"]
+      8: ["take the black bowl beside the plate and put it on the plate", "put the bowl that is next to the plate onto the plate"]
+      9: ["take the black bowl sitting on the wooden cabinet and put it on the plate", "move the bowl from the top of the cabinet onto the plate"]

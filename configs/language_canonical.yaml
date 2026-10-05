@@ -1,0 +1,11 @@
+# Same paraphrases as language_variants, but each instruction is first mapped to the closest of the
+# 40 LIBERO training instructions (sentence-embedding retrieval, threshold fixed at 0.5 beforehand).
+name: language_canonical
+suite: libero_goal
+tasks: all
+episodes: 5
+check_all_goals: true
+canonicalize: {threshold: 0.5}
+conditions:
+  - label: paraphrase
+    paraphrases_from: configs/language_variants.yaml

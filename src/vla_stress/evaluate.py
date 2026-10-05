@@ -34,6 +34,8 @@ FIELDS = KEY + [
     "unit",
     "sign",
     "instruction",
+    "instruction_used",
+    "similarity",
     "success",
     "goals_achieved",
     "goals_at_reset",
@@ -88,8 +90,9 @@ def expand_jobs(cfg: dict) -> list[dict]:
                 yield f"from_task_{i}", instructions[i]
         elif "instruction" in cond:
             yield cond.get("variant", "custom"), cond["instruction"]
-        elif "paraphrases" in cond:
-            for k, text in enumerate(cond["paraphrases"][task_id]):
+        elif "paraphrases" in cond or "paraphrases_from" in cond:
+            para = cond.get("paraphrases") or paraphrases_from(cond["paraphrases_from"])
+            for k, text in enumerate(para[task_id]):
                 yield f"paraphrase_{k}", text
         else:
             yield "", instructions[task_id]
@@ -116,6 +119,12 @@ def expand_jobs(cfg: dict) -> list[dict]:
                             }
                         )
     return jobs
+
+
+def paraphrases_from(path: str) -> dict:
+    """Reuse the paraphrase list of another config, so both experiments use exactly the same texts."""
+    cfg = yaml.safe_load(open(path))
+    return next(c for c in cfg["conditions"] if "paraphrases" in c)["paraphrases"]
 
 
 def key_of(row: dict) -> tuple:
@@ -182,6 +191,12 @@ def main():
         residual = Residual(meta["residual"])
     # Optional: check every task's goal at every step (only meaningful when the tasks share a scene).
     goals = suite_goals(cfg["suite"]) if cfg.get("check_all_goals") else None
+    # Optional: map each instruction to the closest training instruction before the policy sees it.
+    canon = None
+    if cfg.get("canonicalize"):
+        from vla_stress.language import Canonicalizer
+
+        canon = Canonicalizer(**cfg["canonicalize"])
     envs = {}
     new_file = not out.exists()
     # When appending to an older CSV keep its column order, even if FIELDS has grown since.
@@ -197,14 +212,18 @@ def main():
                 envs = {job["task_id"]: make_env(job["suite"], job["task_id"], resolution=meta["resolution"])}
             env = envs[job["task_id"]]
             pert = P.build(job["perturbation"], job["intensity"], **job["params"])
+            used, sim = job["instruction"], ""
+            if canon is not None:
+                used, sim, _ = canon(job["instruction"])
+                sim = round(sim, 4)
             if args.smoke:
                 obs = env.reset(seed=0)[0]
                 print("  instruction given :", repr(job["instruction"]))
-                print("  tokens decoded    :", repr(vla.decode_tokens(obs, job["instruction"])))
+                print("  tokens decoded    :", repr(vla.decode_tokens(obs, used)))
             res = run_episode(
                 env,
                 vla,
-                job["instruction"],
+                used,
                 episode=job["episode"],
                 seed=job["episode"],
                 perturbation=pert,
@@ -219,6 +238,8 @@ def main():
                 **job,
                 **meta,
                 **{k: v for k, v in res.items() if k != "frames"},
+                "instruction_used": used,
+                "similarity": sim,
                 "magnitude": round(pert.magnitude, 4),
                 "unit": pert.unit,
                 "sign": sign,

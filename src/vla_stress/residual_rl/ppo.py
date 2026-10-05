@@ -36,6 +36,7 @@ def parse():
     ap.add_argument("--alpha", type=float, default=0.2, help="scale of the correction on the final action")
     ap.add_argument("--n-envs", type=int, default=2)
     ap.add_argument("--n-action-steps", type=int, default=50)
+    ap.add_argument("--random-signs", action="store_true", help="draw new joint-offset signs at every reset (more diverse training starts)")
     ap.add_argument("--train-init-states", type=int, default=40, help="init states 0..N-1 for training; the rest are held out")
     ap.add_argument("--total-steps", type=int, default=100_000)
     ap.add_argument("--rollout-steps", type=int, default=1024, help="steps per env between updates")
@@ -89,6 +90,7 @@ def main():
         n_action_steps=args.n_action_steps,
         init_states=range(args.train_init_states),
         seed=args.seed * 1000 + update,  # different episodes after a resume
+        perturbation_params={"random_signs": True} if args.random_signs else None,
     )
     T, N = args.rollout_steps, args.n_envs
     obs_buf = torch.zeros(T, N, OBS_DIM)

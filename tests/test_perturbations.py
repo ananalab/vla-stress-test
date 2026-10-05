@@ -68,3 +68,15 @@ def test_camera_mask_blacks_out_one_view(env):
     obs = observe(env, "camera_mask", 1.0, camera="image2")
     assert obs["pixels"]["image2"].max() == 0
     assert obs["pixels"]["image"].max() > 0
+
+
+def test_combined_applies_every_part(env):
+    ref = observe(env, "none", 0.0)
+    cam = P.build("camera_orbit", 1.0)
+    light = P.build("light_dimming", 1.0)
+    pert = P.Combined([light, cam])
+    obs = reset(env, 0, 0)
+    obs = pert.on_obs(pert.on_reset(env, 0) or obs)
+    both = img_diff(ref, obs)
+    assert both > img_diff(ref, observe(env, "camera_orbit", 1.0)) * 0.5
+    assert obs["pixels"]["image"].mean() < ref["pixels"]["image"].mean() * 0.5  # the light change is kept
