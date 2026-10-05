@@ -84,6 +84,47 @@ def bootstrap_x50(df: pd.DataFrame, x_col: str = "magnitude", n_boot: int = 500,
     return np.array(out)
 
 
+def x50_interp(x: np.ndarray, y: np.ndarray) -> float:
+    """Model-free breaking point: pooled success per level, made non-increasing by
+    pool-adjacent-violators, then linearly interpolated where it crosses half the
+    unperturbed rate. Returns inf if it never gets there."""
+    levels = np.unique(x)
+    rates = np.array([y[x == lv].mean() for lv in levels])
+    counts = np.array([np.sum(x == lv) for lv in levels], float)
+    # pool adjacent violators for a non-increasing sequence
+    blocks = [[r, c, 1] for r, c in zip(rates, counts)]
+    i = 0
+    while i < len(blocks) - 1:
+        if blocks[i][0] < blocks[i + 1][0]:
+            r1, c1, n1 = blocks[i]
+            r2, c2, n2 = blocks.pop(i + 1)
+            blocks[i] = [(r1 * c1 + r2 * c2) / (c1 + c2), c1 + c2, n1 + n2]
+            i = max(i - 1, 0)
+        else:
+            i += 1
+    iso = np.concatenate([[b[0]] * b[2] for b in blocks])
+    target = iso[0] / 2
+    below = np.where(iso <= target)[0]
+    if len(below) == 0:
+        return float("inf")
+    k = below[0]
+    if k == 0:
+        return float(levels[0])
+    x0, x1, y0, y1 = levels[k - 1], levels[k], iso[k - 1], iso[k]
+    return float(x0 + (y0 - target) * (x1 - x0) / (y0 - y1)) if y0 != y1 else float(x1)
+
+
+def bootstrap_x50_interp(df: pd.DataFrame, x_col: str = "magnitude", n_boot: int = 1000, seed: int = 0) -> np.ndarray:
+    rng = np.random.default_rng(seed)
+    tasks = df["task_id"].unique()
+    by_task = {t: df[df["task_id"] == t] for t in tasks}
+    out = []
+    for _ in range(n_boot):
+        d = pd.concat([by_task[t] for t in rng.choice(tasks, size=len(tasks), replace=True)])
+        out.append(x50_interp(d[x_col].values, d["success"].values))
+    return np.array(out)
+
+
 def mcnemar_exact(a: np.ndarray, b: np.ndarray) -> dict:
     """Paired binary outcomes a, b (same episodes). Two-sided exact test on discordant pairs."""
     a = np.asarray(a, bool)

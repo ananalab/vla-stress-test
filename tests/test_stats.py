@@ -1,6 +1,6 @@
 import numpy as np
 
-from vla_stress.analysis.stats import fit_dose_response, mcnemar_exact, wilson
+from vla_stress.analysis.stats import fit_dose_response, mcnemar_exact, wilson, x50_interp
 
 
 def test_wilson_known_values():
@@ -28,3 +28,11 @@ def test_mcnemar_identical_is_not_significant():
     assert r["p"] == 1.0 and r["a_only"] == 0
     r = mcnemar_exact(np.ones(12), np.zeros(12))
     assert r["p"] < 0.001
+
+
+def test_x50_interp():
+    x = np.repeat([0, 1, 2, 3], 10)
+    y = np.concatenate([np.ones(8), np.zeros(2), np.ones(8), np.zeros(2), np.ones(2), np.zeros(8), np.zeros(10)])
+    # rates 0.8, 0.8, 0.2, 0 -> half of 0.8 = 0.4 is crossed between 1 and 2, at 1 + 0.4/0.6
+    assert abs(x50_interp(x, y) - (1 + 0.4 / 0.6)) < 1e-9
+    assert x50_interp(x, np.ones(len(x))) == float("inf")

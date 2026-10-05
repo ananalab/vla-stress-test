@@ -155,7 +155,14 @@ if cm is not None and bs is not None:
 # ---------------------------------------------------------------- residual RL
 rl_vla = load("rl_eval_vla")
 rl_res = {Path(f).stem.split("_")[-1]: pd.read_csv(f, keep_default_na=False) for f in sorted(glob.glob(str(R / "rl_eval_residual_s*.csv")))}
-logs = {Path(f).parent.name: pd.read_csv(f) for f in sorted(glob.glob("runs/robot025_task2_s*/log.csv"))}
+logs = {}
+for f in sorted(glob.glob("runs/robot025_task2_s*/log.csv")):
+    try:
+        lg = pd.read_csv(f)
+    except pd.errors.EmptyDataError:
+        continue  # run just started
+    if len(lg) >= 10:
+        logs[Path(f).parent.name] = lg
 rl_rows = []
 if rl_vla is not None:
     rl_vla["level"] = rl_vla["magnitude"].astype(float)
@@ -226,6 +233,10 @@ if curves:
         n = names[r["family"]]
         macros[f"{n}Xfifty"] = f"{r['x50']:.2g}" if r["reached"] else f">{curves[r['family']]['magnitude'].max():g}"
         macros[f"{n}XfiftyCI"] = f"[{max(r['x50_lo'], 0):.2g}, {r['x50_hi']:.2g}]"
+        xi_max = curves[r["family"]]["magnitude"].max()
+        macros[f"{n}XfiftyInterp"] = f"{r['x50_interp']:.2g}" if np.isfinite(r["x50_interp"]) else f">{xi_max:g}"
+        hi_txt = f"{r['x50_interp_hi']:.2g}" if np.isfinite(r["x50_interp_hi"]) else f">{xi_max:g}"
+        macros[f"{n}XfiftyInterpCI"] = f"[{r['x50_interp_lo']:.2g}, {hi_txt}]"
 # lerobot-eval cross-check (same tasks, unpaired seeds)
 chk = R / "lerobot_eval_check.json"
 if chk.exists() and bs is not None:

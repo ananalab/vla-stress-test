@@ -72,17 +72,23 @@ and we did not reproduce their setting, so this is a statement about SmolVLA on 
 
 \subsection{Three ways of breaking}
 The perturbations do not just differ in strength; the curves have different shapes (Fig.~\ref{fig:dose}).
+We report two estimates of the breaking point: the logistic $x_{50}$, and a model-free one (pooled
+success made non-increasing by isotonic regression, then linearly interpolated at half the baseline),
+both with task-bootstrap intervals.
 \begin{itemize}
-  \item \textbf{Camera orbit: gradual.} Success declines roughly linearly with the angle and is halved at
-  $x_{50}=\CamXfifty^\circ$ \CamXfiftyCI{}. The decline is strongly task dependent: some tasks are unaffected
-  at the largest angle, others fail from the first level.
-  \item \textbf{Arm initial pose: immediate.} An offset of \RobotXfifty{}\,rad per joint \RobotXfiftyCI{}
-  halves success, although the wrist camera still sees the scene and the objects have not moved. This is
-  the most sensitive axis by far relative to what a human would consider a meaningful change.
-  \item \textbf{Lighting: threshold.} Removing up to two thirds of the light has no measurable effect; the
-  policy then collapses between \LightCliffLow{} and \LightCliffHigh{} of light removed ($x_{50}=\LightXfifty$).
-  Below the cliff the model is effectively invariant, which a single fixed-level test would miss
-  entirely.
+  \item \textbf{Camera orbit: gradual.} Success declines roughly linearly with the angle, with no
+  plateau. The logistic fit puts the breaking point at $\CamXfifty^\circ$ \CamXfiftyCI{}, at the edge of the
+  tested range; the pooled rate is still above half the baseline at $30^\circ$. The decline is strongly
+  task dependent: some tasks are unaffected at the largest angle, others fail from the first level.
+  \item \textbf{Arm initial pose: narrow tolerance, then a cliff.} Offsets up to 0.02\,rad per joint
+  ($\approx1^\circ$) leave success unchanged; between 0.03 and 0.05\,rad it is halved (model-free
+  $x_{50}=\RobotXfiftyInterp$\,rad \RobotXfiftyInterpCI{}; logistic \RobotXfifty{}\,rad), and a long tail
+  follows. The objects have not moved and the wrist camera still sees them; the policy only starts
+  from an arm configuration a few degrees away from the demonstrations.
+  \item \textbf{Lighting: threshold.} Removing up to \LightCliffLow{} of the light has no measurable
+  effect; success is then halved at $x_{50}=\LightXfiftyInterp$ \LightXfiftyInterpCI{} of light removed
+  and falls below a quarter of the baseline at \LightCliffHigh{}. A single fixed-level test would either
+  miss the effect entirely or report a collapse.
 \end{itemize}
 \NoiseSentence{}
 \CameraMaskSentence{}

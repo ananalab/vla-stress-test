@@ -14,7 +14,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 from matplotlib.colors import LinearSegmentedColormap  # noqa: E402
 
-from vla_stress.analysis.stats import bootstrap_x50, fit_dose_response, logistic, rate_table  # noqa: E402
+from vla_stress.analysis.stats import bootstrap_x50, bootstrap_x50_interp, fit_dose_response, logistic, rate_table, x50_interp  # noqa: E402
 
 COLORS = {"camera_orbit": "#2a78d6", "robot_init": "#eb6834", "light_dimming": "#1baf7a", "image_noise": "#b07c00"}
 INK, GREY, LIGHT = "#1f1f1d", "#6b6a66", "#c9c8c2"
@@ -186,8 +186,12 @@ def dose_response(curves: dict[str, pd.DataFrame], path, n_boot: int = 300):
         ax.set_ylim(-0.02, 1.02)
         ax.set_xlim(-0.03 * xmax, 1.03 * xmax)
         panel_label(ax, lab)
+        xi = x50_interp(d["magnitude"].values, d["success"].values)
+        bi = bootstrap_x50_interp(d, n_boot=n_boot)
+        bi_lo, bi_hi = np.percentile(bi, [2.5, 97.5])
         summary.append(
-            {"family": fam, "s0": fit["s0"], "x50": x50, "x50_lo": lo, "x50_hi": hi, "reached": fit["reached"], "w": fit["w"], "n_per_point": int(t["n"].median()), "n_boot_valid": len(boots)}
+            {"family": fam, "s0": fit["s0"], "x50": x50, "x50_lo": lo, "x50_hi": hi, "reached": fit["reached"], "w": fit["w"],
+             "x50_interp": xi, "x50_interp_lo": bi_lo, "x50_interp_hi": bi_hi, "n_per_point": int(t["n"].median()), "n_boot_valid": len(boots)}
         )
     axes[0].set_ylabel("success rate")
     save(fig, path)
