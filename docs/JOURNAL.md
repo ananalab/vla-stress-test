@@ -62,3 +62,10 @@
 
 ### RL résiduel (lancé)
 - Tâche 2 de LIBERO-Spatial, décalage articulaire 0,05 rad (intensité 0,25), α = 0,2, 4 envs, rollout 512 pas/env (~8 épisodes par mise à jour, ~50 mises à jour en 100k pas), γ = 0,995. États initiaux 0-39 pour l'entraînement, éval sur 40-49 (jamais vus) en hard reset.
+
+### RL résiduel, seed 0 (5 octobre, 3h30)
+- 100k pas en 3 h (49 mises à jour). Succès en entraînement (avec bruit d'exploration, états 0-39) : 0,60 sur les 10 premières mises à jour, 0,70 sur les 10 dernières. |Δ| moyen de 0,035 à 0,16.
+- Éval déterministe en hard reset sur les états 40-49 jamais vus : 8/10 contre 8/10 sans perturbation, **4/10 contre 5/10** au niveau d'entraînement (0,05 rad), 1/10 contre 1/10 à 0,1 rad. Pas de gain, le seul épisode discordant est en défaveur du résiduel.
+- Ce que le correcteur a appris : les épisodes déjà réussis finissent plus vite (121 → 92 pas, 103 → 90). Avec γ = 0,995 une réussite plus rapide rapporte plus, donc c'est exactement ce que PPO optimise ; rattraper un échec est beaucoup plus rare à observer avec ~400 épisodes.
+- Diagnostics ajoutés avant de lancer d'autres seeds : (1) même éval sur les états d'entraînement 0-19 pour distinguer « n'a rien appris » de « ne généralise pas » ; (2) alternative sans apprentissage : exécuter 10 actions par chunk au lieu de 50 (le VLA replanifie 5 fois plus souvent).
+- Seed 1 gardé avec la même config : changer les hyperparamètres maintenant ferait du réglage sur l'ensemble de test.
