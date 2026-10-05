@@ -9,7 +9,7 @@ one weakness with residual RL without touching the VLA.
 *Same LIBERO-Goal scene, six different instructions: the robot does what it is told, not what the scene
 usually asks for.*
 
-**Report:** [`report/main.pdf`](report/main.pdf) (4 pages). **Notes:** [`docs/JOURNAL.md`](docs/JOURNAL.md) (in French).
+**Report:** [`report/full_report.pdf`](report/full_report.pdf) (9 pages, full) and [`report/main.pdf`](report/main.pdf) (4-page workshop version). **Notes:** [`docs/JOURNAL.md`](docs/JOURNAL.md) (in French).
 
 ## Main results
 
