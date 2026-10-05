@@ -200,6 +200,15 @@ def dose_response(curves: dict[str, pd.DataFrame], path, n_boot: int = 300):
 
 # --------------------------------------------------------------------------- residual RL
 SEED_COLORS = ["#2a78d6", "#eb6834", "#1baf7a"]
+RAND_COLORS = ["#4a3aa7", "#e87ba4"]
+
+
+def _series(name: str):
+    """Colour, line style and label for a residual run key: 's0'..'s2' (fixed offset signs) or 'rand_s0'.."""
+    k = int(name[-1])
+    if "rand" in name:
+        return RAND_COLORS[k % 2], (0, (3, 1.5)), f"random signs, seed {k}"
+    return SEED_COLORS[k % 3], "-", f"seed {k}"
 
 
 def rl_summary(logs: dict[str, pd.DataFrame], groups: list[dict], path, train_ref: float | None = None, window: int = 5):
@@ -208,9 +217,10 @@ def rl_summary(logs: dict[str, pd.DataFrame], groups: list[dict], path, train_re
 
     groups: [{"label": str, "vla": (k, n), "res": {seed: (k, n)}}]"""
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(6.75, 2.1), gridspec_kw={"width_ratios": [1, 1.25]}, constrained_layout=True)
-    for i, (name, lg) in enumerate(sorted(logs.items())):
+    for name, lg in sorted(logs.items(), key=lambda kv: ("rand" in kv[0], kv[0])):
         s = lg["success_rate"].rolling(window, min_periods=1).mean()
-        ax1.plot(lg["step"] / 1000, s, color=SEED_COLORS[i % 3], lw=1.3, label=f"seed {name.rsplit('_s', 1)[-1]}")
+        col, ls, lab = _series(name)
+        ax1.plot(lg["step"] / 1000, s, color=col, ls=ls, lw=1.2, label=lab)
     if train_ref is not None:
         ax1.axhline(train_ref, color=GREY, ls=(0, (2, 2)), lw=0.9, label="VLA alone (states 0\u20134)")
     ax1.set_xlabel("environment steps (thousands)")
@@ -223,7 +233,7 @@ def rl_summary(logs: dict[str, pd.DataFrame], groups: list[dict], path, train_re
     from vla_stress.analysis.stats import wilson
 
     x = np.arange(len(groups))
-    seeds = sorted({sd for g in groups for sd in g["res"]})
+    seeds = sorted({sd for g in groups for sd in g["res"]}, key=lambda k: ("rand" in k, k))
     width = 0.8 / (1 + len(seeds))
     for j, who in enumerate(["vla"] + seeds):
         xs, ys, los, his = [], [], [], []
@@ -237,10 +247,9 @@ def rl_summary(logs: dict[str, pd.DataFrame], groups: list[dict], path, train_re
             ys.append(k / n)
             los.append(k / n - lo)
             his.append(hi - k / n)
-        col = GREY if who == "vla" else SEED_COLORS[(j - 1) % 3]
-        lab = "VLA alone" if who == "vla" else f"+ residual, seed {who[1:]}"
+        col, _, lab = (GREY, "-", "VLA alone") if who == "vla" else _series(who)
         ax2.bar(xs, ys, width=width * 0.92, color=col, alpha=0.9 if who != "vla" else 0.55, label=lab, zorder=2)
-        ax2.errorbar(xs, ys, yerr=[los, his], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, capthick=0.6, zorder=3)
+        ax2.errorbar(xs, ys, yerr=[np.maximum(los, 0), np.maximum(his, 0)], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, capthick=0.6, zorder=3)
     ax2.set_xticks(x)
     ax2.set_xticklabels([g["label"] for g in groups])
     ax2.set_ylim(0, 1.32)
@@ -301,7 +310,7 @@ def canonicalisation(panels: list[dict], sim: pd.DataFrame | None, path):
             ci = [wilson(k, m) for k, m in ks]
             xs = x + (j - 0.5) * 0.38
             ax.bar(xs, r, width=0.36, color=col, label=name, zorder=2)
-            ax.errorbar(xs, r, yerr=[[a - c[0] for a, c in zip(r, ci)], [c[1] - a for a, c in zip(r, ci)]], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
+            ax.errorbar(xs, r, yerr=[[max(a - c[0], 0) for a, c in zip(r, ci)], [max(c[1] - a, 0) for a, c in zip(r, ci)]], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
         k, m = p["ref"]
         ax.axhline(k / m, color=GREY, ls=(0, (2, 2)), lw=0.9, label="original wording", zorder=1)
         ax.set_xticks(x)
@@ -367,7 +376,7 @@ def qd_summary(rows: pd.DataFrame, validation: pd.DataFrame | None, grid: int, p
         rates = t.k / t.n
         ci = [wilson(int(a), int(b)) for a, b in zip(t.k, t.n)]
         ax.barh(y, rates, color="#eb6834", height=0.6, zorder=2)
-        ax.errorbar(rates, y, xerr=[rates - [c[0] for c in ci], [c[1] for c in ci] - rates], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
+        ax.errorbar(rates, y, xerr=[np.maximum(rates - [c[0] for c in ci], 0), np.maximum([c[1] for c in ci] - rates, 0)], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
         ax.set_yticks(y)
         ax.set_yticklabels([f"{c:.1f}°, {a:.3f} rad, {100 * l:.0f}% off, σ={s:.0f}" for c, a, l, s in zip(t.cam, t.arm, t.light, t.noise)], fontsize=6)
         for yi, k, n in zip(y, t.k, t.n):

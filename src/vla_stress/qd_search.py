@@ -65,7 +65,7 @@ def evaluate(vla, g, episodes):
         env = make_env(SUITE, task)
         r = run_episode(env, vla, instr[task], ep, ep, perturbation(g))
         env.close()
-        out.append({"task": task, "episode": ep, "success": r["success"], "steps": r["steps"]})
+        out.append({"task": task, "episode": ep, "success": r["success"], "steps": r["steps"], "duration_s": r["duration_s"]})
     # A failure counts 1; a success counts its length relative to the time limit, so slower
     # successes (closer to failing) still guide the search.
     fitness = float(np.mean([1.0 if not o["success"] else o["steps"] / HORIZON for o in out]))
@@ -146,7 +146,7 @@ def validate(args):
     instr = task_instructions(SUITE)
     new = not out.exists()
     with open(out, "a", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["eval_id", "camera_deg", "arm_rad", "light_removed", "noise_std", "task", "episode", "success", "steps"])
+        w = csv.DictWriter(f, fieldnames=["eval_id", "camera_deg", "arm_rad", "light_removed", "noise_std", "task", "episode", "success", "steps", "duration_s"])
         if new:
             w.writeheader()
         for r in picked:
@@ -159,7 +159,7 @@ def validate(args):
                 env.close()
                 w.writerow({"eval_id": r["eval_id"], "camera_deg": r["camera_deg"], "arm_rad": r["arm_rad"],
                             "light_removed": r["light_removed"], "noise_std": r["noise_std"],
-                            "task": task, "episode": ep, "success": res["success"], "steps": res["steps"]})
+                            "task": task, "episode": ep, "success": res["success"], "steps": res["steps"], "duration_s": res["duration_s"]})
                 f.flush()
                 print(f"elite {r['eval_id']} task {task} ep {ep}: {'OK' if res['success'] else 'FAIL'}", flush=True)
 

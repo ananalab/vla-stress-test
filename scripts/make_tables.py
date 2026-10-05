@@ -100,6 +100,12 @@ v_ho, v_tr = load("rl_eval_vla"), load("rl_eval_train_vla")
 seeds = sorted(Path(f).stem.split("_")[-1] for f in glob.glob("results/rl_eval_residual_s*.csv"))
 res_ho = {sd: load(f"rl_eval_residual_{sd}") for sd in seeds}
 res_tr = {sd: load(f"rl_eval_train_residual_{sd}") for sd in seeds if load(f"rl_eval_train_residual_{sd}") is not None}
+rseeds = sorted("rand_" + Path(f).stem.split("_")[-1] for f in glob.glob("results/rl_eval_residual_rand_s*.csv"))
+for sd in rseeds:
+    res_ho[sd] = load(f"rl_eval_residual_{sd}")
+    if load(f"rl_eval_train_residual_{sd}") is not None:
+        res_tr[sd] = load(f"rl_eval_train_residual_{sd}")
+all_seeds = seeds + rseeds
 rp = load("rl_eval_replan10")
 
 
@@ -115,16 +121,16 @@ def cell(t):
 
 
 groups = [("Seen (0--19)", "0.05", v_tr, res_tr, 0.05, None), ("Held-out (40--49)", "0.05", v_ho, res_ho, 0.05, rp), ("Held-out (40--49)", "0", v_ho, res_ho, 0.0, rp), ("Held-out (40--49)", "0.10", v_ho, res_ho, 0.10, rp)]
-cols = "ll" + "c" * (2 + len(seeds))
-head = "Initial states & Offset (rad) & VLA & " + " & ".join(f"+ res. {sd}" for sd in seeds) + " & Re-plan / 10 \\\\\n"
+cols = "ll" + "c" * (2 + len(all_seeds))
+head = "Initial states & Offset (rad) & VLA & " + " & ".join(f"{sd}" if not sd.startswith("rand") else f"r{sd[-2:]}" for sd in all_seeds) + " & Re-plan / 10 \\\\\n"
 body = f"\\begin{{tabular}}{{{cols}}}\n\\toprule\n" + head + "\\midrule\n"
 for lab, off, v, res, mag, rpl in groups:
-    body += f"{lab} & {off} & {cell(kn(v, mag))} & " + " & ".join(cell(kn(res.get(sd), mag)) for sd in seeds) + f" & {cell(kn(rpl, mag))} \\\\\n"
+    body += f"{lab} & {off} & {cell(kn(v, mag))} & " + " & ".join(cell(kn(res.get(sd), mag)) for sd in all_seeds) + f" & {cell(kn(rpl, mag))} \\\\\n"
 # episode length of successes and McNemar p at the training level
 body += "\\midrule\n"
 for lab, v, res in [("Seen", v_tr, res_tr), ("Held-out", v_ho, res_ho)]:
     lens, ps = [], []
-    for sd in seeds:
+    for sd in all_seeds:
         r = res.get(sd)
         if r is None:
             lens.append("--")
@@ -167,25 +173,43 @@ exp = [
     ("Instruction variants", ["language_variants"]),
     ("Dose-response (4 families)", ["dose_camera_orbit", "dose_camera_orbit_wide", "dose_robot_init", "dose_robot_init_fine", "dose_light_dimming", "dose_light_dimming_fine", "dose_image_noise"]),
     ("Camera masking", ["camera_mask"]),
-    ("Residual RL evaluation", ["rl_eval_vla", "rl_eval_train_vla", "rl_eval_replan10", "rl_zero_check"] + [f"rl_eval_residual_{sd}" for sd in seeds] + [f"rl_eval_train_residual_{sd}" for sd in seeds]),
+    ("Instruction canonicalisation", ["language_canonical", "language_spatial_paraphrases", "language_spatial_canonical"]),
+    ("Residual RL evaluation", ["rl_eval_vla", "rl_eval_train_vla", "rl_eval_replan10", "rl_zero_check"] + [f"rl_eval_residual_{sd}" for sd in all_seeds] + [f"rl_eval_train_residual_{sd}" for sd in all_seeds]),
     ("Validation re-runs", ["repro_check"]),
 ]
 body = "\\begin{tabular}{lrrr}\n\\toprule\nExperiment & Episodes & s / episode & Hours \\\\\n\\midrule\n"
 tot_n, tot_h = 0, 0.0
 for lab, names in exp:
-    ds = [load(n) for n in names]
-    d = pd.concat([x for x in ds if x is not None])
+    ds = [x for x in (load(n) for n in names) if x is not None]
+    if not ds:
+        continue
+    d = pd.concat(ds)
     h = d.duration_s.sum() / 3600
     tot_n += len(d)
     tot_h += h
     body += f"{lab} & {len(d)} & {d.duration_s.mean():.0f} & {h:.1f} \\\\\n"
+# failure search: durations are stored per episode inside the search and validation files
+qd_p, qv_p = Path("results/qd_search.csv"), Path("results/qd_validation.csv")
+if qd_p.exists():
+    qd = pd.read_csv(qd_p)
+    eps = [e for js in qd.episodes for e in json.loads(js)]
+    durs = [e.get("duration_s", np.nan) for e in eps]
+    n_qd = len(eps)
+    if qv_p.exists():
+        qv = pd.read_csv(qv_p)
+        n_qd += len(qv)
+        durs += list(qv.get("duration_s", pd.Series([np.nan] * len(qv))))
+    h = np.nansum(durs) / 3600
+    tot_n += n_qd
+    tot_h += h
+    body += f"Failure search (MAP-Elites) & {n_qd} & {np.nanmean(durs):.0f} & {h:.1f} \\\\\n"
 ppo_h = 0.0
-for f in glob.glob("runs/robot025_task2_s*/log.csv"):
+for f in glob.glob("runs/robot025_task2_s*/log.csv") + glob.glob("runs/robot025_task2_rand_s*/log.csv"):
     lg = pd.read_csv(f)
     if len(lg):
         steps = lg.step.diff().fillna(lg.step.iloc[0])
         ppo_h += float((steps / lg.sps).sum()) / 3600
-body += f"PPO training ({len(seeds)} runs) & -- & -- & {ppo_h:.1f} \\\\\n"
+body += f"PPO training ({len(all_seeds)} runs) & -- & -- & {ppo_h:.1f} \\\\\n"
 body += f"\\midrule\nTotal & {tot_n} & & {tot_h + ppo_h:.1f} \\\\\n\\bottomrule\n\\end{{tabular}}\n"
 write("compute", body)
 json.dump({"episodes": tot_n, "eval_hours": round(tot_h, 1), "ppo_hours": round(ppo_h, 1)}, open(S / "compute.json", "w"))

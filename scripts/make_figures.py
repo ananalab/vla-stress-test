@@ -198,17 +198,20 @@ rl_vla = load("rl_eval_vla")
 rl_tr_vla = load("rl_eval_train_vla")
 rl_res = {Path(f).stem.split("_")[-1]: load(Path(f).stem) for f in sorted(glob.glob(str(R / "rl_eval_residual_s*.csv")))}
 rl_tr_res = {Path(f).stem.split("_")[-1]: load(Path(f).stem) for f in sorted(glob.glob(str(R / "rl_eval_train_residual_s*.csv")))}
+# residual trained with random offset signs (more diverse starts), keys rand_s0, rand_s1
+rl_res_rand = {"rand_" + Path(f).stem.split("_")[-1]: load(Path(f).stem) for f in sorted(glob.glob(str(R / "rl_eval_residual_rand_s*.csv")))}
+rl_tr_res_rand = {"rand_" + Path(f).stem.split("_")[-1]: load(Path(f).stem) for f in sorted(glob.glob(str(R / "rl_eval_train_residual_rand_s*.csv")))}
 logs = {}
-for f in sorted(glob.glob("runs/robot025_task2_s*/log.csv")):
+for f in sorted(glob.glob("runs/robot025_task2_s*/log.csv") + glob.glob("runs/robot025_task2_rand_s*/log.csv")):
     try:
         lg = pd.read_csv(f)
     except pd.errors.EmptyDataError:
         continue  # run just started
     if len(lg) >= 40:  # finished runs only
-        logs[Path(f).parent.name] = lg
+        logs[Path(f).parent.name.replace("robot025_task2_", "")] = lg
 rl_rows, groups, rl_steps = [], [], {}
 if rl_vla is not None and rl_res:
-    def kn(d, mag):
+    def kn_at(d, mag):
         g = d[np.isclose(d.magnitude, mag)]
         return (int(g.success.sum()), len(g))
 
@@ -217,9 +220,9 @@ if rl_vla is not None and rl_res:
         return m
 
     if rl_tr_vla is not None:
-        groups.append({"label": "seen states\n0.05 rad", "vla": kn(rl_tr_vla, 0.05), "res": {sd: kn(d, 0.05) for sd, d in rl_tr_res.items()}})
+        groups.append({"label": "seen states\n0.05 rad", "vla": kn_at(rl_tr_vla, 0.05), "res": {sd: kn_at(d, 0.05) for sd, d in {**rl_tr_res, **rl_tr_res_rand}.items()}})
     for mag, lab in [(0.05, "unseen states\n0.05 rad"), (0.0, "unseen states\nno offset"), (0.1, "unseen states\n0.10 rad")]:
-        groups.append({"label": lab, "vla": kn(rl_vla, mag), "res": {sd: kn(d, mag) for sd, d in rl_res.items()}})
+        groups.append({"label": lab, "vla": kn_at(rl_vla, mag), "res": {sd: kn_at(d, mag) for sd, d in {**rl_res, **rl_res_rand}.items()}})
     for g in groups:
         row = {"group": g["label"].replace("\n", " "), "vla": f"{g['vla'][0]}/{g['vla'][1]}"}
         for sd, (k, n) in g["res"].items():
@@ -326,6 +329,14 @@ if lv is not None:
 if rl_rows:
     seeds = sorted(rl_res)
     macros["RLSeeds"] = str(len(seeds))
+    rseeds = sorted(rl_res_rand)
+    if rseeds:
+        names_r = {"seen states 0.05 rad": "Seen", "unseen states 0.05 rad": "Unseen", "unseen states no offset": "UnseenClean", "unseen states 0.10 rad": "UnseenStrong"}
+        for row in rl_rows:
+            ks = [row[sd] for sd in rseeds if sd in row]
+            if ks:
+                macros[f"RLRand{names_r[row['group']]}Res"] = ", ".join(ks)
+        macros["RLRandSeeds"] = str(len(rseeds))
     names = {"seen states 0.05 rad": "Seen", "unseen states 0.05 rad": "Unseen", "unseen states no offset": "UnseenClean", "unseen states 0.10 rad": "UnseenStrong"}
     for row in rl_rows:
         tag = names[row["group"]]
