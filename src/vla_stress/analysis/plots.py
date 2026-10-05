@@ -315,14 +315,15 @@ def canonicalisation(panels: list[dict], sim: pd.DataFrame | None, path):
         ax.axhline(k / m, color=GREY, ls=(0, (2, 2)), lw=0.9, label="original wording", zorder=1)
         ax.set_xticks(x)
         ax.set_xticklabels(p["levels"])
-        ax.set_ylim(0, 1.32)
-        ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+        ax.set_ylim(0, 1.05)
         ax.grid(axis="x", visible=False)
         ax.set_title(p["title"], loc="left")
         panel_label(ax, lab)
         if lab == "a":
             ax.set_ylabel("success rate")
-            ax.legend(frameon=False, fontsize=6, loc="upper left", ncol=3, handlelength=1.2, columnspacing=0.8)
+            handles, labels = ax.get_legend_handles_labels()
+            fig.legend(handles, labels, frameon=False, fontsize=6.5, loc="lower left", bbox_to_anchor=(0.06, 1.0), ncol=3,
+                       handlelength=1.4, columnspacing=1.2)
     if sim is not None:
         ax = axes[-1]
         for suite, mk, col in [("libero_goal", "o", "#2a78d6"), ("libero_spatial", "s", "#eb6834")]:

@@ -16,6 +16,21 @@
   "language_empty": "0/50 = 0% [0%, 7%]",
   "language_absurd": "0/50 = 0% [0%, 7%]",
   "language_variants_failed_with_any_goal": 0,
+  "canonicalisation": {
+    "spearman": [
+      0.4340350419088237,
+      0.0016375174855474714
+    ],
+    "retrieval_goal": [
+      30,
+      30
+    ],
+    "retrieval_spatial": [
+      15,
+      20
+    ],
+    "absurd_sim": 0.21311818063259125
+  },
   "breaking_points": [
     {
       "family": "camera_orbit",

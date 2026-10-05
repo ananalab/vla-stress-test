@@ -1,0 +1,51 @@
+suite,task_id,text,similarity,rate,k,n
+libero_goal,0,open the drawer in the middle of the cabinet,0.9659366607666016,0.0,0,5
+libero_goal,0,pull the cabinet's middle drawer open,0.8950836062431335,0.0,0,5
+libero_goal,0,slide out the middle drawer,0.7383652925491333,0.2,1,5
+libero_goal,1,move the bowl onto the stove,0.9448511600494385,1.0,5,5
+libero_goal,1,place the bowl on the stove,0.9854726791381836,0.8,4,5
+libero_goal,1,set the bowl down on the cooktop,0.7982394695281982,0.0,0,5
+libero_goal,2,move the bottle of wine onto the cabinet,0.865409791469574,0.0,0,5
+libero_goal,2,place the wine bottle on top of the cabinet,0.9852295517921448,0.8,4,5
+libero_goal,2,set the bottle on the cabinet top,0.8541408777236938,0.0,0,5
+libero_goal,3,open the top drawer and place the bowl inside,0.9950897693634033,0.4,2,5
+libero_goal,3,"pull out the upper drawer, then put the bowl in it",0.9515738487243652,0.0,0,5
+libero_goal,3,put the bowl in the top drawer after opening it,0.9402609467506409,0.0,0,5
+libero_goal,4,move the bowl onto the cabinet,0.889704704284668,0.0,0,5
+libero_goal,4,place the bowl on top of the cabinet,0.9867730140686035,0.6,3,5
+libero_goal,4,set the bowl down on the cabinet top,0.945121169090271,0.4,2,5
+libero_goal,5,move the plate forward until it is in front of the stove,0.9118953943252563,0.0,0,5
+libero_goal,5,push the plate to the front of the cooktop,0.8780308961868286,0.0,0,5
+libero_goal,5,slide the plate in front of the stove,0.913831889629364,0.0,0,5
+libero_goal,6,drop the cheese box into the bowl,0.7678556442260742,0.0,0,5
+libero_goal,6,move the cream cheese into the bowl,0.9600750207901001,0.0,0,5
+libero_goal,6,place the cream cheese in the bowl,0.9867997169494629,0.2,1,5
+libero_goal,7,start the cooktop,0.6158741116523743,0.0,0,5
+libero_goal,7,switch on the stove,0.8654083013534546,0.0,0,5
+libero_goal,7,turn the stove on,0.980411171913147,0.8,4,5
+libero_goal,8,move the bowl onto the plate,0.9241113662719727,0.4,2,5
+libero_goal,8,place the bowl on the plate,0.9827766418457031,0.6,3,5
+libero_goal,8,set the bowl down on the dish,0.7896201610565186,0.0,0,5
+libero_goal,9,move the bottle of wine onto the rack,0.8901416063308716,0.0,0,5
+libero_goal,9,place the wine bottle on the rack,0.9874712228775024,0.6,3,5
+libero_goal,9,set the bottle in the wine rack,0.9313080310821533,0.2,1,5
+libero_spatial,0,move the bowl located between the ramekin and the plate onto the plate,0.9018424153327942,0.8,4,5
+libero_spatial,0,take the black bowl that sits between the plate and the ramekin and put it on the plate,0.9743747115135193,0.8,4,5
+libero_spatial,1,put the bowl that is next to the ramekin onto the plate,0.940471887588501,0.6,3,5
+libero_spatial,1,take the black bowl beside the ramekin and put it on the plate,0.9864789843559265,0.0,0,5
+libero_spatial,2,move the bowl at the center of the table onto the plate,0.8673359751701355,0.0,0,5
+libero_spatial,2,take the black bowl in the middle of the table and put it on the plate,0.9585798382759094,0.0,0,5
+libero_spatial,3,move the bowl from the top of the cookie box onto the plate,0.9090851545333862,0.2,1,5
+libero_spatial,3,take the black bowl sitting on the cookie box and put it on the plate,0.9896780252456665,0.6,3,5
+libero_spatial,4,get the bowl out of the cabinet's top drawer and set it on the plate,0.8894213438034058,0.0,0,5
+libero_spatial,4,take the black bowl from the top drawer of the wooden cabinet and put it on the plate,0.9859887957572937,0.2,1,5
+libero_spatial,5,move the bowl stacked on the ramekin onto the plate,0.9082536697387695,0.0,0,5
+libero_spatial,5,take the black bowl sitting on the ramekin and put it on the plate,0.9883283376693726,0.0,0,5
+libero_spatial,6,put the bowl that is next to the cookie box onto the plate,0.938144862651825,0.6,3,5
+libero_spatial,6,take the black bowl beside the cookie box and put it on the plate,0.9880393743515015,0.0,0,5
+libero_spatial,7,move the bowl from the stove onto the plate,0.8864518404006958,0.0,0,5
+libero_spatial,7,take the black bowl sitting on the stove and put it on the plate,0.9853131175041199,0.0,0,5
+libero_spatial,8,put the bowl that is next to the plate onto the plate,0.8841328620910645,0.4,2,5
+libero_spatial,8,take the black bowl beside the plate and put it on the plate,0.9766002893447876,0.0,0,5
+libero_spatial,9,move the bowl from the top of the cabinet onto the plate,0.8450831174850464,0.0,0,5
+libero_spatial,9,take the black bowl sitting on the wooden cabinet and put it on the plate,0.9851158857345581,1.0,5,5

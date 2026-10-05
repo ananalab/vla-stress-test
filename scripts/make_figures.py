@@ -109,6 +109,7 @@ if lv is not None:
 
 # ---------------------------------------------------------------- canonicalisation
 lc, sp, sc = load("language_canonical"), load("language_spatial_paraphrases"), load("language_spatial_canonical")
+bs = load("baseline_spatial")
 canon_panels, sim_df, canon_stats = [], None, {}
 
 
