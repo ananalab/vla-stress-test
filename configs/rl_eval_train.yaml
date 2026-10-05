@@ -1,0 +1,9 @@
+# Same evaluation on init states seen during training (0-19), to tell
+# "learned something that does not generalise" from "learned nothing".
+name: rl_eval_train
+suite: libero_spatial
+tasks: [2]
+episodes: 20
+conditions:
+  - perturbation: robot_init
+    intensities: [0.25]

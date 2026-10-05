@@ -1,0 +1,6 @@
+# Held-out init state, arm offset 0.05 rad/joint: VLA alone vs VLA + residual (seed 0).
+out: media/residual
+columns: 2
+panels:
+  - {suite: libero_spatial, task: 2, episode: 46, perturbation: robot_init, intensity: 0.25, title: "VLA alone", subtitle: "arm offset 0.05 rad/joint, unseen init state"}
+  - {suite: libero_spatial, task: 2, episode: 46, perturbation: robot_init, intensity: 0.25, residual: runs/robot025_task2_s0/final.pt, title: "VLA + residual (PPO)", subtitle: "same episode, correction alpha = 0.2"}

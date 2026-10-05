@@ -1,0 +1,12 @@
+# Training-free alternative: execute 10 actions of each chunk instead of 50, so the VLA
+# re-plans five times more often (closer to closed loop). Same held-out episodes as rl_eval.
+name: rl_eval_replan10
+suite: libero_spatial
+tasks: [2]
+first_episode: 40
+episodes: 10
+n_action_steps: 10
+conditions:
+  - label: clean
+  - perturbation: robot_init
+    intensities: [0.25, 0.5]
