@@ -1,6 +1,10 @@
-# Held-out init state, arm offset 0.05 rad/joint: VLA alone vs VLA + residual (seed 0).
+# Arm offset 0.05 rad/joint, LIBERO-Spatial task 2. VLA alone vs VLA + residual (seed 0).
+# Top: an init state seen in training (the corrector rescues it).
+# Bottom: a held-out init state (both succeed; the corrector is only faster).
 out: media/residual
 columns: 2
 panels:
-  - {suite: libero_spatial, task: 2, episode: 46, perturbation: robot_init, intensity: 0.25, title: "VLA alone", subtitle: "arm offset 0.05 rad/joint, unseen init state"}
-  - {suite: libero_spatial, task: 2, episode: 46, perturbation: robot_init, intensity: 0.25, residual: runs/robot025_task2_s0/final.pt, title: "VLA + residual (PPO)", subtitle: "same episode, correction alpha = 0.2"}
+  - {suite: libero_spatial, task: 2, episode: 0, perturbation: robot_init, intensity: 0.25, title: "VLA alone", subtitle: "init state seen in RL training"}
+  - {suite: libero_spatial, task: 2, episode: 0, perturbation: robot_init, intensity: 0.25, residual: runs/robot025_task2_s0/final.pt, title: "VLA + residual", subtitle: "init state seen in RL training"}
+  - {suite: libero_spatial, task: 2, episode: 46, perturbation: robot_init, intensity: 0.25, title: "VLA alone", subtitle: "held-out init state"}
+  - {suite: libero_spatial, task: 2, episode: 46, perturbation: robot_init, intensity: 0.25, residual: runs/robot025_task2_s0/final.pt, title: "VLA + residual", subtitle: "held-out init state"}
