@@ -302,6 +302,12 @@ if rl_rows:
         last = [lg.success_rate.tail(10).mean() for lg in logs.values()]
         macros["RLTrainFirst"] = ", ".join(f"{v:.2f}" for v in first)
         macros["RLTrainLast"] = ", ".join(f"{v:.2f}" for v in last)
+if cm is not None and bs is not None:
+    both = bs[bs.episode.isin(cm.episode.unique())]
+    macros["CamMaskBoth"] = f"{int(both.success.sum())}/{len(both)}"
+    for c, tag in [("mask_agentview", "Agent"), ("mask_wrist", "Wrist")]:
+        g = cm[cm.condition == c]
+        macros[f"CamMask{tag}"] = f"{int(g.success.sum())}/{len(g)}"
 rp = load("rl_eval_replan10")
 if rp is not None and rl_vla is not None:
     for mag, tag in [(0.0, "Clean"), (0.05, "Train"), (0.1, "Strong")]:

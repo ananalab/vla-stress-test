@@ -92,6 +92,10 @@ both with task-bootstrap intervals.
   miss the effect entirely or report a collapse.
 \end{itemize}
 \NoiseSentence{}
-\CameraMaskSentence{}
+\textbf{Both cameras are needed.} Blacking out one stream entirely drops success from \CamMaskBoth{} to
+\CamMaskAgent{} without the main camera and \CamMaskWrist{} without the wrist camera (same episodes). The
+policy cannot do without the third-person view, yet tolerates rotating it by $20$--$30^\circ$ with a
+moderate loss, which suggests it relies on coarse scene layout from that view rather than on precise
+image coordinates.
 
 \input{results_rl.tex}
