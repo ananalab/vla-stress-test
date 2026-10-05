@@ -139,7 +139,6 @@ if cm is not None and bs is not None:
     names = {"both cameras": "both cameras", "mask_agentview": "agentview masked", "mask_wrist": "wrist masked"}
     t["name"] = t["condition"].map(names)
     t.to_csv(SUM / "camera_mask.csv", index=False)
-    plots.bars(t, "name", FIG / "camera_mask.pdf", figsize=(3.25, 1.0))
 
 # ---------------------------------------------------------------- residual RL
 rl_vla = load("rl_eval_vla")

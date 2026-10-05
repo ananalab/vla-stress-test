@@ -200,7 +200,7 @@ class ImageNoise(Perturbation):
 
 
 class CameraMask(Perturbation):
-    """Replace one camera stream with a black image (intensity 1) — which view does the policy use?"""
+    """Replace one camera stream with a black image (intensity 1), to see which view the policy relies on."""
 
     name = "camera_mask"
     unit = "masked"

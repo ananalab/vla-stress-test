@@ -21,7 +21,7 @@ import torch.utils._pytree as pytree
 
 from lerobot.configs.policies import PreTrainedConfig
 from lerobot.envs.configs import LiberoEnv as LiberoEnvConfig
-from lerobot.envs.libero import TASK_SUITE_MAX_STEPS, LiberoEnv, _get_suite
+from lerobot.envs.libero import LiberoEnv, _get_suite
 from lerobot.envs.utils import preprocess_observation
 from lerobot.policies import make_policy, make_pre_post_processors
 from lerobot.processor.env_processor import LiberoProcessorStep
@@ -118,10 +118,6 @@ def make_env(suite_name: str, task_id: int, resolution: int = 360, hard_reset: b
 
 def task_instructions(suite_name: str) -> list[str]:
     return [t.language for t in _get_suite(suite_name).tasks]
-
-
-def max_steps(suite_name: str) -> int:
-    return TASK_SUITE_MAX_STEPS[suite_name]
 
 
 def suite_goals(suite_name: str) -> list[list]:

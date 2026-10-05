@@ -1,6 +1,6 @@
 # Drafts for LeRobot (not posted yet)
 
-## Issue 1 — `lerobot-eval` ignores the rename map saved with the checkpoint
+## Issue 1: `lerobot-eval` ignores the rename map saved with the checkpoint
 
 **Context.** `lerobot/smolvla_libero` names its cameras `observation.images.camera1/2/3`, while the
 LIBERO env produces `observation.images.image/image2`. The checkpoint's `policy_preprocessor.json`
@@ -17,13 +17,13 @@ with an empty dict). Happy to open a PR with a test.
 
 **Versions.** lerobot 0.6.1, checkpoint revision `31d453f7edd7`.
 
-## Issue 2 — LIBERO runs on macOS, the `sys_platform == "linux"` marker could be relaxed or documented
+## Issue 2: LIBERO runs on macOS, the `sys_platform == "linux"` marker could be relaxed or documented
 
 `hf-libero` is restricted to Linux in the `libero` extra. The only package that does not build on
 macOS is `egl-probe`, pulled by `robomimic`, which LIBERO evaluation does not import. Installing
 `hf-libero`, `robosuite==1.4.0` and `bddl==1.0.1` with `--no-deps` plus their real dependencies
 gives a working setup on Apple Silicon with `MUJOCO_GL=cgl` (offscreen rendering), and
-`lerobot-eval` runs on MPS. I evaluated ~2,000 episodes this way.
+`lerobot-eval` runs on MPS. I ran about 2,400 evaluation episodes this way.
 
 Two possible changes: a short "macOS" section in the LIBERO doc page, or making `robomimic`
 optional in `hf-libero`.

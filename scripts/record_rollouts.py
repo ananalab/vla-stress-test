@@ -1,6 +1,6 @@
 """Record rollouts side by side and write a captioned GIF + MP4.
 
-    python scripts/record_rollouts.py --spec media/specs/perturbations.yaml
+    python scripts/record_rollouts.py --spec configs/videos/perturbations.yaml
 
 A spec lists panels; each panel is one episode:
 
@@ -147,7 +147,6 @@ def compose(runs, spec, out, stride, fps):
     small = [Image.fromarray(f).resize((f.shape[1] * 2 // 3, f.shape[0] * 2 // 3), Image.LANCZOS) for f in video[::2]]
     small = [im.quantize(colors=192, method=Image.Quantize.MEDIANCUT) for im in small]
     small[0].save(out.with_suffix(".gif"), save_all=True, append_images=small[1:], duration=int(2000 / fps), loop=0, optimize=True)
-    Image.fromarray(video[-1]).save(out.with_name(out.name + "_final.png"))
     print("wrote", out.with_suffix(".gif"), out.with_suffix(".mp4"))
 
 
