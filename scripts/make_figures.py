@@ -271,6 +271,7 @@ if "light_dimming" in curves:
 if lv is not None:
     pp = lv[lv.condition == "paraphrase"]
     macros["LangPara"] = frac(int(pp.success.sum()), len(pp))
+    macros["LangOrig"] = frac(int(ref.success.sum()), len(ref))
     for k, nm in zip(["paraphrase_0", "paraphrase_1", "paraphrase_2"], ["Close", "Reworded", "Distant"]):
         g = pp[pp.variant == k]
         macros[f"LangPara{nm}"] = f"{int(g.success.sum())}/{len(g)}"

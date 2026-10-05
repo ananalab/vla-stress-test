@@ -1,6 +1,6 @@
 {
-  "baseline_goal": "30/31 = 97% [84%, 99%]",
-  "baseline_goal_sec_per_episode": 21.5,
+  "baseline_goal": "84/100 = 84% [76%, 90%]",
+  "baseline_goal_sec_per_episode": 19.4,
   "baseline_spatial": "59/100 = 59% [49%, 68%]",
   "baseline_spatial_sec_per_episode": 37.9,
   "language_diagonal": "25/30 = 83% [66%, 93%]",
