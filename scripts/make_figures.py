@@ -17,6 +17,7 @@ import numpy as np
 import pandas as pd
 
 from vla_stress.analysis import plots
+from vla_stress.analysis.results import load
 from vla_stress.analysis.stats import mcnemar_exact, rate_table
 
 R = Path("results")
@@ -39,18 +40,6 @@ GOAL_SHORT = [
 ]
 # Extra configs that refine or extend a family (same init states / seeds, more levels).
 EXTRA = {"robot_init": ["dose_robot_init_fine"], "light_dimming": ["dose_light_dimming_fine"], "camera_orbit": ["dose_camera_orbit_wide"]}
-
-
-def load(name: str) -> pd.DataFrame | None:
-    files = sorted(glob.glob(str(R / f"{name}.csv")) + glob.glob(str(R / f"{name}.shard*.csv")))
-    if not files:
-        return None
-    df = pd.concat([pd.read_csv(f, keep_default_na=False) for f in files], ignore_index=True)
-    for c in ["success", "task_id", "episode", "steps"]:
-        df[c] = df[c].astype(int)
-    df["magnitude"] = df["magnitude"].astype(float)
-    df["intensity"] = df["intensity"].astype(float)
-    return df
 
 
 def wilson_str(k, n):

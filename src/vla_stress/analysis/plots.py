@@ -251,3 +251,33 @@ def rl_summary(logs: dict[str, pd.DataFrame], groups: list[dict], path, train_re
     ax2.set_title("Deterministic evaluation, hard resets", loc="left")
     panel_label(ax2, "b")
     save(fig, path)
+
+
+def dose_per_task(curves: dict[str, pd.DataFrame], path):
+    """Success per task (rows) and level (columns) for each family: shows how much of the pooled
+    curve is a few tasks breaking early versus all tasks degrading together."""
+    fams = list(curves)
+    fig, axes = plt.subplots(1, len(fams), figsize=(6.75, 1.95), constrained_layout=True,
+                             gridspec_kw={"width_ratios": [curves[f].magnitude.nunique() for f in fams]})
+    for ax, fam, lab in zip(np.atleast_1d(axes), fams, "abcdef"):
+        d = curves[fam]
+        m = d.pivot_table(index="task_id", columns="magnitude", values="success", aggfunc="mean")
+        im = ax.imshow(m.values, cmap=BLUES, vmin=0, vmax=1, aspect="auto")
+        ax.set_xticks(range(m.shape[1]))
+        fmt = {"camera_orbit": "{:g}", "robot_init": "{:g}", "light_dimming": "{:.2f}", "image_noise": "{:g}"}[fam]
+        ax.set_xticklabels([fmt.format(c) for c in m.columns], rotation=90, fontsize=5.5)
+        ax.set_yticks(range(m.shape[0]))
+        ax.set_yticklabels(m.index if lab == "a" else [], fontsize=6)
+        ax.set_xlabel(XLABELS[fam], fontsize=7)
+        if lab == "a":
+            ax.set_ylabel("LIBERO-Spatial task")
+        ax.set_title(TITLES[fam], loc="left")
+        ax.grid(False)
+        ax.tick_params(length=0)
+        for s in ax.spines.values():
+            s.set_visible(False)
+        panel_label(ax, lab)
+    cb = fig.colorbar(im, ax=axes, fraction=0.02, pad=0.01)
+    cb.set_label("success rate")
+    cb.outline.set_visible(False)
+    save(fig, path)
