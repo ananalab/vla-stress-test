@@ -107,6 +107,59 @@ if lv is not None:
     failed = lv[lv.success == 0]
     headline["language_variants_failed_with_any_goal"] = int((failed.goals_achieved.astype(str) != "").sum())
 
+# ---------------------------------------------------------------- canonicalisation
+lc, sp, sc = load("language_canonical"), load("language_spatial_paraphrases"), load("language_spatial_canonical")
+canon_panels, sim_df, canon_stats = [], None, {}
+
+
+def kn(d):
+    return (int(d.success.sum()), len(d))
+
+
+if lc is not None and lv is not None:
+    levels = ["close", "reworded", "distant"]
+    canon_panels.append({
+        "title": "LIBERO-Goal (3 paraphrases per task)", "levels": levels,
+        "raw": [kn(lv[lv.variant == f"paraphrase_{i}"]) for i in range(3)],
+        "canon": [kn(lc[lc.variant == f"paraphrase_{i}"]) for i in range(3)],
+        "ref": kn(lang_ref),
+    })
+if sp is not None and sc is not None and bs is not None:
+    canon_panels.append({
+        "title": "LIBERO-Spatial (2 per task)", "levels": ["close", "reworded"],
+        "raw": [kn(sp[sp.variant == f"paraphrase_{i}"]) for i in range(2)],
+        "canon": [kn(sc[sc.variant == f"paraphrase_{i}"]) for i in range(2)],
+        "ref": kn(bs[bs.episode < 5]),
+    })
+if canon_panels:
+    from scipy.stats import mannwhitneyu, spearmanr
+
+    from vla_stress.env_utils import task_instructions
+    from vla_stress.language import Canonicalizer
+
+    cz = Canonicalizer()
+    recs = []
+    for suite, raw in [("libero_goal", lv[lv.condition == "paraphrase"] if lv is not None else None), ("libero_spatial", sp)]:
+        if raw is None:
+            continue
+        orig = task_instructions(suite)
+        for (t, text), g in raw.groupby(["task_id", "instruction"]):
+            recs.append({"suite": suite, "task_id": t, "text": text, "similarity": cz.similarity(text, orig[t]), "rate": g.success.mean(), "k": int(g.success.sum()), "n": len(g)})
+    sim_df = pd.DataFrame(recs)
+    sim_df.to_csv(SUM / "paraphrase_similarity.csv", index=False)
+    rho, p_rho = spearmanr(sim_df.similarity, sim_df.rate)
+    canon_stats["spearman"] = (rho, p_rho)
+    for name, d in [("goal", lc), ("spatial", sc)]:
+        if d is None:
+            continue
+        suite = d.suite.iloc[0]
+        orig = task_instructions(suite)
+        u = d.drop_duplicates("instruction")
+        canon_stats[f"retrieval_{name}"] = (int(sum(a == orig[t] for a, t in zip(u.instruction_used, u.task_id))), len(u))
+    canon_stats["absurd_sim"] = cz("sing a song")[1]
+    plots.canonicalisation(canon_panels, sim_df, FIG / "language_canonical.pdf")
+    headline["canonicalisation"] = {k: v for k, v in canon_stats.items()}
+
 # ---------------------------------------------------------------- dose-response
 bs = load("baseline_spatial")
 curves = {}
@@ -298,6 +351,48 @@ if cm is not None and bs is not None:
     for c, tag in [("mask_agentview", "Agent"), ("mask_wrist", "Wrist")]:
         g = cm[cm.condition == c]
         macros[f"CamMask{tag}"] = f"{int(g.success.sum())}/{len(g)}"
+for p in canon_panels:
+    tag = "Goal" if "Goal" in p["title"] else "Spatial"
+    rk = sum(k for k, _ in p["raw"]); rn = sum(n for _, n in p["raw"])
+    ck = sum(k for k, _ in p["canon"]); cn = sum(n for _, n in p["canon"])
+    macros[f"Canon{tag}Raw"] = frac(rk, rn)
+    macros[f"Canon{tag}"] = frac(ck, cn)
+    macros[f"Canon{tag}Ref"] = frac(*p["ref"])
+for name, tag in [("retrieval_goal", "Goal"), ("retrieval_spatial", "Spatial")]:
+    if name in canon_stats:
+        macros[f"Retrieval{tag}"] = "%d/%d" % canon_stats[name]
+if "spearman" in canon_stats:
+    macros["SimRho"] = f"{canon_stats['spearman'][0]:.2f}"
+    macros["SimRhoP"] = f"{canon_stats['spearman'][1]:.2g}"
+    macros["AbsurdSim"] = f"{canon_stats['absurd_sim']:.2f}"
+    macros["CanonThreshold"] = "0.5"
+
+qd_path, qv_path = R / "qd_search.csv", R / "qd_validation.csv"
+if qd_path.exists():
+    qd_rows = pd.read_csv(qd_path)
+    qv = pd.read_csv(qv_path) if qv_path.exists() else None
+    plots.qd_summary(qd_rows, qv, 5, FIG / "qd_search.pdf")
+    macros["QDEvals"] = str(len(qd_rows))
+    macros["QDEpisodes"] = str(4 * len(qd_rows))
+    best = qd_rows.groupby("cell").fitness.max()
+    macros["QDCells"] = str(best.size)
+    macros["QDFailCells"] = str(int((qd_rows.groupby("cell").n_fail.max() > 0).sum()))
+    anchors = qd_rows[qd_rows.source == "anchor"]
+    single = anchors[(anchors[["g0", "g1", "g2", "g3"]] == 1).sum(axis=1) == 1]
+    corner = anchors[(anchors[["g0", "g1", "g2", "g3"]] == 1).all(axis=1)]
+    macros["QDSingleFails"] = f"{int(single.n_fail.sum())}/{4 * len(single)}"
+    if len(corner):
+        macros["QDCornerFails"] = f"{int(corner.n_fail.iloc[0])}/4"
+    macros["QDAnyFail"] = f"{int((qd_rows.n_fail > 0).sum())}/{len(qd_rows)}"
+    if qv is not None and len(qv):
+        g = qv.groupby("eval_id").success.agg(lambda x: int((x == 0).sum()))
+        nper = qv.groupby("eval_id").size()
+        macros["QDValBest"] = f"{int(g.max())}/{int(nper[g.idxmax()])}"
+        macros["QDValPooled"] = frac(int(g.sum()), int(nper.sum()))
+        macros["QDValElites"] = str(g.size)
+        cq = qd_rows[qd_rows.eval_id.isin(g.index)]
+        if len(corner) and corner.eval_id.iloc[0] in g.index:
+            macros["QDValCorner"] = f"{int(g[corner.eval_id.iloc[0]])}/{int(nper[corner.eval_id.iloc[0]])}"
 rp = load("rl_eval_replan10")
 if rp is not None and rl_vla is not None:
     for mag, tag in [(0.0, "Clean"), (0.05, "Train"), (0.1, "Strong")]:

@@ -281,3 +281,101 @@ def dose_per_task(curves: dict[str, pd.DataFrame], path):
     cb.set_label("success rate")
     cb.outline.set_visible(False)
     save(fig, path)
+
+
+# --------------------------------------------------------------------------- language: canonicalisation
+def canonicalisation(panels: list[dict], sim: pd.DataFrame | None, path):
+    """panels: [{"title", "levels": [label...], "raw": [(k, n)...], "canon": [(k, n)...], "ref": (k, n)}].
+    sim: one row per paraphrase with columns similarity, rate, suite (raw paraphrases)."""
+    from vla_stress.analysis.stats import wilson
+
+    n = len(panels) + (sim is not None)
+    fig, axes = plt.subplots(1, n, figsize=(6.75, 2.0), constrained_layout=True,
+                             gridspec_kw={"width_ratios": [len(p["levels"]) + 0.6 for p in panels] + ([3.2] if sim is not None else [])})
+    axes = np.atleast_1d(axes)
+    for ax, p, lab in zip(axes, panels, "abc"):
+        x = np.arange(len(p["levels"]))
+        for j, (key, col, name) in enumerate([("raw", LIGHT, "paraphrase as written"), ("canon", "#2a78d6", "after canonicalisation")]):
+            ks = p[key]
+            r = [k / m for k, m in ks]
+            ci = [wilson(k, m) for k, m in ks]
+            xs = x + (j - 0.5) * 0.38
+            ax.bar(xs, r, width=0.36, color=col, label=name, zorder=2)
+            ax.errorbar(xs, r, yerr=[[a - c[0] for a, c in zip(r, ci)], [c[1] - a for a, c in zip(r, ci)]], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
+        k, m = p["ref"]
+        ax.axhline(k / m, color=GREY, ls=(0, (2, 2)), lw=0.9, label="original wording", zorder=1)
+        ax.set_xticks(x)
+        ax.set_xticklabels(p["levels"])
+        ax.set_ylim(0, 1.32)
+        ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
+        ax.grid(axis="x", visible=False)
+        ax.set_title(p["title"], loc="left")
+        panel_label(ax, lab)
+        if lab == "a":
+            ax.set_ylabel("success rate")
+            ax.legend(frameon=False, fontsize=6, loc="upper left", ncol=3, handlelength=1.2, columnspacing=0.8)
+    if sim is not None:
+        ax = axes[-1]
+        for suite, mk, col in [("libero_goal", "o", "#2a78d6"), ("libero_spatial", "s", "#eb6834")]:
+            d = sim[sim.suite == suite]
+            ax.scatter(d.similarity, d.rate + np.random.default_rng(0).uniform(-0.015, 0.015, len(d)), s=12, marker=mk, color=col,
+                       edgecolor="white", linewidth=0.4, label=suite.replace("libero_", "LIBERO-").title().replace("Libero", "LIBERO"), zorder=3)
+        ax.set_xlabel("similarity to original instruction")
+        ax.set_ylabel("success, paraphrase as written")
+        ax.set_ylim(-0.05, 1.05)
+        ax.set_title("Is closeness enough?", loc="left")
+        ax.legend(frameon=False, fontsize=6, loc="upper left")
+        panel_label(ax, "abc"[len(panels)])
+    save(fig, path)
+
+
+# --------------------------------------------------------------------------- QD failure search
+def qd_summary(rows: pd.DataFrame, validation: pd.DataFrame | None, grid: int, path):
+    """(a) MAP-Elites archive: most harmful genome found in each cell. (b) Held-out validation of elites."""
+    from vla_stress.analysis.stats import wilson
+
+    fig, axes = plt.subplots(1, 2, figsize=(6.75, 2.35), constrained_layout=True, gridspec_kw={"width_ratios": [1, 1.45]})
+    ax = axes[0]
+    m = np.full((grid, grid), np.nan)
+    nf = np.zeros((grid, grid), int)
+    for _, r in rows.iterrows():
+        i, j = map(int, r["cell"].split(","))
+        if np.isnan(m[j, i]) or r.fitness > m[j, i]:
+            m[j, i], nf[j, i] = r.fitness, r.n_fail
+    im = ax.imshow(m, origin="lower", cmap=BLUES, vmin=0.3, vmax=1.0, extent=(0, 1, 0, 1))
+    for i in range(grid):
+        for j in range(grid):
+            if not np.isnan(m[j, i]):
+                ax.text((i + 0.5) / grid, (j + 0.5) / grid, f"{nf[j, i]}/4", ha="center", va="center", fontsize=6,
+                        color="white" if m[j, i] > 0.7 else INK)
+    ax.scatter(rows.desc_geo, rows.desc_photo, s=3, color=INK, alpha=0.35, zorder=3)
+    ax.set_xlabel("geometric intensity (camera, arm)")
+    ax.set_ylabel("photometric intensity (light, noise)")
+    ax.set_title(f"Archive ({len(rows)} evaluations)", loc="left")
+    ax.grid(False)
+    cb = fig.colorbar(im, ax=ax, fraction=0.046, pad=0.02)
+    cb.set_label("harm (1 = all fail)")
+    cb.outline.set_visible(False)
+    panel_label(ax, "a")
+
+    ax = axes[1]
+    if validation is not None and len(validation):
+        g = validation.groupby("eval_id")
+        t = g.agg(k=("success", lambda s: int((s == 0).sum())), n=("success", "size"), cam=("camera_deg", "first"), arm=("arm_rad", "first"),
+                  light=("light_removed", "first"), noise=("noise_std", "first")).reset_index().sort_values("k")
+        y = np.arange(len(t))
+        rates = t.k / t.n
+        ci = [wilson(int(a), int(b)) for a, b in zip(t.k, t.n)]
+        ax.barh(y, rates, color="#eb6834", height=0.6, zorder=2)
+        ax.errorbar(rates, y, xerr=[rates - [c[0] for c in ci], [c[1] for c in ci] - rates], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
+        ax.set_yticks(y)
+        ax.set_yticklabels([f"{c:.1f}°, {a:.3f} rad, {100 * l:.0f}% off, σ={s:.0f}" for c, a, l, s in zip(t.cam, t.arm, t.light, t.noise)], fontsize=6)
+        for yi, k, n in zip(y, t.k, t.n):
+            ax.text(1.01, yi, f"{k}/{n}", va="center", fontsize=6, color=GREY, transform=ax.get_yaxis_transform())
+        ax.set_xlim(0, 1)
+        ax.set_xlabel("failure rate on held-out episodes")
+        ax.grid(axis="y", visible=False)
+        ax.tick_params(axis="y", length=0)
+    ax.set_title("Validation (each perturbation alone: 0 failures)", loc="left")
+    panel_label(ax, "b")
+    save(fig, path)
