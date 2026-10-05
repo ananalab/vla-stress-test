@@ -81,3 +81,8 @@
 - Sur les états 40-49 jamais vus : pas de gain (4/10 contre 5/10).
 - Donc le correcteur a appris des corrections spécifiques aux 40 états initiaux d'entraînement et ne généralise pas. Normal avec une entrée uniquement proprioceptive et 40 états : rien ne lui permet de déduire la correction pour une configuration nouvelle autrement que par interpolation.
 - Replanifier toutes les 10 actions au lieu de 50 (sans apprentissage) : 10/10, 4/10, 3/10 contre 8/10, 5/10, 1/10. Rien de significatif avec 10 épisodes, et 2,4 fois plus lent.
+
+### Incident disque (5 octobre, 8h50)
+- Disque plein (d'autres projets tournaient en parallèle) : la fin de la file a échoué d'un coup (lumière fine arrêtée à 101/200, seeds 1 et 2 pas lancés). Cache uv vidé (4 Go).
+- Effet de bord : le projet est sur le Bureau, synchronisé avec iCloud. Quand le disque s'est rempli, macOS a évincé les fichiers vers le cloud (« dataless ») : résultats, code, `.git` et tout le `.venv`. Fichiers du projet rapatriés en les relisant un par un (`brctl download` était beaucoup trop lent). CSV et dépôt git intacts (`git fsck` propre).
+- L'environnement Python vit maintenant hors iCloud (`~/venvs/vla-stress`), avec un lien `.venv` dans le projet. Mêmes versions épinglées. Vérifié en rejouant 4 épisodes déjà enregistrés : mêmes issues et même nombre de pas exact (108, 280, 90, 81).
