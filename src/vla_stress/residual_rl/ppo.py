@@ -69,7 +69,7 @@ def main():
 
     model = ActorCritic(args.hidden, args.init_log_std)
     opt = torch.optim.Adam(model.parameters(), lr=args.lr, eps=1e-5)
-    step, update, ep_log = 0, 0, []
+    step, update = 0, 0
     ckpt_path = run / "last.pt"
     if ckpt_path.exists():
         ck = torch.load(ckpt_path, weights_only=False)

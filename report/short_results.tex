@@ -61,6 +61,14 @@ therefore find sensitivity to language on both counts: naming another goal chang
 rewording the same goal breaks it. Model, suite and perturbation types all differ from LIBERO-Plus,
 and we did not reproduce their setting, so this is a statement about SmolVLA on LIBERO-Goal only.
 
+\textbf{A fix at the input.} Mapping each instruction to the closest of the 40 LIBERO training
+instructions with a sentence encoder (all-MiniLM-L6-v2~\citep{reimers2019sbert}; below a cosine
+similarity of \CanonThreshold{}, fixed beforehand, the instruction is left unchanged) brings paraphrases from
+\CanonGoalRaw{} to \CanonGoal{} on LIBERO-Goal, the level of the original wording, and rejects
+\emph{``sing a song''}. On LIBERO-Spatial, where instructions differ only by a spatial relation, the
+encoder confuses \textit{next to} and \textit{on} for 5 of 20 paraphrases and success only rises from
+\CanonSpatialRaw{} to \CanonSpatial{}.
+
 \begin{figure*}[t]
   \centering
   \includegraphics[width=\textwidth]{figures/dose_response.pdf}
@@ -105,5 +113,13 @@ single ``robust/fragile'' scale and missed the differences.
 policy cannot do without the third-person view, yet tolerates rotating it by $20$--$30^\circ$ with a
 moderate loss, which suggests it relies on coarse scene layout from that view rather than on precise
 image coordinates.
+
+\textbf{Harmless alone, harmful together.} We restrict each perturbation to a range where it alone costs at
+most about 15\% of the baseline (camera $\le7.5^\circ$, arm $\le0.03$\,rad, light removed $\le67.5\%$,
+noise $\sigma\le30$) and keep the 15 episodes that succeed under each one alone at the top of its range. A
+MAP-Elites search~\citep{mouret2015mapelites} over their combinations (\QDEvals{} combinations, four search
+episodes each) finds failures almost everywhere: \QDAnyFail{} combinations fail at least one episode, the
+full combination fails \QDCornerFails{}, and the six most harmful ones make \QDValPooled{} of the 11 held-out
+episodes fail. One-factor-at-a-time curves overestimate the margin when several conditions drift together.
 
 \input{short_results_rl.tex}

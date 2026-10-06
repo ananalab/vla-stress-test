@@ -2,7 +2,7 @@
 
     python scripts/make_keyframes.py
 
-Writes report/figures/teaser.pdf, keyframes_language.pdf and keyframes_failures.pdf. The frames
+Writes report/figures/teaser.pdf and keyframes_failures.pdf. The frames
 are exactly what the policy saw from the main camera during the recorded episodes.
 """
 
@@ -13,10 +13,9 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import FancyBboxPatch
 
 from vla_stress.analysis import plots  # noqa: F401  (shared style)
-from vla_stress.analysis.plots import GREY, INK, panel_label, save
+from vla_stress.analysis.plots import GREY, INK, save
 
 CACHE = Path("outputs/video_cache")
 FIG = Path("report/figures")
@@ -104,27 +103,6 @@ def teaser():
     save(fig, FIG / "teaser.pdf")
 
 
-# ---------------------------------------------------------------- language keyframes
-def keyframes_language(rows=(0, 1, 3, 5), k=5, top=0.0):
-    lang = runs("language")
-    w = 5.45 / k
-    fig, axes = plt.subplots(len(rows), k, figsize=(6.75, len(rows) * (w * (1 - top) + 0.08) + 0.05),
-                             gridspec_kw={"wspace": 0.03, "hspace": 0.06, "left": 0.19, "right": 1, "top": 1, "bottom": 0})
-    for r, i in enumerate(rows):
-        frames, title, sub, ok = lang[i]
-        for c, t in enumerate(strip_times(len(frames), k)):
-            ax = axes[r, c]
-            ax.imshow(crop(frames[t], top))
-            clean(ax)
-            tstamp(ax, t)
-            if c == k - 1:
-                badge(ax, ok)
-        words = sub.split()
-        lab = " ".join(words[: (len(words) + 1) // 2]) + "\n" + " ".join(words[(len(words) + 1) // 2 :])
-        axes[r, 0].set_ylabel("\u201c" + lab + "\u201d", fontsize=7, rotation=0, ha="right", va="center", labelpad=6)
-    save(fig, FIG / "keyframes_language.pdf")
-
-
 # ---------------------------------------------------------------- failure keyframes
 def keyframes_failures(k=5, top=0.2):
     pert = runs("perturbations")
@@ -146,6 +124,5 @@ def keyframes_failures(k=5, top=0.2):
 
 if __name__ == "__main__":
     teaser()
-    keyframes_language()
     keyframes_failures()
-    print("wrote teaser.pdf, keyframes_language.pdf, keyframes_failures.pdf")
+    print("wrote teaser.pdf, keyframes_failures.pdf")

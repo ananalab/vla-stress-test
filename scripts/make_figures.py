@@ -133,7 +133,7 @@ if sp is not None and sc is not None and bs is not None:
         "ref": kn(bs[bs.episode < 5]),
     })
 if canon_panels:
-    from scipy.stats import mannwhitneyu, spearmanr
+    from scipy.stats import spearmanr
 
     from vla_stress.env_utils import task_instructions
     from vla_stress.language import Canonicalizer
@@ -396,11 +396,17 @@ if qd_path.exists():
     if len(corner):
         macros["QDCornerFails"] = f"{int(corner.n_fail.iloc[0])}/4"
     macros["QDAnyFail"] = f"{int((qd_rows.n_fail > 0).sum())}/{len(qd_rows)}"
+    from scipy.stats import spearmanr
+
+    searched = qd_rows[qd_rows.source != "anchor"]
+    for gname, tag in [("g0", "Cam"), ("g1", "Arm"), ("g2", "Light"), ("g3", "Noise")]:
+        macros[f"QDRho{tag}"] = f"{spearmanr(searched[gname], searched.fitness)[0]:.2f}"
     if qv is not None and len(qv):
         g = qv.groupby("eval_id").success.agg(lambda x: int((x == 0).sum()))
         nper = qv.groupby("eval_id").size()
         macros["QDValBest"] = f"{int(g.max())}/{int(nper[g.idxmax()])}"
         macros["QDValPooled"] = frac(int(g.sum()), int(nper.sum()))
+        macros["QDValPooledPct"] = pct(int(g.sum()), int(nper.sum()))
         macros["QDValElites"] = str(g.size)
         cq = qd_rows[qd_rows.eval_id.isin(g.index)]
         if len(corner) and corner.eval_id.iloc[0] in g.index:

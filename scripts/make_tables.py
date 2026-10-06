@@ -15,11 +15,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import torch
-import yaml
 
 from vla_stress.analysis import plots
 from vla_stress.analysis.results import load
-from vla_stress.analysis.stats import mcnemar_exact, rate_table, wilson
+from vla_stress.analysis.stats import mcnemar_exact, wilson
 
 T = Path("report/tables")
 T.mkdir(parents=True, exist_ok=True)
@@ -213,25 +212,6 @@ body += f"PPO training ({len(all_seeds)} runs) & -- & -- & {ppo_h:.1f} \\\\\n"
 body += f"\\midrule\nTotal & {tot_n} & & {tot_h + ppo_h:.1f} \\\\\n\\bottomrule\n\\end{{tabular}}\n"
 write("compute", body)
 json.dump({"episodes": tot_n, "eval_hours": round(tot_h, 1), "ppo_hours": round(ppo_h, 1)}, open(S / "compute.json", "w"))
-
-# ------------------------------------------------------------------ paraphrases (appendix)
-lv = load("language_variants")
-cfg = yaml.safe_load(open("configs/language_variants.yaml"))
-para = next(c for c in cfg["conditions"] if "paraphrases" in c)["paraphrases"]
-orig = bg[bg.episode < 5].groupby("task_id").success.sum()
-from vla_stress.env_utils import task_instructions  # noqa: E402
-
-instr = task_instructions("libero_goal")
-body = "\\begin{tabular}{rp{0.2\\linewidth}cp{0.17\\linewidth}cp{0.17\\linewidth}cp{0.17\\linewidth}c}\n\\toprule\n"
-body += "Task & Original & & Close & & Reworded & & Distant & \\\\\n\\midrule\n"
-for t in range(10):
-    cells = [instr[t], f"{int(orig.get(t, 0))}/5"]
-    for k in range(3):
-        x = lv[(lv.task_id == t) & (lv.variant == f"paraphrase_{k}")]
-        cells += [para[t][k], f"{int(x.success.sum())}/{len(x)}"]
-    body += f"{t} & " + " & ".join(cells) + " \\\\\n"
-body += "\\bottomrule\n\\end{tabular}\n"
-write("paraphrases", body)
 
 # ------------------------------------------------------------------ per-task dose figure
 curves = {}

@@ -43,6 +43,9 @@
 
 \input{numbers.tex}
 \input{tables/macros.tex}
+% text that depends on the random-sign residual runs (filled in once they finish)
+\providecommand{\RLRandAbstract}{and training on more diverse starting poses is examined as well.}
+\providecommand{\RLRandConclusion}{A residual corrector trained on a few hundred episodes does not repair the arm-pose weakness on unseen configurations.}
 
 \begin{document}
 
@@ -74,15 +77,19 @@ trained on. We study SmolVLA~\citep{shukor2025smolvla}, a 450M-parameter open VL
 benchmark~\citep{liu2023libero} through three questions. \emph{Does it listen?} In LIBERO-Goal, where ten
 tasks share one scene, we swap instructions and evaluate all ten goal predicates at every step: the
 robot reaches the goal of the instruction it is given in \LangOffInstructed{} of swapped episodes and the
-environment's own goal in \LangOffEnv{}, yet hand-written paraphrases of an instruction succeed far less
-often than its original wording (\LangParaPct{} against \LangOrigPct{}). \emph{How does it break?}
-Under five perturbations swept over a continuous intensity, success declines gradually with camera
-viewpoint, collapses past sharp thresholds for lighting and pixel noise, and is halved by an offset of
-about $3^\circ$ per arm joint at the start of the episode. \emph{Can a small corrector help?} A residual
+environment's own goal in \LangOffEnv{}, yet paraphrases of an instruction succeed far less often than its
+original wording (\LangParaPct{} against \LangOrigPct{}). Mapping each instruction to the closest training
+instruction with a sentence encoder restores the original level on LIBERO-Goal, and only partly on
+LIBERO-Spatial, whose instructions differ by a spatial relation. \emph{How does it break?} Swept over a
+continuous intensity, success declines gradually with camera viewpoint, collapses past sharp thresholds
+for lighting and pixel noise, and is halved by about $3^\circ$ of offset per arm joint at the start of
+the episode. A MAP-Elites search over combinations of four perturbations, each harmless on its own,
+finds failures almost everywhere: the most harmful combinations make \QDValPooledPct{} of held-out
+episodes fail, although each perturbation alone fails none. \emph{Can a small corrector help?} A residual
 policy trained with PPO on top of the frozen model improves success on the initial states it was trained
-on but not on held-out ones, and mostly learns to finish successful episodes faster. The study comprises
-\AllEpisodes{} simulated episodes and about \TotalHours{} hours of compute on a laptop; all per-episode
-logs, code and figure scripts are released.
+on but not on held-out ones, \RLRandAbstract{} The study comprises \AllEpisodes{} simulated episodes and
+about \TotalHours{} hours of compute on a laptop; all per-episode logs, code and figure scripts are
+released.
 \end{abstract}
 
 % =====================================================================================
@@ -101,8 +108,12 @@ fits on consumer hardware and is integrated in LeRobot~\citep{cadene2024lerobot}
   \item A \textbf{goal-level listening test}. Because all LIBERO-Goal tasks share the same objects, we
   can evaluate every task's goal at every step. This separates a robot that ignores the instruction from
   one that follows it but fails, which success on the environment's own goal cannot do.
+  \item An \textbf{input-side repair} of the paraphrase brittleness: retrieval of the closest training
+  instruction, with a rejection threshold so that unrelated requests are not turned into tasks.
   \item \textbf{Dose-response curves} for five perturbations with a continuous intensity, a breaking
   point $x_{50}$ estimated in two ways with task-level bootstrap intervals, and per-task curves.
+  \item A \textbf{search for interaction failures}: MAP-Elites~\citep{mouret2015mapelites} over combinations of
+  perturbations that are each harmless on the episodes used, validated on held-out episodes.
   \item A \textbf{residual RL} experiment targeting the weakness that is visible in proprioception, with
   an evaluation on held-out initial states that distinguishes learning from generalising.
   \item A \textbf{validated, reproducible pipeline}: a cross-check against the official evaluation,
@@ -124,6 +135,13 @@ authors interpret as models ignoring language. LIBERO-PRO~\citep{zhou2025liberop
 collapse under object, position and instruction changes and attributes high scores to memorisation. We
 reuse their axes but sweep intensity continuously, and replace success on the environment's goal by an
 evaluation of all goals of the shared scene.
+
+\paragraph{Search-based testing of learned systems} Vision-based driving controllers have been tested
+by evolutionary search over scenario parameters~\citep{abdessalem2018testing}, and Quality-Diversity
+search has been used to map the feature space of deep-learning systems where they
+misbehave~\citep{zohdinasab2021deephyperion} or the frontier between correct and incorrect
+behaviour~\citep{riccio2020deepjanus}. We use MAP-Elites in the same spirit, restricted to perturbations that
+are harmless one at a time, so that every failure found is an interaction.
 
 \paragraph{Residual policy learning} Residual RL learns an additive correction on top of a fixed
 controller~\citep{silver2018residual,johannink2019residual}. ResiP~\citep{ankile2024resip} and Policy
@@ -240,13 +258,7 @@ below are relative to the measured baseline, and tasks vary widely (\cref{tab:pe
 \section{Does the model listen?}
 \label{sec:language}
 \subsection{Swapping instructions in a shared scene}
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.92\textwidth]{figures/keyframes_language.pdf}
-  \caption{\textbf{One scene, four instructions.} LIBERO-Goal environment of task 2 (whose own instruction
-  is the first row), initial state 1. Each row is a full episode, frames evenly spaced in time.}
-  \label{fig:keylang}
-\end{figure*}
+
 
 All ten LIBERO-Goal tasks are defined on the same objects (a bowl, a plate, a bottle, a cream cheese box, a
 stove, a cabinet with drawers, a rack) and differ only by their instruction, goal predicate and set of
@@ -263,8 +275,8 @@ in \LangOffInstructed{} of the 270 swapped episodes, close to the rate with matc
 (\LangDiag{}), never reaches the environment's goal (\LangOffEnvFrac{}), and completes a third, unrelated
 goal in only \LangOther{} episodes. The initial states of the ten tasks differ slightly, so the behaviour is
 not keyed on the starting configuration either. Instructions involving cluttered targets are followed less
-reliably (task 3, bowl into the top drawer; task 6, cream cheese into the bowl). Keyframes of one scene
-under four instructions are shown in \cref{fig:keylang}.
+reliably (task 3, bowl into the top drawer; task 6, cream cheese into the bowl). \Cref{fig:teaser}a shows one scene
+under three instructions.
 
 
 
@@ -285,7 +297,7 @@ under four instructions are shown in \cref{fig:keylang}.
   \centering
   \includegraphics[width=\columnwidth]{figures/language_variants.pdf}
   \caption{\textbf{Instruction variants} on LIBERO-Goal (environment and instruction of the same task, 5
-  episodes per task and variant). Paraphrases were written by hand (\cref{tab:paraphrases}).}
+  episodes per task and variant). Paraphrases were written by hand and are listed in \texttt{configs/language\_variants.yaml}.}
   \label{fig:variants}
 \end{figure}
 We then keep the goal and change the words (\cref{fig:variants}). Three hand-written paraphrases per task,
@@ -303,11 +315,36 @@ goal breaks it, which differs from the conclusion of LIBERO-Plus. Models, suites
 differ, and we did not reproduce their setting; a swap test in a shared scene is simply the most direct
 check that the instruction is used.
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/language_canonical.pdf}
+  \caption{\textbf{Repairing paraphrases at the input.} (a,b)~Success of hand-written paraphrases as written
+  and after mapping them to the closest LIBERO training instruction, on the same episodes (5 per task and
+  paraphrase); dashed: original wording. (c)~Success of each paraphrase as written against its embedding
+  similarity to the original instruction.}
+  \label{fig:canon}
+\end{figure*}
+
+\subsection{Repairing it at the input}
+If the model only recognises training wordings, a paraphrase can be repaired before it reaches the policy.
+We embed the instruction with a small sentence encoder (all-MiniLM-L6-v2,~\citep{reimers2019sbert,wang2020minilm})
+and replace it by the most similar of the 40 LIBERO training instructions; below a cosine similarity of
+\CanonThreshold{}, fixed before any experiment, the instruction is left unchanged. On LIBERO-Goal every
+paraphrase is mapped to the right task (\RetrievalGoal{}) and success goes from \CanonGoalRaw{} to
+\CanonGoal{}, the level of the original wording (\cref{fig:canon}a); the episodes are in fact identical to the
+original ones, step for step. \emph{``Sing a song''} has a similarity of \AbsurdSim{} and is rejected. LIBERO-Spatial
+is harder: its ten instructions differ only by where the bowl is (\emph{next to} or \emph{on} the ramekin), and
+the encoder confuses 5 of 20 paraphrases (\RetrievalSpatial{} correct). Success rises from \CanonSpatialRaw{} to
+\CanonSpatial{}, against \CanonSpatialRef{} with the original wording; the wrongly mapped paraphrases make the
+robot execute another task. Embedding similarity predicts the success of raw paraphrases only moderately
+(Spearman $\rho=\SimRho$, \cref{fig:canon}c): many paraphrases above 0.9 fail completely, so closeness in
+meaning is not enough for the policy, while a lookup of known wordings is.
+
 % =====================================================================================
 \section{How does it break?}
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.92\textwidth]{figures/keyframes_failures.pdf}
+  \includegraphics[width=0.8\textwidth]{figures/keyframes_failures.pdf}
   \caption{\textbf{How failures unfold} (LIBERO-Spatial task 3, initial state 2, same seed in every row).
   Under the camera orbit the bowl is picked up but ends next to the plate; with the arm offset the bowl
   is never grasped and the gripper drifts out of view; in the dark the bowl is never grasped either.}
@@ -395,6 +432,44 @@ failures are not random motions: under the camera rotation the policy carries ou
 pick-and-place but puts the bowl down next to the plate, as if its estimate of the plate position were
 shifted; with the arm offset it never grasps the bowl and the gripper ends up out of view.
 
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=\textwidth]{figures/qd_search.pdf}
+  \caption{\textbf{Harmless alone, harmful together.} (a)~MAP-Elites archive over combinations of camera orbit
+  ($\le7.5^\circ$), arm offset ($\le0.03$\,rad), light removed ($\le67.5\%$) and pixel noise ($\sigma\le30$);
+  each cell shows the most harmful combination found and how many of the 4 search episodes it fails.
+  Dots: all evaluated combinations. (b)~The most harmful combinations re-run on 11 held-out episodes on which
+  each of the four perturbations alone never fails. Wilson 95\% intervals.}
+  \label{fig:qd}
+\end{figure*}
+
+\subsection{Harmless alone, harmful together}
+The curves above vary one factor at a time. To test whether factors interact, we restrict each perturbation to
+a range in which, alone, it costs at most about 15\% of the baseline (camera $\le7.5^\circ$, arm
+$\le0.03$\,rad, light removed $\le67.5\%$, noise $\sigma\le30$), and select the 15 LIBERO-Spatial episodes that
+succeed unperturbed \emph{and} under each of the four perturbations alone at the top of its range. On these
+episodes a failure can only come from the combination.
+
+\paragraph{Search} A genome $\bm g\in[0,1]^4$ sets the four intensities. Fitness is the mean over four of these
+episodes (four tasks) of 1 for a failure and $T/280$ for a success in $T$ steps, so slower successes still
+guide the search; since simulation and policy are deterministic, fitness is a deterministic function of
+$\bm g$. MAP-Elites keeps the most harmful genome in each cell of a $5\times5$ grid over geometric
+(camera, arm) and photometric (light, noise) intensity. We evaluate the four single-perturbation maxima and
+the full combination, 15 random genomes, then Gaussian mutations ($\sigma=0.15$) of random elites, for
+\QDEvals{} evaluations (\QDEpisodes{} episodes). The six most harmful elites are then re-run on the 11 remaining
+episodes.
+
+\paragraph{Results} As designed, the single-perturbation maxima fail \QDSingleFails{} search episodes; their
+combination fails \QDCornerFails{}. Failures are not confined to that corner: \QDAnyFail{} evaluated combinations
+fail at least one episode and all \QDFailCells{} filled cells contain one (\cref{fig:qd}a). The most harmful
+elites transfer to the held-out episodes, where they produce \QDValPooled{} failures (\cref{fig:qd}b); the full
+combination fails \QDValCorner{}. Small combinations suffice: $1.8^\circ$ of camera orbit, 0.02\,rad of arm
+offset and half of the light removed, with no noise, fail all four search episodes and 5 of 11 held-out ones.
+Across the evaluated combinations, harm correlates most with pixel noise (Spearman $\rho=\QDRhoNoise$) and
+arm offset ($\rho=\QDRhoArm$), and little with camera angle ($\QDRhoCam$) or lighting ($\QDRhoLight$) within
+these ranges; the search does not sample uniformly, so these correlations are only indicative. Robustness measured
+one factor at a time therefore overestimates the margin available when several conditions drift together.
+
 % =====================================================================================
 \section{Can a small corrector fix it?}
 \begin{figure*}[t]
@@ -473,6 +548,10 @@ held-out episodes (no offset, 0.05 and 0.10\,rad), not distinguishable from the 
   A GPU runner with the same configurations is provided but was not used for reported numbers.
   \item \textbf{Paraphrases} were written by one person and are not a sample of how users phrase tasks.
   \item \textbf{Camera direction} is confounded with the initial state; we only interpret magnitude.
+  \item \textbf{Canonicalisation} needs the list of known tasks and cannot help with a genuinely new
+  instruction; its encoder loses spatial relations.
+  \item \textbf{Failure search} used four episodes for fitness, so elites can overfit them; the held-out
+  validation (11 episodes) limits but does not remove this. The archive descriptors are one choice among many.
   \item \textbf{Residual RL} used one task, one perturbation level, about 400 training episodes per run and
   soft resets during training, so its negative result says more about this budget than about residual RL.
 \end{itemize}
@@ -480,13 +559,11 @@ held-out episodes (no offset, 0.05 and 0.10\,rad), not distinguishable from the 
 % =====================================================================================
 \section{Conclusion}
 On LIBERO, SmolVLA is neither deaf to language nor robust to it: the instruction decides which task is
-attempted, but only in wordings close to those seen in training. Its failures under distribution shift have
-distinct shapes, gradual for viewpoint, abrupt for lighting, noise and arm configuration, which a single
-perturbation level per axis would hide, and pooled curves partly average over task-specific cliffs. A
-residual corrector trained on a few hundred episodes does not repair the arm-pose weakness on unseen
-configurations; making it generalise likely requires many more initial states or an input that encodes the
-scene, not only proprioception. Natural next steps are a search over combinations of perturbations instead
-of one axis at a time, and the same protocol on larger VLAs.
+attempted, but only in wordings close to those seen in training, and a simple lookup of known wordings
+repairs most paraphrases. Its failures under distribution shift have distinct shapes, gradual for
+viewpoint and abrupt for lighting, noise and arm configuration, and perturbations that are harmless one at a
+time become harmful together, which one-factor-at-a-time benchmarks cannot reveal. \RLRandConclusion{}
+Natural next steps are the same protocol on larger VLAs and a search over a richer space of scene changes.
 
 \paragraph{Reproducibility} Every number in this report is generated from the per-episode CSV files by
 scripts in the repository, which also contains the configurations, the trained correctors and the
@@ -526,13 +603,6 @@ rollout videos.
 \input{tables/compute.tex}
 \end{table}
 
-\begin{table*}[t]
-\centering
-\caption{\textbf{Paraphrases} used in \cref{fig:variants}, with successes out of 5 (original wording:
-episodes 0--4 of the baseline).}
-\label{tab:paraphrases}
-\scriptsize
-\input{tables/paraphrases.tex}
-\end{table*}
+
 
 \end{document}
