@@ -1,0 +1,11 @@
+# Combination of the four perturbations at the top of their ranges (results/qd_search.csv, eval 4)
+# on one of the search episodes: each perturbation alone, then all four together.
+out: media/combined
+columns: 3
+panels:
+  - {suite: libero_spatial, task: 0, episode: 0, title: "No perturbation", subtitle: "LIBERO-Spatial task 0"}
+  - {suite: libero_spatial, task: 0, episode: 0, qd_genome: [1, 0, 0, 0], title: "Camera 7.5 deg alone", subtitle: "main camera rotated"}
+  - {suite: libero_spatial, task: 0, episode: 0, qd_genome: [0, 1, 0, 0], title: "Arm offset 0.03 rad alone", subtitle: "start pose shifted on each joint"}
+  - {suite: libero_spatial, task: 0, episode: 0, qd_genome: [0, 0, 1, 0], title: "67.5% of light removed alone", subtitle: "all scene lights dimmed"}
+  - {suite: libero_spatial, task: 0, episode: 0, qd_genome: [0, 0, 0, 1], title: "Pixel noise 30 alone", subtitle: "Gaussian noise on both cameras"}
+  - {suite: libero_spatial, task: 0, episode: 0, qd_genome: [1, 1, 1, 1], title: "All four together", subtitle: "same episode, same seed"}

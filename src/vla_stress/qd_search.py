@@ -2,6 +2,7 @@
 
     python -m vla_stress.qd_search search --budget 120
     python -m vla_stress.qd_search validate --n-elites 6
+    python -m vla_stress.qd_search controls
 
 Search space. A genome g in [0, 1]^4 sets four perturbations at once:
 camera orbit g0 * 7.5 deg, arm offset g1 * 0.03 rad/joint, light removed g2 * 0.675, pixel noise
@@ -164,6 +165,49 @@ def validate(args):
                 print(f"elite {r['eval_id']} task {task} ep {ep}: {'OK' if res['success'] else 'FAIL'}", flush=True)
 
 
+def controls(args):
+    """Single-factor controls for the validated elites.
+
+    Episode outcomes are deterministic but not monotonic in the intensity: an episode that
+    succeeds at the top of a range can fail at an intermediate level. Checking each perturbation
+    alone only at its maximum is therefore not enough to call a failure an interaction. Here every
+    non-zero component of every validated elite is re-run alone, at the same value, on the same
+    held-out episodes. An episode counts as a pure interaction when the combination fails and
+    every component alone succeeds.
+    """
+    val = list(csv.DictReader(open(args.validation)))
+    archive = {r["eval_id"]: r for r in csv.DictReader(open(args.archive))}
+    elites = sorted({r["eval_id"] for r in val}, key=int)
+    out = Path(args.out)
+    done = set()
+    if out.exists():
+        done = {(r["eval_id"], r["axis"], int(r["task"]), int(r["episode"])) for r in csv.DictReader(open(out))}
+    vla = load_vla()
+    instr = task_instructions(SUITE)
+    new = not out.exists()
+    with open(out, "a", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=["eval_id", "axis", "value", "task", "episode", "success", "steps", "duration_s"])
+        if new:
+            w.writeheader()
+        for eid in elites:
+            g = np.array([float(archive[eid][f"g{i}"]) for i in range(4)])
+            for i, name in enumerate(AXES):
+                if g[i] == 0:
+                    continue
+                single = np.zeros(4)
+                single[i] = g[i]
+                for task, ep in VALIDATION_EPISODES:
+                    if (eid, name, task, ep) in done:
+                        continue
+                    env = make_env(SUITE, task)
+                    res = run_episode(env, vla, instr[task], ep, ep, perturbation(single))
+                    env.close()
+                    w.writerow({"eval_id": eid, "axis": name, "value": round(g[i] * MAX[name], 4), "task": task, "episode": ep,
+                                "success": res["success"], "steps": res["steps"], "duration_s": res["duration_s"]})
+                    f.flush()
+                    print(f"elite {eid} {name} alone, task {task} ep {ep}: {'OK' if res['success'] else 'FAIL'}", flush=True)
+
+
 def main():
     ap = argparse.ArgumentParser()
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -177,8 +221,12 @@ def main():
     v.add_argument("--archive", default="results/qd_search.csv")
     v.add_argument("--n-elites", type=int, default=6)
     v.add_argument("--out", default="results/qd_validation.csv")
+    c = sub.add_parser("controls")
+    c.add_argument("--archive", default="results/qd_search.csv")
+    c.add_argument("--validation", default="results/qd_validation.csv")
+    c.add_argument("--out", default="results/qd_controls.csv")
     args = ap.parse_args()
-    search(args) if args.cmd == "search" else validate(args)
+    {"search": search, "validate": validate, "controls": controls}[args.cmd](args)
 
 
 if __name__ == "__main__":

@@ -118,3 +118,10 @@
 ### Divers
 - Swap qui remplissait le disque pendant le PPO à 4 envs : cache vidéo supprimé, garde-fou qui arrête la file sous 3 Go libres (reprise possible).
 - Total : 3 435 épisodes, ~39 h. Rapport complet ramené à 9 pages (planche de keyframes langage et tableau des paraphrases retirés, les paraphrases restent dans configs/).
+
+### Vidéos des nouvelles expériences et contrôle des interactions
+- Vidéo canonicalisation : « pull the cabinet's middle drawer open » et « switch on the stove » échouent telles quelles, réussissent une fois ramenées à la consigne connue.
+- En préparant la vidéo des combinaisons avec la plus petite élite (1,8°, 0,02 rad, 51 % de lumière), surprise : la combinaison réussit et la lumière seule à 51 % échoue sur cet épisode. Rejoué dans deux processus : résultats identiques, donc déterministe. Mais l'issue n'est pas monotone en l'intensité (51 % échoue, 67,5 % réussit), et le génome arrondi à 4 décimales dans le CSV suffit à faire basculer l'épisode par rapport à la recherche.
+- Conséquence : vérifier chaque perturbation seule au maximum de sa plage ne suffit pas pour parler d'interaction. Contrôle ajouté : chaque composante de chaque élite validée rejouée seule, à la même valeur, sur les 11 épisodes de validation (253 épisodes). 20 échecs, surtout la caméra à des angles intermédiaires.
+- Résultat corrigé : 47/66 échecs, dont 33/66 (50 %) d'interactions pures (chaque composante seule réussit). La combinaison maximale : 10/11, toutes pures. Le message tient, avec un chiffre plus honnête.
+- Vidéo des combinaisons refaite sur la combinaison maximale : sans perturbation et chaque perturbation seule réussissent, les quatre ensemble échouent.

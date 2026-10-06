@@ -11,6 +11,8 @@ A spec lists panels; each panel is one episode:
       - {suite: libero_spatial, task: 2, episode: 0, perturbation: camera_orbit, intensity: 1.0, title: "camera +30 deg"}
       - {suite: libero_goal, task: 8, episode: 0, instruction: "turn on the stove", title: "told: turn on the stove"}
       - {..., residual: runs/x/final.pt}
+      - {..., canonicalize: true}                  # instruction mapped to the closest training one
+      - {..., qd_genome: [0.24, 0.66, 0.76, 0]}    # a combination from vla_stress.qd_search
 
 The frames are what the policy sees from the main camera (after the perturbation),
 upright. Panels that finish early hold their last frame with the outcome stamped on it.
@@ -95,11 +97,25 @@ def main():
 
 def simulate(spec):
     vla = load_vla()
+    canon = None
     runs = []
     for p in spec["panels"]:
         suite = p["suite"]
         instruction = p.get("instruction") or task_instructions(suite)[p["task"]]
-        pert = P.build(p.get("perturbation", "none"), p.get("intensity", 0.0), **p.get("params", {}))
+        subtitle = p.get("subtitle", instruction)
+        if p.get("canonicalize"):
+            if canon is None:
+                from vla_stress.language import Canonicalizer
+
+                canon = Canonicalizer()
+            instruction = canon(instruction)[0]
+            subtitle = p.get("subtitle", f"model receives: {instruction}")
+        if p.get("qd_genome") is not None:
+            from vla_stress.qd_search import perturbation as qd_perturbation
+
+            pert = qd_perturbation(np.array(p["qd_genome"], dtype=float))
+        else:
+            pert = P.build(p.get("perturbation", "none"), p.get("intensity", 0.0), **p.get("params", {}))
         residual = None
         if p.get("residual"):
             from vla_stress.residual_rl.policy import Residual
@@ -113,7 +129,7 @@ def simulate(spec):
         if p.get("success_goal") is not None:  # judge by another task's goal (language demo)
             ok = str(p["success_goal"]) in res["goals_achieved"].split(";")
         frames = [f[:, : f.shape[1] // 2] for f in res["frames"]]  # main camera only
-        runs.append((frames, p.get("title", ""), p.get("subtitle", instruction), ok))
+        runs.append((frames, p.get("title", ""), subtitle, ok))
         print(f"{p.get('title')}: {'success' if ok else 'failure'} in {res['steps']} steps", flush=True)
     return runs
 

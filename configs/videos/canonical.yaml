@@ -1,0 +1,8 @@
+# Paraphrases that fail as written and succeed once mapped to the closest training instruction.
+out: media/canonical
+columns: 2
+panels:
+  - {suite: libero_goal, task: 0, episode: 0, instruction: "pull the cabinet's middle drawer open", title: "Paraphrase as written", subtitle: "pull the cabinet's middle drawer open"}
+  - {suite: libero_goal, task: 0, episode: 0, instruction: "pull the cabinet's middle drawer open", canonicalize: true, title: "After canonicalisation"}
+  - {suite: libero_goal, task: 7, episode: 0, instruction: "switch on the stove", title: "Paraphrase as written", subtitle: "switch on the stove"}
+  - {suite: libero_goal, task: 7, episode: 0, instruction: "switch on the stove", canonicalize: true, title: "After canonicalisation"}

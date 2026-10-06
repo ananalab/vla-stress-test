@@ -9,7 +9,8 @@ far less often (\LangParaPct{} against \LangOrigPct{}), a gap that retrieving th
 instruction closes. \emph{How does it break?} Under five graded perturbations, success declines
 gradually with camera viewpoint, collapses past sharp thresholds for lighting and pixel noise, and is
 halved by an offset of about 3$^\circ$ per arm joint at the start of the episode; combinations of
-perturbations that are each harmless make \QDValPooledPct{} of held-out episodes fail. \emph{Can a small corrector help?} A residual policy trained with PPO on top of the frozen VLA
+perturbations that are each harmless make \QDValPooledPct{} of held-out episodes fail, \QDPurePct{} as
+pure interactions. \emph{Can a small corrector help?} A residual policy trained with PPO on top of the frozen VLA
 improves success on the initial states it was trained on but not on held-out ones, and mostly learns to
 finish successful episodes faster. All results come from \TotalEpisodes{} simulated episodes run on a
 laptop, with per-episode logs and code released.
@@ -87,12 +88,10 @@ task difficulty varies far more than episode outcomes within a task.
 \input{short_results.tex}
 
 \section{Limitations}
-Everything is in simulation, on one model and one checkpoint, with 3--10 episodes per cell; intervals are
-correspondingly wide and per-task curves noisy. Our baseline is well below the numbers reported in the
-SmolVLA paper (which may not use this Hub checkpoint), so all conclusions are relative to the measured
-baseline. Inference ran on Apple MPS in bf16; a GPU run with the same configs is provided but was not used
-for the reported numbers. The residual corrector sees proprioception only, which is why we target a
-perturbation that is visible in proprioception.
+Simulation only, one model and one checkpoint, 3--10 episodes per cell, so intervals are wide. Our baselines are
+below the published ones (which may not use this Hub checkpoint) and all conclusions are relative to them.
+Inference ran on Apple MPS in bf16. The residual corrector sees proprioception only, which is why we target a
+perturbation visible in proprioception. The full report details these points.
 
 \section{Conclusion}
 On LIBERO, SmolVLA is neither deaf to language nor robust to it: the instruction decides which task is

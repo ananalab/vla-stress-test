@@ -24,6 +24,7 @@ ev configs/language_spatial_paraphrases.yaml
 ev configs/language_spatial_canonical.yaml
 python -u -m vla_stress.qd_search search --budget 120
 python -u -m vla_stress.qd_search validate --n-elites 6
+python -u -m vla_stress.qd_search controls          # each component alone, at the same values
 
 # 4. Residual RL: plumbing check, three seeds, evaluation on seen and held-out initial states
 python scripts/zero_residual.py runs/zero/final.pt
@@ -48,7 +49,7 @@ for s in 0 1; do
 done
 
 # 5. Videos, figures, tables, reports
-for v in perturbations language residual; do python scripts/record_rollouts.py --spec configs/videos/$v.yaml; done
+for v in perturbations language residual canonical combined; do python scripts/record_rollouts.py --spec configs/videos/$v.yaml; done
 python scripts/perturbation_grid.py
 python scripts/make_figures.py
 python scripts/make_tables.py

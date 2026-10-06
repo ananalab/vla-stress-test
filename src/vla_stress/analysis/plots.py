@@ -340,8 +340,10 @@ def canonicalisation(panels: list[dict], sim: pd.DataFrame | None, path):
 
 
 # --------------------------------------------------------------------------- QD failure search
-def qd_summary(rows: pd.DataFrame, validation: pd.DataFrame | None, grid: int, path):
-    """(a) MAP-Elites archive: most harmful genome found in each cell. (b) Held-out validation of elites."""
+def qd_summary(rows: pd.DataFrame, validation: pd.DataFrame | None, grid: int, path, controls: pd.DataFrame | None = None):
+    """(a) MAP-Elites archive: most harmful genome found in each cell. (b) Held-out validation of elites;
+    with single-factor controls, failures are split into pure interactions (every component alone
+    succeeds on that episode) and failures where a component alone already fails."""
     from vla_stress.analysis.stats import wilson
 
     fig, axes = plt.subplots(1, 2, figsize=(6.75, 2.35), constrained_layout=True, gridspec_kw={"width_ratios": [1, 1.45]})
@@ -370,22 +372,43 @@ def qd_summary(rows: pd.DataFrame, validation: pd.DataFrame | None, grid: int, p
 
     ax = axes[1]
     if validation is not None and len(validation):
-        g = validation.groupby("eval_id")
-        t = g.agg(k=("success", lambda s: int((s == 0).sum())), n=("success", "size"), cam=("camera_deg", "first"), arm=("arm_rad", "first"),
-                  light=("light_removed", "first"), noise=("noise_std", "first")).reset_index().sort_values("k")
+        t = qd_validation_table(validation, controls)
         y = np.arange(len(t))
-        rates = t.k / t.n
-        ci = [wilson(int(a), int(b)) for a, b in zip(t.k, t.n)]
-        ax.barh(y, rates, color="#eb6834", height=0.6, zorder=2)
-        ax.errorbar(rates, y, xerr=[np.maximum(rates - [c[0] for c in ci], 0), np.maximum([c[1] for c in ci] - rates, 0)], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
+        if controls is not None:
+            ax.barh(y, t.pure / t.n, color="#eb6834", height=0.6, zorder=2, label="pure interaction")
+            ax.barh(y, (t.k - t.pure) / t.n, left=t.pure / t.n, color="#f5c2ad", height=0.6, zorder=2, label="a component alone also fails")
+            ax.legend(frameon=False, fontsize=6, loc="lower right")
+            labels = [f"{p}+{k - p}/{n}" for p, k, n in zip(t.pure, t.k, t.n)]
+        else:
+            rates = t.k / t.n
+            ci = [wilson(int(a), int(b)) for a, b in zip(t.k, t.n)]
+            ax.barh(y, rates, color="#eb6834", height=0.6, zorder=2)
+            ax.errorbar(rates, y, xerr=[np.maximum(rates - [c[0] for c in ci], 0), np.maximum([c[1] for c in ci] - rates, 0)], fmt="none", ecolor=INK, elinewidth=0.6, capsize=1.2, zorder=3)
+            labels = [f"{k}/{n}" for k, n in zip(t.k, t.n)]
         ax.set_yticks(y)
         ax.set_yticklabels([f"{c:.1f}°, {a:.3f} rad, {100 * l:.0f}% off, σ={s:.0f}" for c, a, l, s in zip(t.cam, t.arm, t.light, t.noise)], fontsize=6)
-        for yi, k, n in zip(y, t.k, t.n):
-            ax.text(1.01, yi, f"{k}/{n}", va="center", fontsize=6, color=GREY, transform=ax.get_yaxis_transform())
+        for yi, lab in zip(y, labels):
+            ax.text(1.01, yi, lab, va="center", fontsize=6, color=GREY, transform=ax.get_yaxis_transform())
         ax.set_xlim(0, 1)
         ax.set_xlabel("failure rate on held-out episodes")
         ax.grid(axis="y", visible=False)
         ax.tick_params(axis="y", length=0)
-    ax.set_title("Validation (each perturbation alone: 0 failures)", loc="left")
+    ax.set_title("Validation on 11 held-out episodes", loc="left")
     panel_label(ax, "b")
     save(fig, path)
+
+
+def qd_validation_table(validation: pd.DataFrame, controls: pd.DataFrame | None) -> pd.DataFrame:
+    """One row per validated elite: failures k out of n, and how many are pure interactions."""
+    v = validation.copy()
+    v["fail"] = (v.success == 0).astype(int)
+    if controls is not None and len(controls):
+        single_fail = controls.assign(f=(controls.success == 0).astype(int)).groupby(["eval_id", "task", "episode"]).f.max().rename("single_fail")
+        v = v.merge(single_fail.reset_index(), on=["eval_id", "task", "episode"], how="left")
+        v["single_fail"] = v.single_fail.fillna(0).astype(int)
+    else:
+        v["single_fail"] = 0
+    v["pure"] = ((v.fail == 1) & (v.single_fail == 0)).astype(int)
+    t = v.groupby("eval_id").agg(k=("fail", "sum"), pure=("pure", "sum"), n=("fail", "size"), cam=("camera_deg", "first"),
+                                 arm=("arm_rad", "first"), light=("light_removed", "first"), noise=("noise_std", "first")).reset_index()
+    return t.sort_values(["k", "pure"]).reset_index(drop=True)

@@ -386,7 +386,9 @@ qd_path, qv_path = R / "qd_search.csv", R / "qd_validation.csv"
 if qd_path.exists():
     qd_rows = pd.read_csv(qd_path)
     qv = pd.read_csv(qv_path) if qv_path.exists() else None
-    plots.qd_summary(qd_rows, qv, 5, FIG / "qd_search.pdf")
+    qc_path = R / "qd_controls.csv"
+    qc = pd.read_csv(qc_path) if qc_path.exists() else None
+    plots.qd_summary(qd_rows, qv, 5, FIG / "qd_search.pdf", controls=qc)
     macros["QDEvals"] = str(len(qd_rows))
     macros["QDEpisodes"] = str(4 * len(qd_rows))
     best = qd_rows.groupby("cell").fitness.max()
@@ -411,7 +413,13 @@ if qd_path.exists():
         macros["QDValPooled"] = frac(int(g.sum()), int(nper.sum()))
         macros["QDValPooledPct"] = pct(int(g.sum()), int(nper.sum()))
         macros["QDValElites"] = str(g.size)
-        cq = qd_rows[qd_rows.eval_id.isin(g.index)]
+        if qc is not None and len(qc):
+            vt = plots.qd_validation_table(qv, qc)
+            macros["QDPure"] = frac(int(vt.pure.sum()), int(vt.n.sum()))
+            macros["QDPurePct"] = pct(int(vt.pure.sum()), int(vt.n.sum()))
+            macros["QDSingleAlsoFail"] = str(int((vt.k - vt.pure).sum()))
+            macros["QDControlEpisodes"] = str(len(qc))
+            macros["QDControlFails"] = f"{int((qc.success == 0).sum())}/{len(qc)}"
         if len(corner) and corner.eval_id.iloc[0] in g.index:
             macros["QDValCorner"] = f"{int(g[corner.eval_id.iloc[0]])}/{int(nper[corner.eval_id.iloc[0]])}"
 rp = load("rl_eval_replan10")

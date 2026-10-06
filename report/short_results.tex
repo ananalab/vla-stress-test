@@ -108,18 +108,14 @@ both with task-bootstrap intervals.
 Gradual decline for viewpoint, sharp thresholds for photometric changes (lighting, noise) and a narrow
 tolerance for the arm configuration: one fixed perturbation level per axis would have placed these on a
 single ``robust/fragile'' scale and missed the differences.
-\textbf{Both cameras are needed.} Blacking out one stream entirely drops success from \CamMaskBoth{} to
-\CamMaskAgent{} without the main camera and \CamMaskWrist{} without the wrist camera (same episodes). The
-policy cannot do without the third-person view, yet tolerates rotating it by $20$--$30^\circ$ with a
-moderate loss, which suggests it relies on coarse scene layout from that view rather than on precise
-image coordinates.
-
 \textbf{Harmless alone, harmful together.} We restrict each perturbation to a range where it alone costs at
 most about 15\% of the baseline (camera $\le7.5^\circ$, arm $\le0.03$\,rad, light removed $\le67.5\%$,
 noise $\sigma\le30$) and keep the 15 episodes that succeed under each one alone at the top of its range. A
 MAP-Elites search~\citep{mouret2015mapelites} over their combinations (\QDEvals{} combinations, four search
 episodes each) finds failures almost everywhere: \QDAnyFail{} combinations fail at least one episode, the
 full combination fails \QDCornerFails{}, and the six most harmful ones make \QDValPooled{} of the 11 held-out
-episodes fail. One-factor-at-a-time curves overestimate the margin when several conditions drift together.
+episodes fail. Since episode outcomes are not monotonic in the intensity, each component is also run alone at
+the same value: in \QDPure{} of the held-out episodes the combination fails while every component alone
+succeeds. One-factor-at-a-time curves overestimate the margin when several conditions drift together.
 
 \input{short_results_rl.tex}

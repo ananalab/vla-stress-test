@@ -194,10 +194,11 @@ if qd_p.exists():
     eps = [e for js in qd.episodes for e in json.loads(js)]
     durs = [e.get("duration_s", np.nan) for e in eps]
     n_qd = len(eps)
-    if qv_p.exists():
-        qv = pd.read_csv(qv_p)
-        n_qd += len(qv)
-        durs += list(qv.get("duration_s", pd.Series([np.nan] * len(qv))))
+    for side in [qv_p, Path("results/qd_controls.csv")]:  # validation and single-component controls
+        if side.exists():
+            x = pd.read_csv(side)
+            n_qd += len(x)
+            durs += list(x.get("duration_s", pd.Series([np.nan] * len(x))))
     h = np.nansum(durs) / 3600
     tot_n += n_qd
     tot_h += h

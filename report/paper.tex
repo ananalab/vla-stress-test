@@ -85,7 +85,7 @@ continuous intensity, success declines gradually with camera viewpoint, collapse
 for lighting and pixel noise, and is halved by about $3^\circ$ of offset per arm joint at the start of
 the episode. A MAP-Elites search over combinations of four perturbations, each harmless on its own,
 finds failures almost everywhere: the most harmful combinations make \QDValPooledPct{} of held-out
-episodes fail, although each perturbation alone fails none. \emph{Can a small corrector help?} A residual
+episodes fail, and in \QDPurePct{} of them every component alone, at the same value, succeeds. \emph{Can a small corrector help?} A residual
 policy trained with PPO on top of the frozen model improves success on the initial states it was trained
 on but not on held-out ones, \RLRandAbstract{} The study comprises \AllEpisodes{} simulated episodes and
 about \TotalHours{} hours of compute on a laptop; all per-episode logs, code and figure scripts are
@@ -438,8 +438,9 @@ shifted; with the arm offset it never grasps the bowl and the gripper ends up ou
   \caption{\textbf{Harmless alone, harmful together.} (a)~MAP-Elites archive over combinations of camera orbit
   ($\le7.5^\circ$), arm offset ($\le0.03$\,rad), light removed ($\le67.5\%$) and pixel noise ($\sigma\le30$);
   each cell shows the most harmful combination found and how many of the 4 search episodes it fails.
-  Dots: all evaluated combinations. (b)~The most harmful combinations re-run on 11 held-out episodes on which
-  each of the four perturbations alone never fails. Wilson 95\% intervals.}
+  Dots: all evaluated combinations. (b)~The most harmful combinations re-run on 11 held-out episodes. Dark:
+  pure interactions, where each component alone at the same value succeeds on that episode; light: a
+  component alone already fails.}
   \label{fig:qd}
 \end{figure*}
 
@@ -447,24 +448,30 @@ shifted; with the arm offset it never grasps the bowl and the gripper ends up ou
 The curves above vary one factor at a time. To test whether factors interact, we restrict each perturbation to
 a range in which, alone, it costs at most about 15\% of the baseline (camera $\le7.5^\circ$, arm
 $\le0.03$\,rad, light removed $\le67.5\%$, noise $\sigma\le30$), and select the 15 LIBERO-Spatial episodes that
-succeed unperturbed \emph{and} under each of the four perturbations alone at the top of its range. On these
-episodes a failure can only come from the combination.
+succeed unperturbed \emph{and} under each of the four perturbations alone at the top of its range.
 
 \paragraph{Search} A genome $\bm g\in[0,1]^4$ sets the four intensities. Fitness is the mean over four of these
 episodes (four tasks) of 1 for a failure and $T/280$ for a success in $T$ steps, so slower successes still
 guide the search; since simulation and policy are deterministic, fitness is a deterministic function of
-$\bm g$. MAP-Elites keeps the most harmful genome in each cell of a $5\times5$ grid over geometric
+$\bm g$. It is not a smooth one: on a given episode the outcome is not monotonic in the intensity (one
+search episode fails with 51\% of the light removed but succeeds with 67.5\%), and changing a genome in the
+fourth decimal can flip an episode. MAP-Elites keeps the most harmful genome in each cell of a $5\times5$ grid over geometric
 (camera, arm) and photometric (light, noise) intensity. We evaluate the four single-perturbation maxima and
 the full combination, 15 random genomes, then Gaussian mutations ($\sigma=0.15$) of random elites, for
 \QDEvals{} evaluations (\QDEpisodes{} episodes). The six most harmful elites are then re-run on the 11 remaining
-episodes.
+episodes. Because of the non-monotonicity, checking each perturbation alone at the top of its range does not
+rule out that it fails alone at an intermediate value. As a control, every component of every validated
+combination is also run alone, at the same value, on the same held-out episodes (\QDControlEpisodes{}
+episodes); a failure counts as a \emph{pure interaction} only if every component alone succeeds on that episode.
 
 \paragraph{Results} As designed, the single-perturbation maxima fail \QDSingleFails{} search episodes; their
 combination fails \QDCornerFails{}. Failures are not confined to that corner: \QDAnyFail{} evaluated combinations
 fail at least one episode and all \QDFailCells{} filled cells contain one (\cref{fig:qd}a). The most harmful
-elites transfer to the held-out episodes, where they produce \QDValPooled{} failures (\cref{fig:qd}b); the full
-combination fails \QDValCorner{}. Small combinations suffice: $1.8^\circ$ of camera orbit, 0.02\,rad of arm
-offset and half of the light removed, with no noise, fail all four search episodes and 5 of 11 held-out ones.
+elites transfer to the held-out episodes, where they produce \QDValPooled{} failures (\cref{fig:qd}b). The
+single-component controls fail \QDControlFails{} episodes, mostly the camera orbit at intermediate angles,
+so \QDSingleAlsoFail{} of these failures are not pure interactions; the remaining \QDPure{} are. The full
+combination fails \QDValCorner{} held-out episodes, all pure interactions, and even the smallest elite
+($1.8^\circ$, 0.02\,rad, half of the light removed, no noise) fails 5 of 11, 3 of them pure.
 Across the evaluated combinations, harm correlates most with pixel noise (Spearman $\rho=\QDRhoNoise$) and
 arm offset ($\rho=\QDRhoArm$), and little with camera angle ($\QDRhoCam$) or lighting ($\QDRhoLight$) within
 these ranges; the search does not sample uniformly, so these correlations are only indicative. Robustness measured
@@ -560,7 +567,9 @@ held-out episodes (no offset, 0.05 and 0.10\,rad), not distinguishable from the 
   \item \textbf{Canonicalisation} needs the list of known tasks and cannot help with a genuinely new
   instruction; its encoder loses spatial relations.
   \item \textbf{Failure search} used four episodes for fitness, so elites can overfit them; the held-out
-  validation (11 episodes) limits but does not remove this. The archive descriptors are one choice among many.
+  validation (11 episodes) limits but does not remove this. Episode outcomes are not monotonic in the
+  intensity, which is why interactions are only counted against single-component controls at the same
+  values. The archive descriptors are one choice among many.
   \item \textbf{Residual RL} used one task, one perturbation level, about 400 training episodes per run and
   soft resets during training, so its negative result says more about this budget than about residual RL.
 \end{itemize}
