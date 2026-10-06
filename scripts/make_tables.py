@@ -204,7 +204,10 @@ if qd_p.exists():
     body += f"Failure search (MAP-Elites) & {n_qd} & {np.nanmean(durs):.0f} & {h:.1f} \\\\\n"
 ppo_h = 0.0
 for f in glob.glob("runs/robot025_task2_s*/log.csv") + glob.glob("runs/robot025_task2_rand_s*/log.csv"):
-    lg = pd.read_csv(f)
+    try:
+        lg = pd.read_csv(f)
+    except pd.errors.EmptyDataError:
+        continue  # run just started
     if len(lg):
         steps = lg.step.diff().fillna(lg.step.iloc[0])
         ppo_h += float((steps / lg.sps).sum()) / 3600

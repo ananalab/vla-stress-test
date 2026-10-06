@@ -44,8 +44,8 @@
 \input{numbers.tex}
 \input{tables/macros.tex}
 % text that depends on the random-sign residual runs (filled in once they finish)
-\providecommand{\RLRandAbstract}{and training on more diverse starting poses is examined as well.}
-\providecommand{\RLRandConclusion}{A residual corrector trained on a few hundred episodes does not repair the arm-pose weakness on unseen configurations.}
+\newcommand{\RLRandAbstract}{even when trained on more diverse starting poses, and mostly learns to finish successful episodes faster.}
+\newcommand{\RLRandConclusion}{A residual corrector trained on a few hundred episodes does not repair the arm-pose weakness on unseen configurations, and more diverse arm offsets during training do not change this; generalising likely requires more varied scenes or an input that encodes the scene, not only proprioception.}
 
 \begin{document}
 
@@ -476,8 +476,9 @@ one factor at a time therefore overestimates the margin available when several c
   \centering
   \includegraphics[width=\textwidth]{figures/rl_residual.pdf}
   \caption{\textbf{Residual RL on the arm-offset weakness.} (a)~Success of the stochastic policy during PPO,
-  moving average over 5 updates. (b)~Deterministic evaluation with hard resets on initial states seen in
-  training (0--19) and held out (40--49). Wilson 95\% intervals.}
+  moving average over 5 updates; dashed: runs trained with new random offset signs at every reset.
+  (b)~Deterministic evaluation with hard resets on initial states seen in training (0--19) and held out
+  (40--49). Wilson 95\% intervals.}
   \label{fig:rl}
 \end{figure*}
 \label{sec:rl}
@@ -505,7 +506,8 @@ hard resets, like every other number in this report.
 \begin{table}[t]
 \centering
 \caption{\textbf{Residual RL evaluation} (successes / episodes, offset in rad per joint). ``Re-plan / 10''
-executes 10 instead of 50 actions per chunk, without any learning.}
+executes 10 instead of 50 actions per chunk, without any learning. s0--s2: residual seeds with fixed
+offset signs per initial state; rs0--rs1: trained with new random signs at every reset.}
 \label{tab:rl}
 \scriptsize
 \setlength{\tabcolsep}{3pt}
@@ -528,6 +530,13 @@ from \RLStepsSeenVla{} to \RLStepsSeenRes{} steps on seen states and from \RLSte
 faster success is worth more, and an episode that already works can be sped up in every rollout, whereas
 recovering a failure is a rare event in 400 episodes. The recoveries that do occur are tied to the
 configurations seen in training; with 40 of them, a proprioceptive corrector has little to interpolate from.
+
+\paragraph{More diverse starts do not help} If the corrector fails to generalise because it only saw 40
+offset patterns (signs are tied to the initial state), drawing new signs at every training reset should
+help. It does not: with random signs, the corrector reaches \RLRandSeenRes{} on the seen initial states and
+\RLRandUnseenRes{} on held-out ones at the training level (against \RLSeenVla{} and \RLUnseenVla{} for the VLA
+alone), the same pattern as before. The bottleneck is therefore not the variety of arm offsets but the
+variety of scenes, or what a proprioceptive corrector can infer about them.
 
 \paragraph{A training-free alternative} Executing 10 instead of 50 actions per chunk, so that the VLA
 re-plans five times more often, gives \RLReplanClean{}, \RLReplanTrain{} and \RLReplanStrong{} on the

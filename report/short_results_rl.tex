@@ -36,6 +36,10 @@ and speeding up an episode that already works is observed in every rollout, wher
 is a rare event in 400 episodes. The recoveries that do happen are tied to the configurations seen in
 training; with 40 of them, the corrector has little to interpolate from.
 
+Drawing new offset signs at every training reset, to expose the corrector to more varied starting poses,
+gives the same pattern (\RLRandSeenRes{} on seen and \RLRandUnseenRes{} on held-out initial states), so the
+variety of arm offsets is not what limits generalisation.
+
 A training-free alternative, executing 10 instead of 50 actions per chunk so that the VLA re-plans five
 times more often, gives \RLReplanClean{}, \RLReplanTrain{} and \RLReplanStrong{} on the same held-out
 episodes (no offset, 0.05 and 0.10\,rad), not distinguishable from the VLA alone with 10 episodes, at
