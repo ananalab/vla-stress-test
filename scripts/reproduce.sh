@@ -18,7 +18,14 @@ for c in dose_camera_orbit dose_camera_orbit_wide dose_robot_init dose_robot_ini
   ev configs/$c.yaml
 done
 
-# 3. Residual RL: plumbing check, three seeds, evaluation on seen and held-out initial states
+# 3. Repairs and interactions: instruction canonicalisation, combined-perturbation failure search
+ev configs/language_canonical.yaml
+ev configs/language_spatial_paraphrases.yaml
+ev configs/language_spatial_canonical.yaml
+python -u -m vla_stress.qd_search search --budget 120
+python -u -m vla_stress.qd_search validate --n-elites 6
+
+# 4. Residual RL: plumbing check, three seeds, evaluation on seen and held-out initial states
 python scripts/zero_residual.py runs/zero/final.pt
 ev configs/rl_zero_check.yaml
 ev configs/rl_eval.yaml --out results/rl_eval_vla.csv
@@ -31,8 +38,16 @@ for s in 0 1 2; do
   ev configs/rl_eval.yaml --residual $run/final.pt --out results/rl_eval_residual_s$s.csv
   ev configs/rl_eval_train.yaml --residual $run/final.pt --out results/rl_eval_train_residual_s$s.csv
 done
+# same, with new random offset signs at every training reset (more diverse starting poses)
+for s in 0 1; do
+  run=runs/robot025_task2_rand_s$s
+  [ -f $run/final.pt ] || python -u -m vla_stress.residual_rl.ppo --task 2 --perturbation robot_init \
+    --intensity 0.25 --random-signs --n-envs 4 --rollout-steps 512 --total-steps 100000 --seed $s --run-dir $run
+  ev configs/rl_eval.yaml --residual $run/final.pt --out results/rl_eval_residual_rand_s$s.csv
+  ev configs/rl_eval_train.yaml --residual $run/final.pt --out results/rl_eval_train_residual_rand_s$s.csv
+done
 
-# 4. Videos, figures, tables, reports
+# 5. Videos, figures, tables, reports
 for v in perturbations language residual; do python scripts/record_rollouts.py --spec configs/videos/$v.yaml; done
 python scripts/perturbation_grid.py
 python scripts/make_figures.py
