@@ -358,7 +358,7 @@ def qd_summary(rows: pd.DataFrame, validation: pd.DataFrame | None, grid: int, p
             if not np.isnan(m[j, i]):
                 ax.text((i + 0.5) / grid, (j + 0.5) / grid, f"{nf[j, i]}/4", ha="center", va="center", fontsize=6,
                         color="white" if m[j, i] > 0.7 else INK)
-    ax.scatter(rows.desc_geo, rows.desc_photo, s=3, color=INK, alpha=0.35, zorder=3)
+    ax.scatter(rows.desc_geo, rows.desc_photo, s=2, color=INK, alpha=0.22, zorder=3)
     ax.set_xlabel("geometric intensity (camera, arm)")
     ax.set_ylabel("photometric intensity (light, noise)")
     ax.set_title(f"Archive ({len(rows)} evaluations)", loc="left")
