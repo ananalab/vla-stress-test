@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Every experiment of the report, in the order they were run, then figures, tables, videos and PDFs.
 # Each evaluation is resumable: re-running this script skips the episodes already in results/.
-# About 30 hours on an Apple M1 laptop; one process at a time (one VLA fits in 8 GB).
+# About 40 hours on an Apple M1 laptop; one process at a time (one VLA fits in 8 GB).
 set -eu
 export HF_HUB_OFFLINE=${HF_HUB_OFFLINE:-0}
 ev() { python -u -m vla_stress.evaluate --config "$@"; }

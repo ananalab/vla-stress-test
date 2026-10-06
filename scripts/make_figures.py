@@ -269,6 +269,8 @@ for f in all_csv:
         continue
     if "success" in d.columns:  # episode logs only
         n_ep += len(d)
+if (R / "qd_search.csv").exists():  # search episodes are stored inside the archive rows, not one per line
+    n_ep += sum(len(json.loads(e)) for e in pd.read_csv(R / "qd_search.csv").episodes)
 macros["TotalEpisodes"] = f"{n_ep:,}".replace(",", "\\,")
 for suite in ["goal", "spatial"]:
     b = load(f"baseline_{suite}")
@@ -353,10 +355,11 @@ if rl_rows:
         macros["RLStepsUnseenVla"] = f"{ho[0][0]:.0f}"
         macros["RLStepsUnseenRes"] = f"{min(t[1] for t in ho):.0f}--{max(t[1] for t in ho):.0f}"
     if logs:
-        first = [lg.success_rate.head(10).mean() for lg in logs.values()]
-        last = [lg.success_rate.tail(10).mean() for lg in logs.values()]
-        macros["RLTrainFirst"] = ", ".join(f"{v:.2f}" for v in first)
-        macros["RLTrainLast"] = ", ".join(f"{v:.2f}" for v in last)
+        for prefix, tag in [("s", ""), ("rand_s", "Rand")]:
+            sel = [lg for k, lg in sorted(logs.items()) if k.startswith(prefix)]
+            if sel:
+                macros[f"RL{tag}TrainFirst"] = ", ".join(f"{lg.success_rate.head(10).mean():.2f}" for lg in sel)
+                macros[f"RL{tag}TrainLast"] = ", ".join(f"{lg.success_rate.tail(10).mean():.2f}" for lg in sel)
 if cm is not None and bs is not None:
     both = bs[bs.episode.isin(cm.episode.unique())]
     macros["CamMaskBoth"] = f"{int(both.success.sum())}/{len(both)}"

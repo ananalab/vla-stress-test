@@ -11,7 +11,7 @@ breaks.
 
 ## Findings
 
-2,439 simulated episodes, about 29 hours on a laptop (Apple M1, 8 GB).
+3,435 simulated episodes, about 39 hours on a laptop (Apple M1, 8 GB).
 
 - **It listens, but to the exact words.** Given the instruction of another task in the same scene, the
   robot completes the task it is told in 73% of episodes and the scene's own task in 0/270. Paraphrases
@@ -27,7 +27,7 @@ breaks.
   most harmful ones make 71% of held-out episodes fail.
 - **A residual corrector learns, but does not generalise.** PPO on top of the frozen VLA raises success on
   the starting configurations it was trained on (13–14/20 vs 10/20, three seeds) but not on held-out ones,
-  where it only makes successful episodes faster.
+  where it only makes successful episodes faster. Training on more diverse arm offsets does not change this.
 
 ![Perturbations](media/perturbations.gif)
 

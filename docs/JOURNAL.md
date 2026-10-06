@@ -95,3 +95,26 @@
 - Baseline Goal complète : 84/100.
 - Bilan : 2 439 épisodes, ~29 h de calcul sur le portable (19 h d'évaluation, 10 h de PPO).
 - Rapport complet (9 pages) et version courte (4 pages + références). Tous les chiffres viennent de `numbers.tex` et `tables/`, générés depuis `results/`.
+
+## 6 octobre 2026
+
+### Canonicalisation des consignes
+- Idée : si le modèle ne reconnaît que les formulations d'entraînement, on peut ramener une paraphrase à la consigne connue la plus proche avant qu'elle n'arrive au modèle. Encodeur de phrases all-MiniLM-L6-v2, 40 consignes LIBERO candidates, seuil de rejet 0,5 fixé avant de lancer quoi que ce soit.
+- LIBERO-Goal : 30/30 paraphrases ramenées à la bonne consigne, succès de 35/150 à 120/150, exactement le niveau de la formulation d'origine (épisodes identiques au pas près, déterminisme encore confirmé). « sing a song » : similarité 0,21, rejetée.
+- LIBERO-Spatial (paraphrases écrites pour l'occasion, 2 par tâche) : plus dur, les consignes ne diffèrent que par la relation spatiale. 15/20 bien ramenées, l'encodeur confond « next to » et « on ». Succès de 26/100 à 54/100 (66 % avec la formulation d'origine). Les paraphrases mal ramenées font exécuter une autre tâche.
+- La similarité prédit mal le succès des paraphrases brutes (Spearman 0,43) : beaucoup de paraphrases au-dessus de 0,9 échouent complètement. Le modèle dépend des mots, pas du sens.
+
+### Recherche de défaillances par combinaison (MAP-Elites)
+- Boîte de perturbations où chacune seule coûte au plus ~15 % : caméra ≤ 7,5°, bras ≤ 0,03 rad, lumière ≤ 67,5 %, bruit ≤ 30. 15 épisodes réussissent sans perturbation et sous chacune des quatre au maximum. 4 servent à la recherche, 11 à la validation.
+- Ancres : chaque perturbation seule 0/4 échec (comme prévu), les quatre ensemble 4/4.
+- 120 évaluations : 98 combinaisons font échouer au moins un épisode, 17 les quatre. Plus petite combinaison qui fait tout échouer : 1,8°, 0,02 rad, 51 % de lumière en moins, sans bruit.
+- Validation sur les 11 épisodes jamais utilisés : 47/66 échecs (71 %), 10/11 pour la combinaison maximale.
+- J'avais écrit que le bras était impliqué dans la plupart des défaillances ; en calculant, c'est le bruit pixel le plus corrélé à la nuisance (ρ = 0,47), puis le bras (0,28). Texte corrigé.
+
+### Résiduel avec signes aléatoires
+- Hypothèse du rapport : le correcteur ne généralise pas parce qu'il n'a vu que 40 motifs de décalage. Test : nouveaux signes tirés à chaque reset.
+- Deux seeds : états vus 13/20 et 12/20 (VLA 10/20), états 40-49 4/10 et 4/10 (VLA 5/10). Même tableau qu'avant : l'hypothèse est rejetée, ce n'est pas la variété des décalages qui manque.
+
+### Divers
+- Swap qui remplissait le disque pendant le PPO à 4 envs : cache vidéo supprimé, garde-fou qui arrête la file sous 3 Go libres (reprise possible).
+- Total : 3 435 épisodes, ~39 h. Rapport complet ramené à 9 pages (planche de keyframes langage et tableau des paraphrases retirés, les paraphrases restent dans configs/).
